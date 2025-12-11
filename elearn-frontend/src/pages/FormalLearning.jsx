@@ -1,4 +1,5 @@
-import { Box, Grid, Container } from "@mui/material";
+import { Box, Grid, Container, Tabs, Tab } from "@mui/material";
+import { useState } from "react";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import PageHeader from "../components/PageHeader";
@@ -6,9 +7,37 @@ import Section from "../components/Section";
 import SectionTitle from "../components/SectionTitle";
 import CourseCardAdvanced from "../components/CourseCardAdvanced";
 import { useSidebar } from "../contexts/SidebarContext";
+import { useAuth } from "../contexts/AuthContext";
+import TeacherDashboard from "../components/TeacherDashboard";
+import StudentFormalDashboard from "../components/StudentFormalDashboard";
 
 export default function FormalLearning() {
   const { isOpen } = useSidebar();
+  const { user } = useAuth();
+  const [tabValue, setTabValue] = useState(0);
+  
+  // Detect if user is a teacher based on email
+  const isTeacher = user?.email?.toLowerCase().includes("teacher") || user?.email?.toLowerCase().includes("prof");
+    if (isTeacher) {
+      return (
+        <Box sx={{ display: "flex" }}>
+          <Sidebar />
+          <Box
+            sx={{
+              flexGrow: 1,
+              ml: { xs: 0, md: isOpen ? 25 : 8.75 },
+              mt: { xs: 6, md: 8 },
+              background: "linear-gradient(135deg, #f8f9fa 0%, #f0f2f5 100%)",
+              minHeight: "100vh",
+              transition: "margin-left 0.3s ease",
+            }}
+          >
+            <Navbar />
+            <TeacherDashboard />
+          </Box>
+        </Box>
+      );
+    }
   const formalCourses = [
     {
       id: "formal-1",
@@ -108,6 +137,7 @@ export default function FormalLearning() {
     },
   ];
 
+  // Student view
   return (
     <Box sx={{ display: "flex" }}>
       <Sidebar />
@@ -123,17 +153,37 @@ export default function FormalLearning() {
       >
         <Navbar />
 
-        {/* Page Header */}
-        <Section background="transparent" pt={4} pb={2} animated={false}>
+        {/* Tab Navigation */}
+        <Section background="transparent" pt={2} pb={0}>
+          <Container maxWidth="lg">
+            <Tabs 
+              value={tabValue} 
+              onChange={(e, newValue) => setTabValue(newValue)}
+              sx={{ borderBottom: "1px solid #e0e0e0", mb: 2 }}
+            >
+              <Tab label="My Courses" />
+              <Tab label="Browse Courses" />
+            </Tabs>
+          </Container>
+        </Section>
+
+        {/* My Courses Tab */}
+        {tabValue === 0 && <StudentFormalDashboard />}
+
+        {/* Browse Courses Tab */}
+        {tabValue === 1 && (
+          <>
+            {/* Page Header */}
+            <Section background="transparent" pt={4} pb={2} animated={false}>
           <PageHeader
             title="Formal Learning"
             subtitle="Structured, curriculum-driven courses with certifications"
             backgroundGradient="linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
           />
-        </Section>
+            </Section>
 
-        {/* Courses Grid */}
-        <Section background="transparent" py={{ xs: 4, md: 6 }}>
+            {/* Courses Grid */}
+            <Section background="transparent" py={{ xs: 4, md: 6 }}>
           <SectionTitle
             title="Available Formal Courses"
             subtitle="Choose from our comprehensive collection of formal learning programs"
@@ -161,7 +211,9 @@ export default function FormalLearning() {
               ))}
             </Grid>
           </Container>
-        </Section>
+            </Section>
+          </>
+        )}
       </Box>
     </Box>
   );

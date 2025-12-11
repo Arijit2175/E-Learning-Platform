@@ -3,6 +3,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import { AuthProvider } from "./contexts/AuthContext";
 import { CoursesProvider } from "./contexts/CoursesContext";
 import { SidebarProvider } from "./contexts/SidebarContext";
+import { FormalEducationProvider } from "./contexts/FormalEducationContext";
 import theme from "./theme";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Home from "./pages/Home";
@@ -14,6 +15,8 @@ import FormalLearning from "./pages/FormalLearning";
 import NonFormalLearning from "./pages/NonFormalLearning";
 import InformalLearning from "./pages/InformalLearning";
 import AITutor from "./pages/AITutor";
+import CourseDetailPage from "./pages/CourseDetailPage";
+import QuizPage from "./pages/QuizPage";
 
 export default function App() {
   return (
@@ -21,60 +24,80 @@ export default function App() {
       <BrowserRouter>
         <AuthProvider>
           <CoursesProvider>
-            <SidebarProvider>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/forgot-password" element={<ForgotPassword />} />
+            <FormalEducationProvider>
+              <SidebarProvider>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
 
-              {/* Protected Routes */}
-              <Route 
-                path="/dashboard" 
-                element={
-                  <ProtectedRoute>
-                    <Dashboard />
-                  </ProtectedRoute>
-                } 
-              />
+                {/* Protected Routes */}
+                <Route
+                  path="/dashboard"
+                  element={
+                    <ProtectedRoute>
+                      <Dashboard />
+                    </ProtectedRoute>
+                  }
+                />
 
-              <Route 
-                path="/formal" 
-                element={
-                  <ProtectedRoute>
-                    <FormalLearning />
-                  </ProtectedRoute>
-                } 
-              />
-              
-              <Route 
-                path="/nonformal" 
-                element={
-                  <ProtectedRoute>
-                    <NonFormalLearning />
-                  </ProtectedRoute>
-                } 
-              />
-              
-              <Route 
-                path="/informal" 
-                element={
-                  <ProtectedRoute>
-                    <InformalLearning />
-                  </ProtectedRoute>
-                } 
-              />
+                <Route
+                  path="/formal"
+                  element={
+                    <ProtectedRoute>
+                      <FormalLearning />
+                    </ProtectedRoute>
+                  }
+                />
 
-              <Route 
-                path="/ai" 
-                element={
-                  <ProtectedRoute>
-                    <AITutor />
-                  </ProtectedRoute>
-                } 
-              />
-            </Routes>
-            </SidebarProvider>
+                <Route
+                  path="/nonformal"
+                  element={
+                    <ProtectedRoute>
+                      <NonFormalLearning />
+                    </ProtectedRoute>
+                  }
+                />
+
+                <Route
+                  path="/informal"
+                  element={
+                    <ProtectedRoute>
+                      <InformalLearning />
+                    </ProtectedRoute>
+                  }
+                />
+
+                <Route
+                  path="/ai"
+                  element={
+                    <ProtectedRoute>
+                      <AITutor />
+                    </ProtectedRoute>
+                  }
+                />
+
+                <Route
+                  path="/course/:courseId"
+                  element={
+                    <ProtectedRoute>
+                      <CourseDetailPage />
+                    </ProtectedRoute>
+                  }
+                />
+
+                <Route
+                  path="/course/:courseId/quiz/:quizId"
+                  element={
+                    <ProtectedRoute>
+                      <QuizPage />
+                    </ProtectedRoute>
+                  }
+                />
+              </Routes>
+              </SidebarProvider>
+            </FormalEducationProvider>
           </CoursesProvider>
         </AuthProvider>
       </BrowserRouter>
