@@ -302,8 +302,12 @@ export default function NonFormalLearner() {
                   variant="contained"
                   onClick={() => {
                     resetAttempts(user?.id, courseId);
+                    resetCourseProgress(user?.id, courseId);
                     setShowResetPrompt(false);
+                    setOpenQuiz(false);
                     setCurrentLessonIdx(0);
+                    setQuizAnswers({});
+                    setQuizSubmitted(false);
                   }}
                   sx={{ mt: 2 }}
                 >
