@@ -37,6 +37,7 @@ import BrushIcon from "@mui/icons-material/Brush";
 import ScienceIcon from "@mui/icons-material/Science";
 import PsychologyIcon from "@mui/icons-material/Psychology";
 import TipsAndUpdatesIcon from "@mui/icons-material/TipsAndUpdates";
+import ImageIcon from "@mui/icons-material/Image";
 
 const DEFAULT_POSTS = [
   {
@@ -153,8 +154,9 @@ export default function InformalLearning() {
   const [filterTopic, setFilterTopic] = useState("All");
   const [sortBy, setSortBy] = useState("recent");
   const [search, setSearch] = useState("");
-  const [composer, setComposer] = useState({ title: "", body: "", topic: "Tech", type: "post" });
+  const [composer, setComposer] = useState({ title: "", body: "", topic: "Tech", type: "post", tagsInput: "", media: null });
   const [commentDraft, setCommentDraft] = useState({});
+  const [aiResponses, setAiResponses] = useState({});
 
   useEffect(() => {
     localStorage.setItem("informalPosts", JSON.stringify(posts));
@@ -237,6 +239,10 @@ export default function InformalLearning() {
 
   const handleAddPost = () => {
     if (!composer.title.trim() || !composer.body.trim()) return;
+    const tags = composer.tagsInput
+      .split(",")
+      .map((t) => t.trim())
+      .filter(Boolean);
     const newPost = {
       id: `post-${Date.now()}`,
       title: composer.title,
@@ -249,11 +255,23 @@ export default function InformalLearning() {
       comments: [],
       saves: 0,
       createdAt: new Date().toISOString(),
-      tags: [],
+      tags,
       authorId: user?.id,
+      media: composer.media,
     };
     setPosts((prev) => [newPost, ...prev]);
-    setComposer({ title: "", body: "", topic: composer.topic, type: "post" });
+    setComposer({ title: "", body: "", topic: composer.topic, type: "post", tagsInput: "", media: null });
+  };
+
+  const handleMediaUpload = (file) => {
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const base64 = e.target?.result;
+      const isVideo = file.type.startsWith("video");
+      setComposer((prev) => ({ ...prev, media: { src: base64, kind: isVideo ? "video" : "image", name: file.name } }));
+    };
+    reader.readAsDataURL(file);
   };
 
   const handleFollowTopic = (topic) => {
@@ -269,6 +287,17 @@ export default function InformalLearning() {
   const formatDate = (iso) => new Date(iso).toLocaleString();
 
   const aiActions = ["Summarize", "Explain simply", "Related concepts", "Make flashcards"];
+
+  const handleAiAction = (post, action) => {
+    const clean = (post.body || "").slice(0, 320);
+    const tags = post.tags && post.tags.length ? post.tags.join(", ") : "the main ideas";
+    let text = "";
+    if (action === "Summarize") text = `Quick summary: ${clean}`;
+    if (action === "Explain simply") text = `In plain words: ${clean}`;
+    if (action === "Related concepts") text = `Look into: ${tags}.`;
+    if (action === "Make flashcards") text = `Flashcards\nQ: Key idea?\nA: ${clean.slice(0, 120)}...\nQ: Related terms?\nA: ${tags}`;
+    setAiResponses((prev) => ({ ...prev, [post.id]: { action, text } }));
+  };
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -350,6 +379,35 @@ export default function InformalLearning() {
                       multiline
                       rows={3}
                     />
+                    <TextField
+                      label="Tags (comma separated)"
+                      value={composer.tagsInput}
+                      onChange={(e) => setComposer({ ...composer, tagsInput: e.target.value })}
+                      fullWidth
+                      placeholder="ai, study, habits"
+                    />
+                    <Stack direction={{ xs: "column", sm: "row" }} spacing={2} alignItems={{ xs: "stretch", sm: "center" }}>
+                      <Button
+                        variant="outlined"
+                        component="label"
+                        startIcon={<ImageIcon />}
+                        sx={{ textTransform: "none" }}
+                      >
+                        Upload image/video
+                        <input
+                          hidden
+                          type="file"
+                          accept="image/*,video/*"
+                          onChange={(e) => handleMediaUpload(e.target.files?.[0])}
+                        />
+                      </Button>
+                      {composer.media && (
+                        <Chip
+                          label={`${composer.media.kind === "video" ? "Video" : "Image"}: ${composer.media.name || "attachment"}`}
+                          onDelete={() => setComposer((prev) => ({ ...prev, media: null }))}
+                        />
+                      )}
+                    </Stack>
                     <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
                       <FormControl size="small" sx={{ minWidth: 140 }}>
                         <InputLabel>Topic</InputLabel>
@@ -415,6 +473,18 @@ export default function InformalLearning() {
                         </Stack>
                       )}
 
+                      {post.media && post.media.kind === "image" && (
+                        <Box sx={{ mt: 1, mb: 1, borderRadius: 2, overflow: "hidden", border: "1px solid #e5e7eb" }}>
+                          <img src={post.media.src} alt={post.media.name || "attachment"} style={{ width: "100%", display: "block" }} />
+                        </Box>
+                      )}
+
+                      {post.media && post.media.kind === "video" && (
+                        <Box sx={{ mt: 1, mb: 1 }}>
+                          <video src={post.media.src} controls style={{ width: "100%", borderRadius: 8 }} />
+                        </Box>
+                      )}
+
                       <Stack direction="row" spacing={1} alignItems="center" sx={{ mt: 1 }}>
                         <IconButton onClick={() => handleLike(post.id)} color={post.likers?.includes(user?.id) ? "primary" : "default"}>
                           {post.likers?.includes(user?.id) ? <FavoriteIcon /> : <FavoriteBorderIcon />}
@@ -434,10 +504,21 @@ export default function InformalLearning() {
                         <Box sx={{ flexGrow: 1 }} />
                         <Stack direction="row" spacing={1}>
                           {aiActions.map((a) => (
-                            <Chip key={a} label={a} size="small" variant="outlined" />
+                            <Chip key={a} label={a} size="small" variant="outlined" onClick={() => handleAiAction(post, a)} />
                           ))}
                         </Stack>
                       </Stack>
+
+                      {aiResponses[post.id] && (
+                        <Box sx={{ mt: 1.5, p: 1.5, borderRadius: 1, background: "#f8fafc", border: "1px solid #e5e7eb" }}>
+                          <Typography variant="caption" sx={{ fontWeight: 700, display: "block", mb: 0.5 }}>
+                            {aiResponses[post.id].action}
+                          </Typography>
+                          <Typography variant="body2" sx={{ whiteSpace: "pre-line", color: "#334155" }}>
+                            {aiResponses[post.id].text}
+                          </Typography>
+                        </Box>
+                      )}
 
                       <Box sx={{ mt: 1.5 }}>
                         <Stack spacing={1}>
