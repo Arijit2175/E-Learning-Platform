@@ -28,7 +28,8 @@ export default function App() {
             <FormalEducationProvider>
               <SidebarProvider>
               <Routes>
-                <Route path="/" element={<Home />} />
+                <Route path="/" element={<Login />} />
+                <Route path="/home" element={<Home />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
@@ -107,7 +108,7 @@ export default function App() {
                 />
 
                 {/* Default entry fallback */}
-                <Route path="*" element={<Home />} />
+                <Route path="*" element={<Login />} />
               </Routes>
               </SidebarProvider>
             </FormalEducationProvider>

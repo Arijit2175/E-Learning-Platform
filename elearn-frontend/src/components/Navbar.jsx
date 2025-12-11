@@ -25,7 +25,7 @@ export default function Navbar() {
   };
 
   const handleHomeClick = () => {
-    navigate("/");
+    navigate("/home");
   };
 
   return (

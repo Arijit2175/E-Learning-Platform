@@ -23,11 +23,8 @@ export const AuthProvider = ({ children }) => {
 
   // Load user from localStorage on mount
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      const parsed = JSON.parse(storedUser);
-      setUser(buildUser({ ...parsed, role: parsed.role || "student" }));
-    }
+    // On fresh run, do not auto-login; clear any stale saved session
+    localStorage.removeItem("user");
     setLoading(false);
   }, []);
 
