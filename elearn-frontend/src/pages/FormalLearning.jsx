@@ -9,6 +9,7 @@ import CourseCardAdvanced from "../components/CourseCardAdvanced";
 export default function FormalLearning() {
   const formalCourses = [
     {
+      id: "formal-1",
       title: "Complete Web Development Bootcamp",
       description: "Learn HTML, CSS, JavaScript, React & more from scratch",
       icon: "🌐",
@@ -17,8 +18,10 @@ export default function FormalLearning() {
       category: "Formal Learning",
       rating: 4.8,
       students: "3,450",
+      instructor: "John Smith",
     },
     {
+      id: "formal-2",
       title: "Data Science Masterclass",
       description: "Python, Machine Learning, and Data Analysis",
       icon: "📊",
@@ -27,8 +30,10 @@ export default function FormalLearning() {
       category: "Formal Learning",
       rating: 4.9,
       students: "5,200",
+      instructor: "Jane Doe",
     },
     {
+      id: "formal-3",
       title: "Advanced Python Programming",
       description: "Deep dive into Python for professionals",
       icon: "🐍",
@@ -37,8 +42,10 @@ export default function FormalLearning() {
       category: "Formal Learning",
       rating: 4.7,
       students: "2,100",
+      instructor: "Mike Johnson",
     },
     {
+      id: "formal-4",
       title: "Cloud Computing with AWS",
       description: "Master AWS services and cloud architecture",
       icon: "☁️",
@@ -47,8 +54,10 @@ export default function FormalLearning() {
       category: "Formal Learning",
       rating: 4.6,
       students: "3,800",
+      instructor: "Sarah Wilson",
     },
     {
+      id: "formal-5",
       title: "Mobile App Development",
       description: "React Native & Flutter for iOS & Android",
       icon: "📱",
@@ -57,8 +66,10 @@ export default function FormalLearning() {
       category: "Formal Learning",
       rating: 4.8,
       students: "2,900",
+      instructor: "David Lee",
     },
     {
+      id: "formal-6",
       title: "DevOps & CI/CD Pipeline",
       description: "Docker, Kubernetes, Jenkins & more",
       icon: "🔧",
@@ -67,8 +78,10 @@ export default function FormalLearning() {
       category: "Formal Learning",
       rating: 4.5,
       students: "1,650",
+      instructor: "Emily Chen",
     },
     {
+      id: "formal-7",
       title: "Database Design & SQL",
       description: "SQL, NoSQL, and Database Architecture",
       icon: "🗄️",
@@ -77,8 +90,10 @@ export default function FormalLearning() {
       category: "Formal Learning",
       rating: 4.7,
       students: "4,100",
+      instructor: "Robert Brown",
     },
     {
+      id: "formal-8",
       title: "Cybersecurity Fundamentals",
       description: "Network security, encryption & ethical hacking",
       icon: "🔐",
@@ -87,6 +102,7 @@ export default function FormalLearning() {
       category: "Formal Learning",
       rating: 4.6,
       students: "2,450",
+      instructor: "Lisa Anderson",
     },
   ];
 
@@ -126,6 +142,7 @@ export default function FormalLearning() {
               {formalCourses.map((course, i) => (
                 <Grid item xs={12} sm={6} md={4} lg={3} key={i}>
                   <CourseCardAdvanced
+                    id={course.id}
                     title={course.title}
                     description={course.description}
                     icon={course.icon}
@@ -134,6 +151,7 @@ export default function FormalLearning() {
                     duration={course.duration}
                     rating={course.rating}
                     students={course.students}
+                    instructor={course.instructor}
                     actionText="Enroll Now"
                   />
                 </Grid>

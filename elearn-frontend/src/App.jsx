@@ -1,6 +1,9 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@mui/material/styles";
+import { AuthProvider } from "./contexts/AuthContext";
+import { CoursesProvider } from "./contexts/CoursesContext";
 import theme from "./theme";
+import ProtectedRoute from "./components/ProtectedRoute";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -14,19 +17,61 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+        <AuthProvider>
+          <CoursesProvider>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
 
-          <Route path="/dashboard" element={<Dashboard />} />
+              {/* Protected Routes */}
+              <Route 
+                path="/dashboard" 
+                element={
+                  <ProtectedRoute>
+                    <Dashboard />
+                  </ProtectedRoute>
+                } 
+              />
 
-          <Route path="/formal" element={<FormalLearning />} />
-          <Route path="/nonformal" element={<NonFormalLearning />} />
-          <Route path="/informal" element={<InformalLearning />} />
+              <Route 
+                path="/formal" 
+                element={
+                  <ProtectedRoute>
+                    <FormalLearning />
+                  </ProtectedRoute>
+                } 
+              />
+              
+              <Route 
+                path="/nonformal" 
+                element={
+                  <ProtectedRoute>
+                    <NonFormalLearning />
+                  </ProtectedRoute>
+                } 
+              />
+              
+              <Route 
+                path="/informal" 
+                element={
+                  <ProtectedRoute>
+                    <InformalLearning />
+                  </ProtectedRoute>
+                } 
+              />
 
-          <Route path="/ai" element={<AITutor />} />
-        </Routes>
+              <Route 
+                path="/ai" 
+                element={
+                  <ProtectedRoute>
+                    <AITutor />
+                  </ProtectedRoute>
+                } 
+              />
+            </Routes>
+          </CoursesProvider>
+        </AuthProvider>
       </BrowserRouter>
     </ThemeProvider>
   );

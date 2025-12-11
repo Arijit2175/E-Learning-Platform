@@ -1,10 +1,16 @@
-import { Card, CardContent, Box, Typography, Chip, Button, LinearProgress } from "@mui/material";
+import { Card, CardContent, Box, Typography, Chip, Button, LinearProgress, Snackbar, Alert } from "@mui/material";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
+import { useCourses } from "../contexts/CoursesContext";
+import { useAuth } from "../contexts/AuthContext";
+import { useState } from "react";
 import StarIcon from "@mui/icons-material/Star";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 const MotionCard = motion(Card);
 
 export default function CourseCardAdvanced({
+  id,
   title,
   description,
   icon,
@@ -18,6 +24,35 @@ export default function CourseCardAdvanced({
   showProgress = false,
   actionText = "Enroll Now",
 }) {
+  const { enrollCourse, isEnrolled } = useCourses();
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+  const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
+  const enrolled = isEnrolled(id);
+
+  const handleEnroll = () => {
+    if (!isAuthenticated) {
+      navigate("/login");
+      return;
+    }
+
+    const courseData = { id, title, description, icon, category, level, duration, instructor, rating };
+    const result = enrollCourse(courseData);
+    
+    setSnackbar({
+      open: true,
+      message: result.message,
+      severity: result.success ? "success" : "info",
+    });
+
+    if (result.success) {
+      setTimeout(() => navigate("/dashboard"), 1500);
+    }
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbar({ ...snackbar, open: false });
+  };
   const getLevelColor = (level) => {
     switch (level?.toLowerCase()) {
       case "beginner":
@@ -174,17 +209,38 @@ export default function CourseCardAdvanced({
           <Button
             fullWidth
             variant="contained"
+            onClick={handleEnroll}
+            disabled={enrolled}
+            startIcon={enrolled ? <CheckCircleIcon /> : null}
             sx={{
-              background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+              background: enrolled 
+                ? "linear-gradient(135deg, #10b981 0%, #059669 100%)" 
+                : "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
               color: "white",
               fontWeight: 700,
               py: 1.2,
+              "&:disabled": {
+                color: "white",
+                opacity: 0.9,
+              },
             }}
           >
-            {actionText}
+            {enrolled ? "Enrolled" : actionText}
           </Button>
         </motion.div>
       </CardContent>
+
+      {/* Snackbar for notifications */}
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={3000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert onClose={handleCloseSnackbar} severity={snackbar.severity} sx={{ width: "100%" }}>
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </MotionCard>
   );
 }

@@ -1,9 +1,11 @@
-import { Box, Container, Button, Typography, Card, CardContent, Link } from "@mui/material";
+import { Box, Container, Button, Typography, Card, CardContent, Link, Alert } from "@mui/material";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import FormInput from "../components/FormInput";
 import PageHeader from "../components/PageHeader";
+import { useAuth } from "../contexts/AuthContext";
 import { useState } from "react";
 
 const MotionCard = motion(Card);
@@ -17,6 +19,9 @@ export default function Register() {
     confirmPassword: "",
   });
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const { register } = useAuth();
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({
@@ -27,8 +32,24 @@ export default function Register() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setError("");
+
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+
+    if (formData.password.length < 6) {
+      setError("Password must be at least 6 characters");
+      return;
+    }
+
     setLoading(true);
-    setTimeout(() => setLoading(false), 2000);
+    setTimeout(() => {
+      register(formData);
+      setLoading(false);
+      navigate("/dashboard");
+    }, 1000);
   };
 
   return (
@@ -71,6 +92,13 @@ export default function Register() {
                   Create Your Account
                 </Typography>
               </Box>
+
+              {/* Error Alert */}
+              {error && (
+                <Alert severity="error" sx={{ mb: 2 }}>
+                  {error}
+                </Alert>
+              )}
 
               {/* Form */}
               <Box component="form" onSubmit={handleSubmit}>

@@ -6,52 +6,43 @@ import SectionTitle from "../components/SectionTitle";
 import StatsGrid from "../components/StatsGrid";
 import EnrolledCoursesList from "../components/EnrolledCoursesList";
 import PageHeader from "../components/PageHeader";
+import { useCourses } from "../contexts/CoursesContext";
+import { useAuth } from "../contexts/AuthContext";
 
 export default function Dashboard() {
+  const { enrolledCourses } = useCourses();
+  const { user } = useAuth();
+  // Calculate total learning hours (estimate 1 hour per week per course)
+  const totalHours = enrolledCourses.reduce((acc, course) => {
+    const weeks = parseInt(course.duration) || 0;
+    return acc + weeks;
+  }, 0);
+
+  // Count completed courses (progress >= 100)
+  const completedCourses = enrolledCourses.filter(c => c.progress >= 100).length;
+
   // Stats data
   const statsData = [
     {
       icon: "📚",
-      value: "5",
+      value: enrolledCourses.length.toString(),
       label: "Courses Enrolled",
       color: "#667eea",
       actionText: "Browse More",
     },
     {
       icon: "⏱️",
-      value: "124h",
+      value: `${totalHours}h`,
       label: "Learning Hours",
       color: "#f093fb",
       actionText: "View Stats",
     },
     {
       icon: "🏆",
-      value: "2",
+      value: completedCourses.toString(),
       label: "Certificates Earned",
       color: "#4facfe",
       actionText: "Share",
-    },
-  ];
-
-  // Enrolled courses data
-  const enrolledCourses = [
-    {
-      title: "Advanced Python",
-      instructor: "John Doe",
-      duration: "12 weeks",
-      progress: 65,
-    },
-    {
-      title: "Web Development Bootcamp",
-      instructor: "Jane Smith",
-      duration: "10 weeks",
-      progress: 45,
-    },
-    {
-      title: "Data Science Fundamentals",
-      instructor: "Mike Johnson",
-      duration: "8 weeks",
-      progress: 82,
     },
   ];
 
@@ -72,7 +63,7 @@ export default function Dashboard() {
         {/* Page Header Section */}
         <Section background="transparent" pt={4} pb={2} animated={false}>
           <PageHeader
-            title="Your Dashboard"
+            title={`Welcome back, ${user?.name || 'Learner'}!`}
             subtitle="Track your learning progress and achievements"
             backgroundGradient="linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
           />

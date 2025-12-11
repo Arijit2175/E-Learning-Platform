@@ -1,9 +1,11 @@
-import { Box, Container, Button, Typography, Card, CardContent, Link } from "@mui/material";
+import { Box, Container, Button, Typography, Card, CardContent, Link, Alert } from "@mui/material";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import FormInput from "../components/FormInput";
 import PageHeader from "../components/PageHeader";
+import { useAuth } from "../contexts/AuthContext";
 import { useState } from "react";
 
 const MotionCard = motion(Card);
@@ -12,11 +14,26 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const { login } = useAuth();
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setError("");
     setLoading(true);
-    setTimeout(() => setLoading(false), 2000);
+
+    // Simulate API call
+    setTimeout(() => {
+      if (email && password) {
+        login(email, password);
+        setLoading(false);
+        navigate("/dashboard");
+      } else {
+        setError("Please enter valid credentials");
+        setLoading(false);
+      }
+    }, 1000);
   };
 
   return (
@@ -59,6 +76,13 @@ export default function Login() {
                   Login to EduSphere
                 </Typography>
               </Box>
+
+              {/* Error Alert */}
+              {error && (
+                <Alert severity="error" sx={{ mb: 2 }}>
+                  {error}
+                </Alert>
+              )}
 
               {/* Form */}
               <Box component="form" onSubmit={handleSubmit}>
