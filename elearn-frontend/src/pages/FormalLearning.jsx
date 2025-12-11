@@ -1,5 +1,5 @@
 import { Box, Grid, Container, Tabs, Tab } from "@mui/material";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import PageHeader from "../components/PageHeader";
@@ -10,10 +10,12 @@ import { useSidebar } from "../contexts/SidebarContext";
 import { useAuth } from "../contexts/AuthContext";
 import TeacherDashboard from "../components/TeacherDashboard";
 import StudentFormalDashboard from "../components/StudentFormalDashboard";
+import { useFormalEducation } from "../contexts/FormalEducationContext";
 
 export default function FormalLearning() {
   const { isOpen } = useSidebar();
   const { user } = useAuth();
+  const { courses, enrollStudent, getStudentEnrollments } = useFormalEducation();
   const [tabValue, setTabValue] = useState(0);
   
   // Detect if user is a teacher based on explicit role
@@ -38,7 +40,7 @@ export default function FormalLearning() {
         </Box>
       );
     }
-  const formalCourses = [
+  const fallbackCourses = useMemo(() => ([
     {
       id: "formal-1",
       title: "Complete Web Development Bootcamp",
@@ -49,93 +51,17 @@ export default function FormalLearning() {
       category: "Formal Learning",
       rating: 4.8,
       students: "3,450",
-      instructor: "John Smith",
+      instructor: "Demo Instructor",
     },
-    {
-      id: "formal-2",
-      title: "Data Science Masterclass",
-      description: "Python, Machine Learning, and Data Analysis",
-      icon: "📊",
-      level: "Intermediate",
-      duration: "10 weeks",
-      category: "Formal Learning",
-      rating: 4.9,
-      students: "5,200",
-      instructor: "Jane Doe",
-    },
-    {
-      id: "formal-3",
-      title: "Advanced Python Programming",
-      description: "Deep dive into Python for professionals",
-      icon: "🐍",
-      level: "Advanced",
-      duration: "8 weeks",
-      category: "Formal Learning",
-      rating: 4.7,
-      students: "2,100",
-      instructor: "Mike Johnson",
-    },
-    {
-      id: "formal-4",
-      title: "Cloud Computing with AWS",
-      description: "Master AWS services and cloud architecture",
-      icon: "☁️",
-      level: "Intermediate",
-      duration: "10 weeks",
-      category: "Formal Learning",
-      rating: 4.6,
-      students: "3,800",
-      instructor: "Sarah Wilson",
-    },
-    {
-      id: "formal-5",
-      title: "Mobile App Development",
-      description: "React Native & Flutter for iOS & Android",
-      icon: "📱",
-      level: "Intermediate",
-      duration: "12 weeks",
-      category: "Formal Learning",
-      rating: 4.8,
-      students: "2,900",
-      instructor: "David Lee",
-    },
-    {
-      id: "formal-6",
-      title: "DevOps & CI/CD Pipeline",
-      description: "Docker, Kubernetes, Jenkins & more",
-      icon: "🔧",
-      level: "Advanced",
-      duration: "8 weeks",
-      category: "Formal Learning",
-      rating: 4.5,
-      students: "1,650",
-      instructor: "Emily Chen",
-    },
-    {
-      id: "formal-7",
-      title: "Database Design & SQL",
-      description: "SQL, NoSQL, and Database Architecture",
-      icon: "🗄️",
-      level: "Beginner",
-      duration: "6 weeks",
-      category: "Formal Learning",
-      rating: 4.7,
-      students: "4,100",
-      instructor: "Robert Brown",
-    },
-    {
-      id: "formal-8",
-      title: "Cybersecurity Fundamentals",
-      description: "Network security, encryption & ethical hacking",
-      icon: "🔐",
-      level: "Intermediate",
-      duration: "10 weeks",
-      category: "Formal Learning",
-      rating: 4.6,
-      students: "2,450",
-      instructor: "Lisa Anderson",
-    },
-  ];
+  ]), []);
+
+  const catalogCourses = courses.length ? courses : fallbackCourses;
+  const studentEnrollments = getStudentEnrollments(user?.id);
+
+  const handleEnroll = (course) => {
+    const result = enrollStudent(user?.id, course.id, `${user?.firstName || ""} ${user?.lastName || ""}`.trim());
+    return result;
+  };
 
   // Student view
   return (
@@ -192,7 +118,9 @@ export default function FormalLearning() {
           
           <Container maxWidth="lg">
             <Grid container spacing={3}>
-              {formalCourses.map((course, i) => (
+              {catalogCourses.map((course, i) => {
+                const enrolled = studentEnrollments.some((e) => e.courseId === course.id);
+                return (
                 <Grid item xs={12} sm={6} md={4} lg={3} key={i}>
                   <CourseCardAdvanced
                     id={course.id}
@@ -205,10 +133,12 @@ export default function FormalLearning() {
                     rating={course.rating}
                     students={course.students}
                     instructor={course.instructor}
-                    actionText="Enroll Now"
+                    actionText={enrolled ? "Enrolled" : "Enroll"}
+                    enrolledOverride={enrolled}
+                    onEnroll={handleEnroll}
                   />
                 </Grid>
-              ))}
+              );})}
             </Grid>
           </Container>
             </Section>

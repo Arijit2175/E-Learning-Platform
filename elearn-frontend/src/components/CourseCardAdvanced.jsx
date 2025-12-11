@@ -23,16 +23,31 @@ export default function CourseCardAdvanced({
   instructor,
   showProgress = false,
   actionText = "Enroll Now",
+  onEnroll,
+  enrolledOverride,
 }) {
   const { enrollCourse, isEnrolled } = useCourses();
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
-  const enrolled = isEnrolled(id);
+  const enrolled = enrolledOverride !== undefined ? enrolledOverride : isEnrolled(id);
 
   const handleEnroll = () => {
     if (!isAuthenticated) {
       navigate("/login");
+      return;
+    }
+
+    if (onEnroll) {
+      const result = onEnroll({ id, title, description, icon, category, level, duration, instructor, rating });
+      setSnackbar({
+        open: true,
+        message: result?.message || (result?.success ? "Enrolled" : "Unable to enroll"),
+        severity: result?.success ? "success" : "info",
+      });
+      if (result?.success) {
+        setTimeout(() => navigate("/formal"), 1200);
+      }
       return;
     }
 
