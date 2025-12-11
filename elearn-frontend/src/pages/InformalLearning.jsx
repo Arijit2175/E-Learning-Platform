@@ -5,8 +5,6 @@ import PageHeader from "../components/PageHeader";
 import Section from "../components/Section";
 import CourseCardAdvanced from "../components/CourseCardAdvanced";
 
-const MotionCard = motion(Card);
-
 export default function InformalLearning() {
   const dailyLessons = [
     {
