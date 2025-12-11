@@ -8,6 +8,7 @@ import EnrolledCoursesList from "../components/EnrolledCoursesList";
 import PageHeader from "../components/PageHeader";
 import { useCourses } from "../contexts/CoursesContext";
 import { useNonFormal } from "../contexts/NonFormalContext";
+import { useFormalEducation } from "../contexts/FormalEducationContext";
 import { useAuth } from "../contexts/AuthContext";
 import { useSidebar } from "../contexts/SidebarContext";
 import { useState } from "react";
@@ -18,13 +19,21 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 export default function Dashboard() {
   const { enrolledCourses } = useCourses();
   const { getEnrolledCourses: getNonFormalCourses, getCourseProgress: getNonFormalProgress, certificates } = useNonFormal();
+    const { courses: formalCoursesData } = useFormalEducation();
   const { user } = useAuth();
   const { isOpen } = useSidebar();
   const navigate = useNavigate();
   const [tabValue, setTabValue] = useState(0);
 
   const displayName = user?.name || `${user?.firstName || ""} ${user?.lastName || ""}`.trim() || "Learner";
-  const formalCourses = enrolledCourses || [];
+  // Merge enrolled courses with formal course data (including schedules)
+  const formalCourses = (enrolledCourses || []).map(enrolledCourse => {
+    const formalData = formalCoursesData.find(fc => fc.id === enrolledCourse.id);
+    return {
+      ...enrolledCourse,
+      schedules: formalData?.schedules || []
+    };
+  });
   const nonFormalCourses = getNonFormalCourses(user?.id) || [];
   const userCertificates = certificates?.filter((c) => c.userId === user?.id) || [];
 

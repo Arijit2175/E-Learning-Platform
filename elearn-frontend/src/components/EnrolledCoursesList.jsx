@@ -1,4 +1,5 @@
-import { Box, Grid, Card, CardContent, Typography, Button, LinearProgress } from "@mui/material";
+import { Box, Grid, Card, CardContent, Typography, Button, LinearProgress, Stack, Chip } from "@mui/material";
+import VideocamIcon from "@mui/icons-material/Videocam";
 import { motion } from "framer-motion";
 
 const MotionCard = motion(Card);
@@ -51,6 +52,37 @@ export default function EnrolledCoursesList({ courses = [] }) {
                     <Button variant="contained" size="small" sx={{ background: "#667eea" }}>
                       Continue
                     </Button>
+                                    {/* Meeting Links */}
+                                    {course.schedules && course.schedules.length > 0 && (
+                                      <Stack spacing={1} sx={{ mb: 2 }}>
+                                        {course.schedules.map((schedule) => (
+                                          <Box key={schedule.id} sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                                            <Chip 
+                                              icon={<VideocamIcon />}
+                                              label={schedule.title || "Live Class"}
+                                              size="small"
+                                              sx={{ backgroundColor: "#10b981", color: "white" }}
+                                            />
+                                            {schedule.meetLink && (
+                                              <Button
+                                                size="small"
+                                                variant="outlined"
+                                                href={schedule.meetLink}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                startIcon={<VideocamIcon />}
+                                                sx={{ textTransform: "none" }}
+                                              >
+                                                Join Meeting
+                                              </Button>
+                                            )}
+                                            <Typography variant="caption" sx={{ color: "#666" }}>
+                                              {new Date(schedule.startTime).toLocaleString()}
+                                            </Typography>
+                                          </Box>
+                                        ))}
+                                      </Stack>
+                                    )}
                   </Box>
 
                   {/* Progress Bar */}
