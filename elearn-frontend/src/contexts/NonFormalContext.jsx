@@ -296,6 +296,7 @@ export const NonFormalProvider = ({ children }) => {
         decrementAttempts,
         resetAttempts,
         getCourseProgress,
+        resetCourseProgress,
       }}
     >
       {children}
