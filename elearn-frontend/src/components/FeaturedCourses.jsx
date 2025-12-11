@@ -110,8 +110,7 @@ export default function FeaturedCourses() {
       <motion.div
         variants={containerVariants}
         initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
+        animate="visible"
       >
         <Grid container spacing={3}>
           {featuredCourses.map((course) => (

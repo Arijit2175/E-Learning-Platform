@@ -1,7 +1,6 @@
 import { Box, Grid, Typography, Container } from "@mui/material";
 import { motion } from "framer-motion";
-import CountUp from "react-countup";
-import VisibilitySensor from "react-visibility-sensor";
+import { useEffect, useState } from "react";
 
 const MotionBox = motion(Box);
 
@@ -12,6 +11,29 @@ export default function StatsSection() {
     { label: "Instructors", value: 250, icon: "👨‍🏫" },
     { label: "Learning Hours", value: 100000, icon: "⏱️" },
   ];
+
+  const [displayValues, setDisplayValues] = useState(stats.map(() => 0));
+
+  useEffect(() => {
+    const timers = stats.map((stat, index) => {
+      const increment = stat.value / 50;
+      let current = 0;
+      return setInterval(() => {
+        current += increment;
+        if (current >= stat.value) {
+          current = stat.value;
+          clearInterval(timers[index]);
+        }
+        setDisplayValues((prev) => {
+          const newValues = [...prev];
+          newValues[index] = Math.floor(current);
+          return newValues;
+        });
+      }, 30);
+    });
+
+    return () => timers.forEach((timer) => clearInterval(timer));
+  }, []);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -54,58 +76,51 @@ export default function StatsSection() {
             color: "#666",
             mb: 4,
             fontSize: { xs: "0.9rem", md: "1rem" },
-        }}
+          }}
         >
           Trusted by thousands of learners worldwide
         </Typography>
 
-        <VisibilitySensor>
-          {({ isVisible }) => (
-            <motion.div
-              variants={containerVariants}
-              initial="hidden"
-              animate={isVisible ? "visible" : "hidden"}
-            >
-              <Grid container spacing={3}>
-                {stats.map((stat, index) => (
-                  <Grid item xs={12} sm={6} md={3} key={index}>
-                    <motion.div variants={itemVariants}>
-                      <MotionBox
-                        whileHover={{ scale: 1.05 }}
-                        sx={{
-                          textAlign: "center",
-                          p: 3,
-                          background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-                          borderRadius: 2,
-                          color: "white",
-                          transition: "all 0.3s ease",
-                        }}
-                      >
-                        <Box sx={{ fontSize: "2.5rem", mb: 1 }}>{stat.icon}</Box>
-                        <Typography
-                          variant="h5"
-                          sx={{
-                            fontWeight: 800,
-                            fontSize: "2rem",
-                            mb: 1,
-                          }}
-                        >
-                          {isVisible && (
-                            <CountUp end={stat.value} duration={2} separator="," />
-                          )}
-                          {!isVisible && "0"}+
-                        </Typography>
-                        <Typography variant="body2" sx={{ opacity: 0.95 }}>
-                          {stat.label}
-                        </Typography>
-                      </MotionBox>
-                    </motion.div>
-                  </Grid>
-                ))}
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          <Grid container spacing={3}>
+            {stats.map((stat, index) => (
+              <Grid item xs={12} sm={6} md={3} key={index}>
+                <motion.div variants={itemVariants}>
+                  <MotionBox
+                    whileHover={{ scale: 1.05 }}
+                    sx={{
+                      textAlign: "center",
+                      p: 3,
+                      background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                      borderRadius: 2,
+                      color: "white",
+                      transition: "all 0.3s ease",
+                    }}
+                  >
+                    <Box sx={{ fontSize: "2.5rem", mb: 1 }}>{stat.icon}</Box>
+                    <Typography
+                      variant="h5"
+                      sx={{
+                        fontWeight: 800,
+                        fontSize: "2rem",
+                        mb: 1,
+                      }}
+                    >
+                      {displayValues[index].toLocaleString()}+
+                    </Typography>
+                    <Typography variant="body2" sx={{ opacity: 0.95 }}>
+                      {stat.label}
+                    </Typography>
+                  </MotionBox>
+                </motion.div>
               </Grid>
-            </motion.div>
-          )}
-        </VisibilitySensor>
+            ))}
+          </Grid>
+        </motion.div>
       </Container>
     </Box>
   );
