@@ -10,7 +10,6 @@ export default function Sidebar() {
 
   const links = [
     { to: "/dashboard", label: "Dashboard" },
-    { to: "/formal", label: "Formal Learning" },
     // Non-formal only for students
     ...(user?.role === "teacher" ? [] : [{ to: "/nonformal", label: "Non-Formal Learning" }]),
     { to: "/informal", label: "Informal Learning" },
