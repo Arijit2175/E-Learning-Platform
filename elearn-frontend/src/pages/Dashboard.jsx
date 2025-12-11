@@ -127,8 +127,11 @@ export default function Dashboard() {
               {formalCourses.length === 0 ? (
                 <Card sx={{ p: 4, textAlign: "center" }}>
                   <Typography variant="body1" sx={{ color: "#999", mb: 2 }}>
-                    No formal courses assigned yet. Your teacher will assign courses to you.
+                    You haven't enrolled in any formal courses yet.
                   </Typography>
+                  <Button variant="contained" onClick={() => navigate("/formal")}>
+                    Explore Formal Courses
+                  </Button>
                 </Card>
               ) : (
                 <EnrolledCoursesList courses={formalCourses} />
