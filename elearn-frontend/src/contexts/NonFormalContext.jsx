@@ -281,6 +281,15 @@ export const NonFormalProvider = ({ children }) => {
     }));
   };
 
+  const resetAllData = () => {
+    setEnrollments([]);
+    setProgress({});
+    setCertificates([]);
+    localStorage.removeItem("nfEnrollments");
+    localStorage.removeItem("nfProgress");
+    localStorage.removeItem("nfCertificates");
+  };
+
   return (
     <NonFormalContext.Provider
       value={{
@@ -297,6 +306,7 @@ export const NonFormalProvider = ({ children }) => {
         resetAttempts,
         getCourseProgress,
         resetCourseProgress,
+        resetAllData,
       }}
     >
       {children}

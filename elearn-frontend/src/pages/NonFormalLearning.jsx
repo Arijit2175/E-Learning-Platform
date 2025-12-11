@@ -13,7 +13,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 export default function NonFormalLearning() {
   const { isOpen } = useSidebar();
   const { user } = useAuth();
-  const { courses, getEnrolledCourses, getCourseProgress, certificates } = useNonFormal();
+  const { courses, getEnrolledCourses, getCourseProgress, certificates, resetAllData } = useNonFormal();
   const navigate = useNavigate();
 
   const enrolledCourses = getEnrolledCourses(user?.id);
@@ -41,11 +41,26 @@ export default function NonFormalLearning() {
         <Navbar />
 
         <Container maxWidth="lg" sx={{ mt: 4 }}>
-          <PageHeader
-            title="My Non-Formal Learning"
-            subtitle="Continue your skill development journey"
-            backgroundGradient="linear-gradient(135deg, #f093fb 0%, #f5576c 100%)"
-          />
+          <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
+            <PageHeader
+              title="My Non-Formal Learning"
+              subtitle="Continue your skill development journey"
+              backgroundGradient="linear-gradient(135deg, #f093fb 0%, #f5576c 100%)"
+            />
+            <Button 
+              variant="outlined" 
+              color="error" 
+              size="small"
+              onClick={() => {
+                if (window.confirm("⚠️ This will reset ALL non-formal learning data (enrollments, progress, certificates). Continue?")) {
+                  resetAllData();
+                  window.location.reload();
+                }
+              }}
+            >
+              Reset All Data
+            </Button>
+          </Stack>
 
           <Grid container spacing={3} sx={{ mt: 2 }}>
             {/* Stats */}
