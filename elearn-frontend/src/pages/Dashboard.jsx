@@ -19,19 +19,25 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 export default function Dashboard() {
   const { enrolledCourses } = useCourses();
   const { getEnrolledCourses: getNonFormalCourses, getCourseProgress: getNonFormalProgress, certificates } = useNonFormal();
-    const { courses: formalCoursesData } = useFormalEducation();
+  const { getStudentEnrollments, getCourseById, getCourseSchedules } = useFormalEducation();
   const { user } = useAuth();
   const { isOpen } = useSidebar();
   const navigate = useNavigate();
   const [tabValue, setTabValue] = useState(0);
 
   const displayName = user?.name || `${user?.firstName || ""} ${user?.lastName || ""}`.trim() || "Learner";
-  // Merge enrolled courses with formal course data (including schedules)
-  const formalCourses = (enrolledCourses || []).map(enrolledCourse => {
-    const formalData = formalCoursesData.find(fc => fc.id === enrolledCourse.id);
+  // Build Formal courses from formal enrollments (+schedules) so only teacher-assigned courses appear
+  const studentFormalEnrollments = user?.id ? getStudentEnrollments(user.id) : [];
+  const formalCourses = studentFormalEnrollments.map((enr) => {
+    const course = getCourseById(enr.courseId) || {};
+    const schedules = getCourseSchedules(enr.courseId) || [];
     return {
-      ...enrolledCourse,
-      schedules: formalData?.schedules || []
+      id: enr.courseId,
+      title: course.title || "Course",
+      instructor: course.instructor || course.teacherName || "Instructor",
+      duration: course.duration || "",
+      progress: enr.progress ?? 0,
+      schedules,
     };
   });
   const nonFormalCourses = getNonFormalCourses(user?.id) || [];
