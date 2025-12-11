@@ -31,7 +31,7 @@ import {
   Delete as DeleteIcon,
   Download as DownloadIcon,
   Upload as UploadIcon,
-  FileText as FileTextIcon,
+  Description as FileTextIcon,
   Grade as GradeIcon,
 } from "@mui/icons-material";
 import Navbar from "../components/Navbar";

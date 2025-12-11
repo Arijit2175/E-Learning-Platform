@@ -4,7 +4,7 @@ import { useFormalEducation } from "../contexts/FormalEducationContext";
 import { useAuth } from "../contexts/AuthContext";
 import Section from "./Section";
 import SectionTitle from "./SectionTitle";
-import { Download, FileText, Quiz, CheckCircle } from "@mui/icons-material";
+import { Download, Description, Quiz, CheckCircle } from "@mui/icons-material";
 
 export default function StudentFormalDashboard() {
   const { user } = useAuth();
