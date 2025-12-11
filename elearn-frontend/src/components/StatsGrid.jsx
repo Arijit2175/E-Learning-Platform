@@ -1,4 +1,5 @@
 import { Grid } from "@mui/material";
+import { motion } from "framer-motion";
 import StatCard from "./StatCard";
 
 export default function StatsGrid({ stats = [] }) {
@@ -16,7 +17,7 @@ export default function StatsGrid({ stats = [] }) {
     <Grid
       container
       spacing={3}
-      component={require("framer-motion").motion.div}
+      component={motion.div}
       variants={containerVariants}
       initial="hidden"
       whileInView="visible"

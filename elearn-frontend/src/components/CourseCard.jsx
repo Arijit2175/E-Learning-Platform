@@ -6,7 +6,6 @@ const MotionCard = motion(Card);
 export default function CourseCard({ children, title, description, icon, sx }) {
   return (
     <MotionCard
-      component={MotionCard}
       whileHover={{ scale: 1.05, y: -8 }}
       transition={{ type: "spring", stiffness: 300, damping: 20 }}
       sx={{
