@@ -11,6 +11,7 @@ import {
   Stack,
   TextField,
   InputAdornment,
+  Alert,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
@@ -18,6 +19,7 @@ import Sidebar from "../components/Sidebar";
 import PageHeader from "../components/PageHeader";
 import Section from "../components/Section";
 import { useSidebar } from "../contexts/SidebarContext";
+import { useAuth } from "../contexts/AuthContext";
 import { useNonFormal } from "../contexts/NonFormalContext";
 import SearchIcon from "@mui/icons-material/Search";
 import CodeIcon from "@mui/icons-material/Code";
@@ -39,6 +41,7 @@ const CATEGORIES = [
 
 export default function NonFormalHome() {
   const { isOpen } = useSidebar();
+  const { user } = useAuth();
   const { courses } = useNonFormal();
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
@@ -95,14 +98,23 @@ export default function NonFormalHome() {
         <Navbar />
 
         <Container maxWidth="lg" sx={{ mt: 4 }}>
-          <PageHeader
-            title="Non-Formal Learning"
-            subtitle="Flexible, skill-focused micro-courses and workshops"
-            backgroundGradient="linear-gradient(135deg, #f093fb 0%, #f5576c 100%)"
-          />
+          {user?.role === "teacher" ? (
+            <Alert severity="info" sx={{ mt: 4 }}>
+              👨‍🏫 Non-formal courses are only available for students. Teachers can manage formal courses in their dashboard.
+              <Button variant="text" onClick={() => navigate("/dashboard")} sx={{ ml: 2 }}>
+                Go to Dashboard
+              </Button>
+            </Alert>
+          ) : (
+            <>
+              <PageHeader
+                title="Non-Formal Learning"
+                subtitle="Flexible, skill-focused micro-courses and workshops"
+                backgroundGradient="linear-gradient(135deg, #f093fb 0%, #f5576c 100%)"
+              />
 
-          {/* Search Bar */}
-          <Card sx={{ mb: 3 }}>
+              {/* Search Bar */}
+              <Card sx={{ mb: 3 }}>
             <CardContent>
               <TextField
                 fullWidth
@@ -119,6 +131,7 @@ export default function NonFormalHome() {
               />
             </CardContent>
           </Card>
+
 
           {/* Categories */}
           <Section background="transparent">
@@ -286,6 +299,8 @@ export default function NonFormalHome() {
               </Grid>
             )}
           </Section>
+            </>
+          )}
         </Container>
       </Box>
     </Box>

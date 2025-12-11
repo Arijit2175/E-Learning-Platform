@@ -194,7 +194,7 @@ export const NonFormalProvider = ({ children }) => {
       setEnrollments((prev) => [...prev, enrollment]);
       setProgress((prev) => ({
         ...prev,
-        [`${userId}-${courseId}`]: { currentLessonIndex: 0, completedLessons: [], score: 0, assessment: null },
+        [`${userId}-${courseId}`]: { currentLessonIndex: 0, completedLessons: [], score: 0, assessment: null, attemptsRemaining: 3, totalAttempts: 3 },
       }));
     }
   };
@@ -222,11 +222,34 @@ export const NonFormalProvider = ({ children }) => {
     const key = `${userId}-${courseId}`;
     setProgress((prev) => ({
       ...prev,
-      [key]: { ...prev[key], score, assessment: { score, completedAt: new Date().toISOString() } },
+      [key]: { ...prev[key], score, assessment: { score, completedAt: new Date().toISOString(), attempts: (prev[key]?.assessment?.attempts || 0) + 1 } },
     }));
     if (score >= 70) {
       earnCertificate(userId, courseId);
     }
+  };
+
+  const decrementAttempts = (userId, courseId) => {
+    const key = `${userId}-${courseId}`;
+    setProgress((prev) => ({
+      ...prev,
+      [key]: {
+        ...prev[key],
+        attemptsRemaining: Math.max(0, (prev[key]?.attemptsRemaining || 3) - 1),
+      },
+    }));
+  };
+
+  const resetAttempts = (userId, courseId) => {
+    const key = `${userId}-${courseId}`;
+    setProgress((prev) => ({
+      ...prev,
+      [key]: {
+        ...prev[key],
+        attemptsRemaining: 3,
+        currentLessonIndex: 0,
+      },
+    }));
   };
 
   const earnCertificate = (userId, courseId) => {
@@ -246,6 +269,18 @@ export const NonFormalProvider = ({ children }) => {
 
   const getCourseProgress = (userId, courseId) => progress[`${userId}-${courseId}`];
 
+  const resetCourseProgress = (userId, courseId) => {
+    const key = `${userId}-${courseId}`;
+    setProgress((prev) => ({
+      ...prev,
+      [key]: {
+        ...prev[key],
+        currentLessonIndex: 0,
+        completedLessons: [],
+      },
+    }));
+  };
+
   return (
     <NonFormalContext.Provider
       value={{
@@ -258,6 +293,8 @@ export const NonFormalProvider = ({ children }) => {
         getEnrolledCourses,
         updateLessonProgress,
         updateAssessmentScore,
+        decrementAttempts,
+        resetAttempts,
         getCourseProgress,
       }}
     >

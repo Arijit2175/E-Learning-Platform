@@ -116,7 +116,9 @@ export default function Dashboard() {
             sx={{ borderBottom: "1px solid #e0e0e0", mb: 3 }}
           >
             <Tab label={`📖 Formal Learning (${formalCourses.length})`} />
-            <Tab label={`🎯 Non-Formal Learning (${nonFormalCourses.length})`} />
+            {user?.role !== "teacher" && (
+              <Tab label={`🎯 Non-Formal Learning (${nonFormalCourses.length})`} />
+            )}
           </Tabs>
 
           {/* Formal Courses Tab */}
@@ -138,7 +140,7 @@ export default function Dashboard() {
           )}
 
           {/* Non-Formal Courses Tab */}
-          {tabValue === 1 && (
+          {tabValue === 1 && user?.role !== "teacher" && (
             <>
               {nonFormalCourses.length === 0 ? (
                 <Card sx={{ p: 4, textAlign: "center" }}>

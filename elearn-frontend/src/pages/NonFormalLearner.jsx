@@ -39,7 +39,7 @@ export default function NonFormalLearner() {
   const { isOpen } = useSidebar();
   const { user } = useAuth();
   const { courseId } = useParams();
-  const { courses, getCourseProgress, updateLessonProgress, updateAssessmentScore } = useNonFormal();
+  const { courses, getCourseProgress, updateLessonProgress, updateAssessmentScore, decrementAttempts, resetAttempts } = useNonFormal();
   const navigate = useNavigate();
 
   const course = courses.find((c) => c.id === courseId);
@@ -49,6 +49,7 @@ export default function NonFormalLearner() {
   const [quizAnswers, setQuizAnswers] = useState({});
   const [quizSubmitted, setQuizSubmitted] = useState(false);
   const [quizScore, setQuizScore] = useState(0);
+  const [showResetPrompt, setShowResetPrompt] = useState(false);
 
   if (!course || !progress) {
     return (
@@ -85,11 +86,21 @@ export default function NonFormalLearner() {
   };
 
   const handleSubmitQuiz = () => {
+    // Check if user has attempts remaining
+    if (progress?.attemptsRemaining === 0) {
+      setShowResetPrompt(true);
+      return;
+    }
+
     let score = 0;
     SAMPLE_QUIZ.forEach((q, idx) => {
       if (quizAnswers[q.id] === idx) score += 1;
     });
     const percentage = (score / SAMPLE_QUIZ.length) * 100;
+    
+    // Decrement attempts
+    decrementAttempts(user?.id, courseId);
+    
     setQuizScore(percentage);
     setQuizSubmitted(true);
     updateAssessmentScore(user?.id, courseId, percentage);
@@ -268,11 +279,35 @@ export default function NonFormalLearner() {
         </Container>
 
         {/* Quiz Dialog */}
-        <Dialog open={openQuiz} onClose={() => !quizSubmitted && setOpenQuiz(false)} maxWidth="md" fullWidth>
+        <Dialog open={openQuiz} onClose={() => !quizSubmitted && !showResetPrompt && setOpenQuiz(false)} maxWidth="md" fullWidth>
           <DialogTitle>📋 Final Assessment</DialogTitle>
           <DialogContent>
-            {!quizSubmitted ? (
+            {showResetPrompt ? (
+              <Stack spacing={2} sx={{ mt: 2 }}>
+                <Alert severity="error">
+                  ❌ You've used all 3 attempts for this assessment.
+                </Alert>
+                <Typography variant="body2" sx={{ color: "#6b7280" }}>
+                  To get 3 more attempts, you need to complete all the lessons again. This helps reinforce your understanding of the material.
+                </Typography>
+                <Button
+                  fullWidth
+                  variant="contained"
+                  onClick={() => {
+                    resetAttempts(user?.id, courseId);
+                    setShowResetPrompt(false);
+                    setCurrentLessonIdx(0);
+                  }}
+                  sx={{ mt: 2 }}
+                >
+                  Rewatch All Lessons to Restore Attempts
+                </Button>
+              </Stack>
+            ) : !quizSubmitted ? (
               <Stack spacing={3} sx={{ mt: 2 }}>
+                <Alert severity="info">
+                  📊 Attempts Remaining: <strong>{progress?.attemptsRemaining || 0}/3</strong> | You need <strong>70%</strong> to pass
+                </Alert>
                 {SAMPLE_QUIZ.map((q, idx) => (
                   <Stack key={q.id}>
                     <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1 }}>
@@ -291,7 +326,7 @@ export default function NonFormalLearner() {
                 <Alert severity={quizScore >= 70 ? "success" : "warning"}>
                   {quizScore >= 70
                     ? "🎉 Congratulations! You passed the assessment!"
-                    : "⚠️ You need to score 70% to earn the certificate. Try again!"}
+                    : `⚠️ Score: ${quizScore.toFixed(0)}% - You need 70% to earn the certificate. (${progress?.attemptsRemaining || 0} attempts remaining)`}
                 </Alert>
                 <Typography variant="h4" sx={{ fontWeight: 700, textAlign: "center" }}>
                   {quizScore.toFixed(0)}%
@@ -299,16 +334,20 @@ export default function NonFormalLearner() {
                 <Typography variant="body2" sx={{ textAlign: "center", color: "#6b7280" }}>
                   {quizScore >= 70
                     ? `Your certificate has been generated. Download it from your dashboard!`
-                    : `Review the lessons and try again to improve your score.`}
+                    : progress?.attemptsRemaining === 0
+                    ? `You've used all attempts. Rewatch the lessons to try again.`
+                    : `Review the lessons and try again to improve your score. (${progress?.attemptsRemaining} attempts left)`}
                 </Typography>
               </Stack>
             )}
           </DialogContent>
           <DialogActions>
-            {!quizSubmitted ? (
+            {showResetPrompt ? (
+              <Button onClick={() => setOpenQuiz(false)}>Cancel</Button>
+            ) : !quizSubmitted ? (
               <>
                 <Button onClick={() => setOpenQuiz(false)}>Cancel</Button>
-                <Button variant="contained" onClick={handleSubmitQuiz}>
+                <Button variant="contained" onClick={handleSubmitQuiz} disabled={progress?.attemptsRemaining === 0}>
                   Submit Assessment
                 </Button>
               </>
@@ -317,6 +356,8 @@ export default function NonFormalLearner() {
                 <Button
                   onClick={() => {
                     setOpenQuiz(false);
+                    setQuizSubmitted(false);
+                    setQuizAnswers({});
                     if (quizScore >= 70) {
                       navigate("/nonformal");
                     } else {
