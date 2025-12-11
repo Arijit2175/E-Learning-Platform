@@ -4,8 +4,10 @@ import Sidebar from "../components/Sidebar";
 import PageHeader from "../components/PageHeader";
 import Section from "../components/Section";
 import CourseCardAdvanced from "../components/CourseCardAdvanced";
+import { useSidebar } from "../contexts/SidebarContext";
 
 export default function InformalLearning() {
+  const { isOpen } = useSidebar();
   const dailyLessons = [
     {
       id: "informal-1",
@@ -111,11 +113,12 @@ export default function InformalLearning() {
       <Box
         sx={{
           flexGrow: 1,
-          ml: { xs: 0, md: 25 },
+          ml: { xs: 0, md: isOpen ? 25 : 8.75 },
           mt: { xs: 6, md: 8 },
           background: "linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)",
           minHeight: "100vh",
           py: 4,
+          transition: "margin-left 0.3s ease",
         }}
       >
         <Navbar />

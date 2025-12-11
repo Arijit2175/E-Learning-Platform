@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@mui/material/styles";
 import { AuthProvider } from "./contexts/AuthContext";
 import { CoursesProvider } from "./contexts/CoursesContext";
+import { SidebarProvider } from "./contexts/SidebarContext";
 import theme from "./theme";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Home from "./pages/Home";
@@ -20,6 +21,7 @@ export default function App() {
       <BrowserRouter>
         <AuthProvider>
           <CoursesProvider>
+            <SidebarProvider>
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
@@ -72,6 +74,7 @@ export default function App() {
                 } 
               />
             </Routes>
+            </SidebarProvider>
           </CoursesProvider>
         </AuthProvider>
       </BrowserRouter>

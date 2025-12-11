@@ -8,10 +8,12 @@ import EnrolledCoursesList from "../components/EnrolledCoursesList";
 import PageHeader from "../components/PageHeader";
 import { useCourses } from "../contexts/CoursesContext";
 import { useAuth } from "../contexts/AuthContext";
+import { useSidebar } from "../contexts/SidebarContext";
 
 export default function Dashboard() {
   const { enrolledCourses } = useCourses();
   const { user } = useAuth();
+  const { isOpen } = useSidebar();
   // Calculate total learning hours (estimate 1 hour per week per course)
   const totalHours = enrolledCourses.reduce((acc, course) => {
     const weeks = parseInt(course.duration) || 0;
@@ -52,10 +54,11 @@ export default function Dashboard() {
       <Box
         sx={{
           flexGrow: 1,
-          ml: { xs: 0, md: 25 },
+          ml: { xs: 0, md: isOpen ? 25 : 8.75 },
           mt: { xs: 6, md: 8 },
           background: "linear-gradient(135deg, #f8f9fa 0%, #f0f2f5 100%)",
           minHeight: "100vh",
+          transition: "margin-left 0.3s ease",
         }}
       >
         <Navbar />

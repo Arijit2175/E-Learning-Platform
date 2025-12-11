@@ -5,11 +5,13 @@ import Sidebar from "../components/Sidebar";
 import PageHeader from "../components/PageHeader";
 import SendIcon from "@mui/icons-material/Send";
 import { useState } from "react";
+import { useSidebar } from "../contexts/SidebarContext";
 
 const MotionCard = motion(Card);
 const MotionPaper = motion(Paper);
 
 export default function AITutor() {
+  const { isOpen } = useSidebar();
   const [messages, setMessages] = useState([
     { id: 1, text: "Hello! I'm your AI Tutor. Ask me anything about any topic!", sender: "ai" },
   ]);
@@ -47,7 +49,8 @@ export default function AITutor() {
       <Box
         sx={{
           flexGrow: 1,
-          ml: { xs: 0, md: 25 },
+          ml: { xs: 0, md: isOpen ? 25 : 8.75 },
+          transition: "margin-left 0.3s ease",
           mt: { xs: 6, md: 8 },
           background: "linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)",
           minHeight: "100vh",

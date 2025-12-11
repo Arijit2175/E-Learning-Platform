@@ -1,24 +1,97 @@
-import { Drawer, List, ListItem, ListItemText } from "@mui/material";
+import { Drawer, List, ListItem, ListItemText, IconButton, Box } from "@mui/material";
 import { Link } from "react-router-dom";
+import { ChevronLeft } from "@mui/icons-material";
+import { useSidebar } from "../contexts/SidebarContext";
 
 export default function Sidebar() {
+  const { isOpen, toggleSidebar } = useSidebar();
+
   return (
-    <Drawer variant="permanent" anchor="left">
-      <List sx={{ width: 200, mt: 8 }}>
-        <ListItem button component={Link} to="/dashboard">
-          <ListItemText primary="Dashboard" />
+    <Drawer 
+      variant="permanent" 
+      anchor="left"
+      sx={{
+        width: isOpen ? 200 : 70,
+        flexShrink: 0,
+        "& .MuiDrawer-paper": {
+          width: isOpen ? 200 : 70,
+          boxSizing: "border-box",
+          transition: "width 0.3s ease",
+          overflowX: "hidden",
+        },
+      }}
+    >
+      {/* Close Button */}
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "flex-end",
+          alignItems: "center",
+          p: 1,
+          mt: 8,
+          minHeight: 50,
+        }}
+      >
+        <IconButton
+          onClick={toggleSidebar}
+          size="small"
+          sx={{
+            color: "#667eea",
+            "&:hover": {
+              background: "#667eea20",
+            },
+          }}
+        >
+          <ChevronLeft />
+        </IconButton>
+      </Box>
+
+      {/* Navigation Items */}
+      <List sx={{ mt: 2 }}>
+        <ListItem button component={Link} to="/dashboard" title="Dashboard">
+          <ListItemText 
+            primary="Dashboard"
+            sx={{
+              opacity: isOpen ? 1 : 0,
+              transition: "opacity 0.3s ease",
+            }}
+          />
         </ListItem>
-        <ListItem button component={Link} to="/formal">
-          <ListItemText primary="Formal Learning" />
+        <ListItem button component={Link} to="/formal" title="Formal Learning">
+          <ListItemText 
+            primary="Formal Learning"
+            sx={{
+              opacity: isOpen ? 1 : 0,
+              transition: "opacity 0.3s ease",
+            }}
+          />
         </ListItem>
-        <ListItem button component={Link} to="/nonformal">
-          <ListItemText primary="Non-Formal Learning" />
+        <ListItem button component={Link} to="/nonformal" title="Non-Formal Learning">
+          <ListItemText 
+            primary="Non-Formal Learning"
+            sx={{
+              opacity: isOpen ? 1 : 0,
+              transition: "opacity 0.3s ease",
+            }}
+          />
         </ListItem>
-        <ListItem button component={Link} to="/informal">
-          <ListItemText primary="Informal Learning" />
+        <ListItem button component={Link} to="/informal" title="Informal Learning">
+          <ListItemText 
+            primary="Informal Learning"
+            sx={{
+              opacity: isOpen ? 1 : 0,
+              transition: "opacity 0.3s ease",
+            }}
+          />
         </ListItem>
-        <ListItem button component={Link} to="/ai">
-          <ListItemText primary="AI Tutor" />
+        <ListItem button component={Link} to="/ai" title="AI Tutor">
+          <ListItemText 
+            primary="AI Tutor"
+            sx={{
+              opacity: isOpen ? 1 : 0,
+              transition: "opacity 0.3s ease",
+            }}
+          />
         </ListItem>
       </List>
     </Drawer>

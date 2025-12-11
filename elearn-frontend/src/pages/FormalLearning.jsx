@@ -5,8 +5,10 @@ import PageHeader from "../components/PageHeader";
 import Section from "../components/Section";
 import SectionTitle from "../components/SectionTitle";
 import CourseCardAdvanced from "../components/CourseCardAdvanced";
+import { useSidebar } from "../contexts/SidebarContext";
 
 export default function FormalLearning() {
+  const { isOpen } = useSidebar();
   const formalCourses = [
     {
       id: "formal-1",
@@ -112,10 +114,11 @@ export default function FormalLearning() {
       <Box
         sx={{
           flexGrow: 1,
-          ml: { xs: 0, md: 25 },
+          ml: { xs: 0, md: isOpen ? 25 : 8.75 },
           mt: { xs: 6, md: 8 },
           background: "linear-gradient(135deg, #f8f9fa 0%, #f0f2f5 100%)",
           minHeight: "100vh",
+          transition: "margin-left 0.3s ease",
         }}
       >
         <Navbar />
