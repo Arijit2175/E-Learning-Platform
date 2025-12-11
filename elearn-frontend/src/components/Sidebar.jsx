@@ -2,9 +2,20 @@ import { Drawer, List, ListItem, ListItemText, IconButton, Box } from "@mui/mate
 import { Link } from "react-router-dom";
 import { Menu } from "@mui/icons-material";
 import { useSidebar } from "../contexts/SidebarContext";
+import { useAuth } from "../contexts/AuthContext";
 
 export default function Sidebar() {
   const { isOpen, toggleSidebar } = useSidebar();
+  const { user } = useAuth();
+
+  const links = [
+    { to: "/dashboard", label: "Dashboard" },
+    { to: "/formal", label: "Formal Learning" },
+    // Non-formal only for students
+    ...(user?.role === "teacher" ? [] : [{ to: "/nonformal", label: "Non-Formal Learning" }]),
+    { to: "/informal", label: "Informal Learning" },
+    { to: "/ai", label: "AI Tutor" },
+  ];
 
   return (
     <Drawer 
@@ -48,51 +59,17 @@ export default function Sidebar() {
 
       {/* Navigation Items */}
       <List sx={{ mt: 2 }}>
-        <ListItem button component={Link} to="/dashboard" title="Dashboard">
-          <ListItemText 
-            primary="Dashboard"
-            sx={{
-              opacity: isOpen ? 1 : 0,
-              transition: "opacity 0.3s ease",
-            }}
-          />
-        </ListItem>
-        <ListItem button component={Link} to="/formal" title="Formal Learning">
-          <ListItemText 
-            primary="Formal Learning"
-            sx={{
-              opacity: isOpen ? 1 : 0,
-              transition: "opacity 0.3s ease",
-            }}
-          />
-        </ListItem>
-        <ListItem button component={Link} to="/nonformal" title="Non-Formal Learning">
-          <ListItemText 
-            primary="Non-Formal Learning"
-            sx={{
-              opacity: isOpen ? 1 : 0,
-              transition: "opacity 0.3s ease",
-            }}
-          />
-        </ListItem>
-        <ListItem button component={Link} to="/informal" title="Informal Learning">
-          <ListItemText 
-            primary="Informal Learning"
-            sx={{
-              opacity: isOpen ? 1 : 0,
-              transition: "opacity 0.3s ease",
-            }}
-          />
-        </ListItem>
-        <ListItem button component={Link} to="/ai" title="AI Tutor">
-          <ListItemText 
-            primary="AI Tutor"
-            sx={{
-              opacity: isOpen ? 1 : 0,
-              transition: "opacity 0.3s ease",
-            }}
-          />
-        </ListItem>
+        {links.map((item) => (
+          <ListItem key={item.to} button component={Link} to={item.to} title={item.label}>
+            <ListItemText
+              primary={item.label}
+              sx={{
+                opacity: isOpen ? 1 : 0,
+                transition: "opacity 0.3s ease",
+              }}
+            />
+          </ListItem>
+        ))}
       </List>
     </Drawer>
   );
