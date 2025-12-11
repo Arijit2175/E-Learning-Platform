@@ -87,7 +87,7 @@ export default function NonFormalLearner() {
   const handleSubmitQuiz = () => {
     let score = 0;
     SAMPLE_QUIZ.forEach((q, idx) => {
-      if (quizAnswers[q.id] === idx) score += 1;
+      if (quizAnswers[q.id] === idx.toString()) score += 1;
     });
     const percentage = (score / SAMPLE_QUIZ.length) * 100;
     
