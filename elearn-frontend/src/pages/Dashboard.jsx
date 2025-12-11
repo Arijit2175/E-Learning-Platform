@@ -14,6 +14,7 @@ export default function Dashboard() {
   const { enrolledCourses } = useCourses();
   const { user } = useAuth();
   const { isOpen } = useSidebar();
+  const displayName = user?.name || `${user?.firstName || ""} ${user?.lastName || ""}`.trim() || "Learner";
   // Calculate total learning hours (estimate 1 hour per week per course)
   const totalHours = enrolledCourses.reduce((acc, course) => {
     const weeks = parseInt(course.duration) || 0;
@@ -66,7 +67,7 @@ export default function Dashboard() {
         {/* Page Header Section */}
         <Section background="transparent" pt={4} pb={2} animated={false}>
           <PageHeader
-            title={`Welcome back, ${user?.name || 'Learner'}!`}
+            title={`Welcome back, ${displayName}!`}
             subtitle="Track your learning progress and achievements"
             backgroundGradient="linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
           />

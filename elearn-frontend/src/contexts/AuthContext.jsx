@@ -1,5 +1,11 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+
+const buildUser = (data) => {
+  const firstName = data.firstName || data.email?.split("@")[0] || "User";
+  const lastName = data.lastName || "";
+  const name = data.name || `${firstName} ${lastName}`.trim() || data.email || "Learner";
+  return { ...data, firstName, lastName, name };
+};
 
 const AuthContext = createContext();
 
@@ -20,14 +26,14 @@ export const AuthProvider = ({ children }) => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
       const parsed = JSON.parse(storedUser);
-      setUser({ ...parsed, role: parsed.role || "student" });
+      setUser(buildUser({ ...parsed, role: parsed.role || "student" }));
     }
     setLoading(false);
   }, []);
 
   const login = (email, password, role = "student") => {
     // Mock login - in real app, this would call your backend
-    const mockUser = {
+    const mockUser = buildUser({
       id: 1,
       email: email,
       firstName: email.split("@")[0],
@@ -35,7 +41,7 @@ export const AuthProvider = ({ children }) => {
       avatar: "👤",
       joinedDate: new Date().toISOString(),
       role,
-    };
+    });
 
     setUser(mockUser);
     localStorage.setItem("user", JSON.stringify(mockUser));
@@ -44,7 +50,7 @@ export const AuthProvider = ({ children }) => {
 
   const register = (formData) => {
     // Mock registration
-    const mockUser = {
+    const mockUser = buildUser({
       id: Date.now(),
       email: formData.email,
       firstName: formData.firstName,
@@ -52,7 +58,7 @@ export const AuthProvider = ({ children }) => {
       avatar: "👤",
       joinedDate: new Date().toISOString(),
       role: formData.role || "student",
-    };
+    });
 
     setUser(mockUser);
     localStorage.setItem("user", JSON.stringify(mockUser));

@@ -17,6 +17,7 @@ import InformalLearning from "./pages/InformalLearning";
 import AITutor from "./pages/AITutor";
 import CourseDetailPage from "./pages/CourseDetailPage";
 import QuizPage from "./pages/QuizPage";
+import Profile from "./pages/Profile";
 
 export default function App() {
   return (
@@ -38,6 +39,15 @@ export default function App() {
                   element={
                     <ProtectedRoute>
                       <Dashboard />
+                    </ProtectedRoute>
+                  }
+                />
+
+                <Route
+                  path="/profile"
+                  element={
+                    <ProtectedRoute>
+                      <Profile />
                     </ProtectedRoute>
                   }
                 />
@@ -95,6 +105,9 @@ export default function App() {
                     </ProtectedRoute>
                   }
                 />
+
+                {/* Default entry fallback */}
+                <Route path="*" element={<Home />} />
               </Routes>
               </SidebarProvider>
             </FormalEducationProvider>

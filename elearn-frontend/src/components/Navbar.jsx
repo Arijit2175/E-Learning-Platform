@@ -8,6 +8,7 @@ export default function Navbar() {
   const { user, isAuthenticated, logout } = useAuth();
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
+  const displayName = user?.name || `${user?.firstName || ""} ${user?.lastName || ""}`.trim() || user?.email;
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -47,7 +48,7 @@ export default function Navbar() {
         {isAuthenticated ? (
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
             <Typography variant="body2" sx={{ mr: 1, display: { xs: 'none', sm: 'block' } }}>
-              {user?.name}
+              {displayName}
             </Typography>
             <IconButton
               size="large"
