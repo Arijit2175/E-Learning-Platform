@@ -16,6 +16,7 @@ export default function Register() {
     email: "",
     password: "",
     confirmPassword: "",
+    role: "student",
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -153,6 +154,23 @@ export default function Register() {
                   onChange={handleChange}
                   required
                 />
+
+                <Box sx={{ display: "flex", gap: 1.5, mb: 2 }}>
+                  <Button
+                    variant={formData.role === "student" ? "contained" : "outlined"}
+                    onClick={() => setFormData({ ...formData, role: "student" })}
+                    sx={{ flex: 1 }}
+                  >
+                    Student
+                  </Button>
+                  <Button
+                    variant={formData.role === "teacher" ? "contained" : "outlined"}
+                    onClick={() => setFormData({ ...formData, role: "teacher" })}
+                    sx={{ flex: 1 }}
+                  >
+                    Teacher
+                  </Button>
+                </Box>
 
                 {/* Terms */}
                 <Typography variant="caption" sx={{ color: "#666", mb: 2, display: "block" }}>

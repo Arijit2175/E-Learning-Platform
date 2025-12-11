@@ -19,12 +19,13 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
-      setUser(JSON.parse(storedUser));
+      const parsed = JSON.parse(storedUser);
+      setUser({ ...parsed, role: parsed.role || "student" });
     }
     setLoading(false);
   }, []);
 
-  const login = (email, password) => {
+  const login = (email, password, role = "student") => {
     // Mock login - in real app, this would call your backend
     const mockUser = {
       id: 1,
@@ -33,6 +34,7 @@ export const AuthProvider = ({ children }) => {
       lastName: "User",
       avatar: "👤",
       joinedDate: new Date().toISOString(),
+      role,
     };
 
     setUser(mockUser);
@@ -49,6 +51,7 @@ export const AuthProvider = ({ children }) => {
       lastName: formData.lastName,
       avatar: "👤",
       joinedDate: new Date().toISOString(),
+      role: formData.role || "student",
     };
 
     setUser(mockUser);

@@ -16,8 +16,8 @@ export default function FormalLearning() {
   const { user } = useAuth();
   const [tabValue, setTabValue] = useState(0);
   
-  // Detect if user is a teacher based on email
-  const isTeacher = user?.email?.toLowerCase().includes("teacher") || user?.email?.toLowerCase().includes("prof");
+  // Detect if user is a teacher based on explicit role
+  const isTeacher = user?.role === "teacher";
     if (isTeacher) {
       return (
         <Box sx={{ display: "flex" }}>

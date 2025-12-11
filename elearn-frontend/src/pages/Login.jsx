@@ -14,6 +14,7 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [role, setRole] = useState("student");
   const { login, isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
@@ -32,7 +33,7 @@ export default function Login() {
     // Simulate API call
     setTimeout(() => {
       if (email && password) {
-        login(email, password);
+        login(email, password, role);
         setLoading(false);
         navigate("/dashboard");
       } else {
@@ -106,6 +107,23 @@ export default function Login() {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                 />
+
+                <Box sx={{ display: "flex", gap: 1, mb: 3 }}>
+                  <Button
+                    variant={role === "student" ? "contained" : "outlined"}
+                    onClick={() => setRole("student")}
+                    sx={{ flex: 1 }}
+                  >
+                    Student
+                  </Button>
+                  <Button
+                    variant={role === "teacher" ? "contained" : "outlined"}
+                    onClick={() => setRole("teacher")}
+                    sx={{ flex: 1 }}
+                  >
+                    Teacher
+                  </Button>
+                </Box>
 
                 {/* Remember & Forgot */}
                 <Box
