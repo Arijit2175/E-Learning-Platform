@@ -2,11 +2,10 @@ import { Box, Container, Button, Typography, Card, CardContent, Link, Alert } fr
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
-import Sidebar from "../components/Sidebar";
 import FormInput from "../components/FormInput";
 import PageHeader from "../components/PageHeader";
 import { useAuth } from "../contexts/AuthContext";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const MotionCard = motion(Card);
 
@@ -15,8 +14,15 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const { login } = useAuth();
+  const { login, isAuthenticated } = useAuth();
   const navigate = useNavigate();
+
+  // Redirect if already logged in
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/dashboard");
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -37,19 +43,16 @@ export default function Login() {
   };
 
   return (
-    <Box sx={{ display: "flex" }}>
-      <Sidebar />
+    <Box>
+      <Navbar />
       <Box
         sx={{
-          flexGrow: 1,
-          ml: { xs: 0, md: 25 },
-          mt: { xs: 6, md: 8 },
           background: "linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)",
           minHeight: "100vh",
           py: 4,
+          pt: { xs: 10, md: 12 },
         }}
       >
-        <Navbar />
 
         <Container maxWidth="sm" sx={{ mt: 4 }}>
           <PageHeader
@@ -120,7 +123,15 @@ export default function Login() {
                       Remember me
                     </label>
                   </Typography>
-                  <Link href="#" sx={{ color: "#667eea", textDecoration: "none" }}>
+                  <Link 
+                    href="/forgot-password" 
+                    sx={{ 
+                      color: "#667eea", 
+                      textDecoration: "none",
+                      cursor: "pointer",
+                      "&:hover": { textDecoration: "underline" }
+                    }}
+                  >
                     Forgot Password?
                   </Link>
                 </Box>

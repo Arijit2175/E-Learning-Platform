@@ -1,5 +1,4 @@
 import Navbar from "../components/Navbar";
-import Sidebar from "../components/Sidebar";
 import HeroSection from "../components/HeroSection";
 import CourseCard from "../components/CourseCard";
 import AnimatedButton from "../components/AnimatedButton";
@@ -8,8 +7,21 @@ import FeaturedCourses from "../components/FeaturedCourses";
 import Footer from "../components/Footer";
 import { Box, Grid, Container, Typography } from "@mui/material";
 import { motion } from "framer-motion";
+import { useAuth } from "../contexts/AuthContext";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Home() {
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+
+  // Redirect to dashboard if already logged in
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/dashboard");
+    }
+  }, [isAuthenticated, navigate]);
+
   const learningPaths = [
     {
       title: "Formal Learning",
@@ -58,22 +70,18 @@ export default function Home() {
   };
 
   return (
-    <Box sx={{ display: "flex" }}>
-      {/* Sidebar */}
-      <Sidebar />
+    <Box>
+      {/* Navbar */}
+      <Navbar />
 
       {/* Main content */}
       <Box
         sx={{
-          flexGrow: 1,
-          ml: { xs: 0, md: 25 },
-          mt: { xs: 6, md: 8 },
           background: "linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)",
           minHeight: "100vh",
+          pt: { xs: 8, md: 10 },
         }}
       >
-        {/* Navbar */}
-        <Navbar />
 
         {/* Hero Section */}
         <HeroSection
