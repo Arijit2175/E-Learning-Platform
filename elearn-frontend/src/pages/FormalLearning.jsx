@@ -1,4 +1,5 @@
-import { Box, Container, Tabs, Tab, Typography, Unstable_Grid2 as Grid } from "@mui/material";
+import { Box, Container, Tabs, Tab, Typography } from "@mui/material";
+import Grid from "@mui/material/Unstable_Grid2";
 import { useMemo, useState } from "react";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
