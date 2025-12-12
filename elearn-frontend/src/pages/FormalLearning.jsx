@@ -40,22 +40,8 @@ export default function FormalLearning() {
         </Box>
       );
     }
-  const fallbackCourses = useMemo(() => ([
-    {
-      id: "formal-1",
-      title: "Complete Web Development Bootcamp",
-      description: "Learn HTML, CSS, JavaScript, React & more from scratch",
-      icon: "🌐",
-      level: "Beginner",
-      duration: "12 weeks",
-      category: "Formal Learning",
-      rating: 4.8,
-      students: "3,450",
-      instructor: "Demo Instructor",
-    },
-  ]), []);
-
-  const catalogCourses = courses.length ? courses : fallbackCourses;
+  // Only show teacher-created courses; no fallback demo content
+  const catalogCourses = courses;
   const studentEnrollments = getStudentEnrollments(user?.id);
 
   const handleEnroll = (course) => {
@@ -118,7 +104,13 @@ export default function FormalLearning() {
           
           <Container maxWidth="lg">
             <Grid container spacing={3}>
-              {catalogCourses.map((course, i) => {
+              {catalogCourses.length === 0 ? (
+                <Box sx={{ width: "100%", textAlign: "center", py: 4 }}>
+                  <Typography variant="body1" sx={{ color: "#999" }}>
+                    No formal courses available yet. Your teacher will assign courses.
+                  </Typography>
+                </Box>
+              ) : catalogCourses.map((course, i) => {
                 const enrolled = studentEnrollments.some((e) => e.courseId === course.id);
                 return (
                 <Grid item xs={12} sm={6} md={4} lg={3} key={i}>

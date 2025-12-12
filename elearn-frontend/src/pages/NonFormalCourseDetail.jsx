@@ -18,6 +18,8 @@ import {
   TableCell,
   TableHead,
   TableRow,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import { useParams, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
@@ -35,7 +37,7 @@ export default function NonFormalCourseDetail() {
   const { isOpen } = useSidebar();
   const { user } = useAuth();
   const { courseId } = useParams();
-  const { courses, enrollCourse, isEnrolled } = useNonFormal();
+  const { courses, enrollCourse, isEnrolled, certificates } = useNonFormal();
   const navigate = useNavigate();
   const [openPreview, setOpenPreview] = useState(false);
   const [previewLesson, setPreviewLesson] = useState(null);
@@ -43,6 +45,7 @@ export default function NonFormalCourseDetail() {
 
   const course = courses.find((c) => c.id === courseId);
   const enrolled = isEnrolled(user?.id, courseId);
+  const hasCertificate = certificates?.some((c) => c.userId === user?.id && c.courseId === courseId);
 
   if (!course) {
     return (
@@ -126,15 +129,21 @@ export default function NonFormalCourseDetail() {
                 </Grid>
                 <Grid item xs={12} md={4} sx={{ textAlign: "center" }}>
                   <Box sx={{ fontSize: 80, mb: 2 }}>{course.thumbnail}</Box>
-                  <Button
-                    fullWidth
-                    variant="contained"
-                    size="large"
-                    onClick={handleEnroll}
-                    sx={{ background: "white", color: "#667eea", fontWeight: 700 }}
-                  >
-                    {enrolled ? "Continue Learning" : "Enroll Now"}
-                  </Button>
+                  <Stack spacing={1}>
+                    {hasCertificate && (
+                      <Chip color="success" label="Certified" />
+                    )}
+                    <Button
+                      fullWidth
+                      variant="contained"
+                      size="large"
+                      onClick={handleEnroll}
+                      disabled={hasCertificate}
+                      sx={{ background: hasCertificate ? "#e5e7eb" : "white", color: hasCertificate ? "#9ca3af" : "#667eea", fontWeight: 700 }}
+                    >
+                      {hasCertificate ? "Completed" : enrolled ? "Continue Learning" : "Enroll Now"}
+                    </Button>
+                  </Stack>
                 </Grid>
               </Grid>
             </CardContent>
