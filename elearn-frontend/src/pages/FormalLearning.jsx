@@ -1,5 +1,4 @@
 import { Box, Container, Tabs, Tab, Typography } from "@mui/material";
-import Grid from "@mui/material/Unstable_Grid2";
 import { useMemo, useState } from "react";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
@@ -104,7 +103,16 @@ export default function FormalLearning() {
           />
           
           <Container maxWidth="lg">
-            <Grid container spacing={3}>
+            <Box sx={{
+              display: "grid",
+              gridTemplateColumns: {
+                xs: "1fr",
+                sm: "repeat(2, 1fr)",
+                md: "repeat(3, 1fr)",
+                lg: "repeat(4, 1fr)",
+              },
+              gap: 3,
+            }}>
               {catalogCourses.length === 0 ? (
                 <Box sx={{ width: "100%", textAlign: "center", py: 4 }}>
                   <Typography variant="body1" sx={{ color: "#999" }}>
@@ -114,7 +122,7 @@ export default function FormalLearning() {
               ) : catalogCourses.map((course, i) => {
                 const enrolled = studentEnrollments.some((e) => e.courseId === course.id);
                 return (
-                <Grid xs={12} sm={6} md={4} lg={3} key={i}>
+                <Box key={i}>
                   <CourseCardAdvanced
                     id={course.id}
                     title={course.title}
@@ -130,9 +138,9 @@ export default function FormalLearning() {
                     enrolledOverride={enrolled}
                     onEnroll={handleEnroll}
                   />
-                </Grid>
+                </Box>
               );})}
-            </Grid>
+            </Box>
           </Container>
             </Section>
           </>
