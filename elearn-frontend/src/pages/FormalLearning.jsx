@@ -1,4 +1,4 @@
-import { Box, Grid, Container, Tabs, Tab } from "@mui/material";
+import { Box, Grid, Container, Tabs, Tab, Typography } from "@mui/material";
 import { useMemo, useState } from "react";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
