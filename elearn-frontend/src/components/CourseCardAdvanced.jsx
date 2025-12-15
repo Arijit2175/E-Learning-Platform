@@ -95,16 +95,16 @@ export default function CourseCardAdvanced({
 
   return (
     <MotionCard
-      whileHover={{ y: -12, boxShadow: "0 20px 50px rgba(0,0,0,0.15)" }}
-      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+      whileHover={{ y: -4, boxShadow: 'var(--shadow-lg)' }}
+      transition={{ duration: 0.18, ease: "easeOut" }}
       sx={{
         height: "100%",
         display: "flex",
         flexDirection: "column",
-        borderRadius: 3,
+        borderRadius: 'var(--radius-lg)',
         overflow: "hidden",
-        border: "1px solid rgba(0,0,0,0.08)",
-        background: "white",
+        border: '1px solid var(--color-border)',
+        background: 'var(--color-surface)',
       }}
     >
       {/* Header with Icon */}
@@ -159,17 +159,17 @@ export default function CourseCardAdvanced({
 
         {/* Title & Description */}
         <Box>
-          <Typography variant="h6" sx={{ fontWeight: 700, color: "#2c3e50", mb: 0.5 }}>
+          <Typography variant="h6" sx={{ fontWeight: 700, color: 'var(--color-text)', mb: 0.5 }}>
             {title}
           </Typography>
-          <Typography variant="body2" sx={{ color: "#7f8c8d", lineHeight: 1.6 }}>
+          <Typography variant="body2" sx={{ color: 'var(--color-muted)', lineHeight: 1.6 }}>
             {description}
           </Typography>
         </Box>
 
         {/* Course Meta */}
         {instructor && (
-          <Typography variant="caption" sx={{ color: "#667eea", fontWeight: 600 }}>
+          <Typography variant="caption" sx={{ color: 'var(--color-primary)', fontWeight: 600 }}>
             👨‍🏫 {instructor}
           </Typography>
         )}
@@ -178,10 +178,10 @@ export default function CourseCardAdvanced({
         {showProgress && progress !== undefined && (
           <Box>
             <Box sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}>
-              <Typography variant="caption" sx={{ color: "#666" }}>
+              <Typography variant="caption" sx={{ color: 'var(--color-muted)' }}>
                 Progress
               </Typography>
-              <Typography variant="caption" sx={{ fontWeight: 700, color: "#667eea" }}>
+              <Typography variant="caption" sx={{ fontWeight: 700, color: 'var(--color-primary)' }}>
                 {progress}%
               </Typography>
             </Box>
@@ -190,11 +190,11 @@ export default function CourseCardAdvanced({
               value={progress}
               sx={{
                 height: 6,
-                borderRadius: 3,
-                background: "#eee",
+                borderRadius: 'var(--radius-md)',
+                background: 'var(--color-border)',
                 "& .MuiLinearProgress-bar": {
-                  background: "linear-gradient(90deg, #667eea 0%, #764ba2 100%)",
-                  borderRadius: 3,
+                  background: 'linear-gradient(90deg, var(--color-primary) 0%, #764ba2 100%)',
+                  borderRadius: 'var(--radius-md)',
                 },
               }}
             />
@@ -203,14 +203,14 @@ export default function CourseCardAdvanced({
 
         {/* Stats */}
         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", pt: 1 }}>
-          <Box sx={{ display: "flex", gap: 1.5, fontSize: "0.85rem", color: "#666" }}>
+          <Box sx={{ display: "flex", gap: 1.5, fontSize: "0.85rem", color: 'var(--color-muted)' }}>
             {students && <span>👥 {students}</span>}
             {duration && <span>⏱️ {duration}</span>}
           </Box>
           {rating && (
             <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
-              <StarIcon sx={{ fontSize: "1rem", color: "#ffc107" }} />
-              <Typography variant="caption" sx={{ fontWeight: 700 }}>
+              <StarIcon sx={{ fontSize: "1rem", color: "#fbbf24" }} />
+              <Typography variant="caption" sx={{ fontWeight: 700, color: 'var(--color-text)' }}>
                 {rating}
               </Typography>
             </Box>

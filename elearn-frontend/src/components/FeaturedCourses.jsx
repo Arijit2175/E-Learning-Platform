@@ -89,7 +89,7 @@ export default function FeaturedCourses() {
           fontWeight: 700,
           textAlign: "center",
           mb: 1,
-          color: "#2c3e50",
+          color: 'var(--color-text)',
           fontSize: { xs: "1.5rem", md: "2rem" },
         }}
       >
@@ -99,7 +99,7 @@ export default function FeaturedCourses() {
         variant="body1"
         sx={{
           textAlign: "center",
-          color: "#666",
+          color: 'var(--color-muted)',
           mb: 4,
           fontSize: { xs: "0.9rem", md: "1rem" },
         }}
@@ -117,21 +117,18 @@ export default function FeaturedCourses() {
             <Grid item xs={12} sm={6} md={6} lg={3} key={course.id}>
               <motion.div variants={itemVariants}>
                 <MotionBox
-                  whileHover={{ y: -8 }}
+                  whileHover={{ y: -4, boxShadow: 'var(--shadow-lg)' }}
+                  transition={{ duration: 0.18, ease: "easeOut" }}
                   sx={{
                     height: "100%",
-                    borderRadius: 3,
-                    background: "white",
-                    border: "1px solid rgba(0,0,0,0.08)",
+                    borderRadius: 'var(--radius-lg)',
+                    background: 'var(--color-surface)',
+                    border: '1px solid var(--color-border)',
                     overflow: "hidden",
-                    transition: "all 0.3s ease",
+                    transition: "all 180ms ease-out",
                     display: "flex",
                     flexDirection: "column",
-                    boxShadow: "0 4px 20px rgba(0,0,0,0.05)",
-                    "&:hover": {
-                      boxShadow: "0 12px 40px rgba(102, 126, 234, 0.2)",
-                      borderColor: "rgba(102, 126, 234, 0.2)",
-                    },
+                    boxShadow: 'var(--shadow-sm)',
                   }}
                 >
                   {/* Course Image Area */}

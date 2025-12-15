@@ -6,20 +6,22 @@ const MotionCard = motion(Card);
 export default function StatCard({ icon, value, label, color = "#667eea", actionText = null, onAction = null }) {
   return (
     <MotionCard
-      whileHover={{ y: -12, boxShadow: "0 20px 40px rgba(0,0,0,0.15)" }}
+      whileHover={{ y: -4, boxShadow: 'var(--shadow-md)' }}
+      transition={{ duration: 0.18, ease: "easeOut" }}
       sx={{
-        background: `linear-gradient(135deg, ${color}15 0%, ${color}05 100%)`,
-        border: `2px solid ${color}20`,
-        borderRadius: 3,
+        background: `linear-gradient(135deg, ${color}10 0%, ${color}04 100%)`,
+        border: `1px solid ${color}25`,
+        borderRadius: 'var(--radius-lg)',
         overflow: "hidden",
         position: "relative",
+        boxShadow: 'var(--shadow-sm)',
         "&::before": {
           content: '""',
           position: "absolute",
           top: 0,
           left: 0,
           right: 0,
-          height: "4px",
+          height: "3px",
           background: `linear-gradient(90deg, ${color}, transparent)`,
         },
       }}
@@ -53,7 +55,7 @@ export default function StatCard({ icon, value, label, color = "#667eea", action
         >
           {value}
         </Typography>
-        <Typography variant="body2" sx={{ color: "#7f8c8d", fontWeight: 500 }}>
+        <Typography variant="body2" sx={{ color: 'var(--color-muted)', fontWeight: 500 }}>
           {label}
         </Typography>
       </CardContent>

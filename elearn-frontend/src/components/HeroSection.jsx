@@ -11,19 +11,20 @@ export default function HeroSection({ title, subtitle }) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
       sx={{
-        minHeight: { xs: "45vh", md: "55vh" },
+        minHeight: { xs: "50vh", md: "60vh" },
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        background: "linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)",
+        background: "linear-gradient(135deg, #667eea 0%, #764ba2 45%, #f093fb 100%)",
         color: "white",
-        borderRadius: 4,
+        borderRadius: 'var(--radius-lg)',
         p: { xs: 3, md: 6 },
         mt: 2,
         mb: 4,
         position: "relative",
         overflow: "hidden",
+        boxShadow: 'var(--shadow-lg)',
       }}
     >
       {/* Animated Background Elements */}
@@ -114,12 +115,12 @@ export default function HeroSection({ title, subtitle }) {
                 px: 4,
                 py: 1.5,
                 fontSize: "1rem",
-                boxShadow: "0 8px 24px rgba(0,0,0,0.15)",
-                transition: "all 0.3s ease",
+                boxShadow: 'var(--shadow-md)',
+                transition: "all 180ms ease-out",
                 "&:hover": {
-                  background: "#f0f0f0",
+                  background: "#f9fafb",
                   transform: "translateY(-2px)",
-                  boxShadow: "0 12px 32px rgba(0,0,0,0.2)",
+                  boxShadow: 'var(--shadow-lg)',
                 },
               }}
             >

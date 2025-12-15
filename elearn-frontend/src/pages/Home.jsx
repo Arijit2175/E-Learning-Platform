@@ -64,7 +64,7 @@ export default function Home() {
       {/* Main content */}
       <Box
         sx={{
-          background: "linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)",
+          background: 'var(--color-bg)',
           minHeight: "100vh",
           pt: { xs: 8, md: 10 },
         }}
@@ -77,7 +77,7 @@ export default function Home() {
         />
 
         {/* Main Container */}
-        <Container maxWidth="lg" sx={{ py: 4 }}>
+        <Container maxWidth="lg" className="section">
           {/* Learning Paths Section */}
           <motion.div
             variants={containerVariants}
@@ -91,7 +91,7 @@ export default function Home() {
                 fontWeight: 700,
                 mb: 2,
                 textAlign: "center",
-                color: "#2c3e50",
+                color: 'var(--color-text)',
                 fontSize: { xs: "1.5rem", md: "2rem" },
               }}
             >
@@ -101,7 +101,7 @@ export default function Home() {
               variant="body1"
               sx={{
                 textAlign: "center",
-                color: "#666",
+                color: 'var(--color-muted)',
                 mb: 4,
                 fontSize: { xs: "0.9rem", md: "1rem" },
               }}

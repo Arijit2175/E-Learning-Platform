@@ -64,7 +64,7 @@ export default function Register() {
       <Navbar />
       <Box
         sx={{
-          background: "linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)",
+          background: 'var(--color-bg)',
           minHeight: "100vh",
           py: 4,
           pt: { xs: 10, md: 12 },
@@ -75,7 +75,7 @@ export default function Register() {
           <PageHeader
             title="Join Us"
             subtitle="Create your account and start learning today"
-            backgroundGradient="linear-gradient(135deg, #f093fb 0%, #f5576c 100%)"
+            backgroundGradient="linear-gradient(180deg, rgba(37, 99, 235, 0.08), transparent)"
           />
 
           <MotionCard
@@ -83,16 +83,16 @@ export default function Register() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
             sx={{
-              borderRadius: 3,
-              boxShadow: "0 8px 32px rgba(0,0,0,0.1)",
-              background: "white",
+              borderRadius: 'var(--radius-lg)',
+              boxShadow: 'var(--shadow-md)',
+              background: 'var(--color-surface)',
             }}
           >
             <CardContent sx={{ p: 4 }}>
               {/* Logo */}
               <Box sx={{ textAlign: "center", mb: 3 }}>
                 <Box sx={{ fontSize: "3rem", mb: 1 }}>🚀</Box>
-                <Typography variant="h6" sx={{ color: "#2c3e50", fontWeight: 700 }}>
+                <Typography variant="h6" sx={{ color: 'var(--color-text)', fontWeight: 700 }}>
                   Create Your Account
                 </Typography>
               </Box>
