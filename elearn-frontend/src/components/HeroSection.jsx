@@ -11,13 +11,13 @@ export default function HeroSection({ title, subtitle }) {
   const letters = displayTitle.split("");
 
   return (
-    <Box sx={{ position: "relative", mt: -3 }}>
+    <Box sx={{ position: "relative", mt: -6 }}>
       {/* Top badge */}
       <motion.div
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1, duration: 0.5 }}
-        style={{ display: "flex", justifyContent: "center", marginBottom: "12px", position: "relative", zIndex: 2 }}
+        style={{ display: "flex", justifyContent: "center", marginBottom: "40px", position: "relative", zIndex: 2 }}
       >
         <Box
           sx={{
