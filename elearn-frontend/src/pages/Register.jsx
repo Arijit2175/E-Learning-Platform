@@ -60,172 +60,303 @@ export default function Register() {
   };
 
   return (
-    <Box>
-      <Navbar />
+    <Box sx={{ position: "relative", minHeight: "100vh" }}>
+      {/* Background Video */}
       <Box
         sx={{
-          background: 'var(--color-bg)',
-          minHeight: "100vh",
-          py: 4,
-          pt: { xs: 10, md: 12 },
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          backgroundColor: "#1a1a2e",
+          zIndex: -10,
+          pointerEvents: "none",
         }}
       >
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            display: "block",
+            filter: "blur(2px)",
+          }}
+        >
+          <source src="/videos/bg-video.mp4" type="video/mp4" />
+        </video>
+        <Box
+          sx={{
+            position: "absolute",
+            inset: 0,
+            background: "rgba(0, 0, 0, 0.5)",
+            zIndex: 1,
+          }}
+        />
+      </Box>
 
-        <Container maxWidth="sm" sx={{ mt: 4 }}>
-          <PageHeader
-            title="Join Us"
-            subtitle="Create your account and start learning today"
-            backgroundGradient="linear-gradient(180deg, rgba(37, 99, 235, 0.08), transparent)"
-          />
+      {/* Content */}
+      <Box sx={{ position: "relative", zIndex: 1 }}>
+        <Navbar />
+        <Box
+          sx={{
+            minHeight: "100vh",
+            py: 4,
+            pt: { xs: 10, md: 12 },
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <Container maxWidth="xl">
+            <Box sx={{ display: "flex", gap: 8, alignItems: "center", flexDirection: { xs: "column", md: "row" } }}>
+              {/* Left Side - Registration Form */}
+              <Box sx={{ flex: 1, display: "flex", justifyContent: "center", width: "100%" }}>
+                <Box sx={{ width: "100%", maxWidth: 500 }}>
+                  <Box sx={{ textAlign: "center", mb: 4 }}>
+                    <Typography
+                      variant="h3"
+                      sx={{
+                        fontWeight: 800,
+                        color: "#ffffff",
+                        mb: 1,
+                        textShadow: "0 2px 10px rgba(0,0,0,0.3)",
+                      }}
+                    >
+                      Join Us
+                    </Typography>
+                    <Typography
+                      variant="body1"
+                      sx={{
+                        color: "#ffffff",
+                        opacity: 0.95,
+                        fontWeight: 500,
+                      }}
+                    >
+                      Create your account and start learning today
+                    </Typography>
+                  </Box>
 
-          <MotionCard
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            sx={{
-              borderRadius: 'var(--radius-lg)',
-              boxShadow: 'var(--shadow-md)',
-              background: 'var(--color-surface)',
-            }}
-          >
-            <CardContent sx={{ p: 4 }}>
-              {/* Logo */}
-              <Box sx={{ textAlign: "center", mb: 3 }}>
-                <Box sx={{ fontSize: "3rem", mb: 1 }}>🚀</Box>
-                <Typography variant="h6" sx={{ color: 'var(--color-text)', fontWeight: 700 }}>
-                  Create Your Account
-                </Typography>
-              </Box>
-
-              {/* Error Alert */}
-              {error && (
-                <Alert severity="error" sx={{ mb: 2 }}>
-                  {error}
-                </Alert>
-              )}
-
-              {/* Form */}
-              <Box component="form" onSubmit={handleSubmit}>
-                <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 1.5, mb: 2 }}>
-                  <FormInput
-                    label="First Name"
-                    placeholder="John"
-                    name="firstName"
-                    value={formData.firstName}
-                    onChange={handleChange}
-                    required
-                  />
-                  <FormInput
-                    label="Last Name"
-                    placeholder="Doe"
-                    name="lastName"
-                    value={formData.lastName}
-                    onChange={handleChange}
-                    required
-                  />
-                </Box>
-
-                <FormInput
-                  label="Email Address"
-                  type="email"
-                  placeholder="you@example.com"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                />
-
-                <FormInput
-                  label="Password"
-                  type="password"
-                  placeholder="••••••••"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  required
-                />
-
-                <FormInput
-                  label="Confirm Password"
-                  type="password"
-                  placeholder="••••••••"
-                  name="confirmPassword"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                  required
-                />
-
-                <Box sx={{ display: "flex", gap: 1.5, mb: 2 }}>
-                  <Button
-                    variant={formData.role === "student" ? "contained" : "outlined"}
-                    onClick={() => setFormData({ ...formData, role: "student" })}
-                    sx={{ flex: 1 }}
-                  >
-                    Student
-                  </Button>
-                  <Button
-                    variant={formData.role === "teacher" ? "contained" : "outlined"}
-                    onClick={() => setFormData({ ...formData, role: "teacher" })}
-                    sx={{ flex: 1 }}
-                  >
-                    Teacher
-                  </Button>
-                </Box>
-
-                {/* Terms */}
-                <Typography variant="caption" sx={{ color: "#666", mb: 2, display: "block" }}>
-                  <input type="checkbox" id="terms" required />
-                  <label htmlFor="terms" style={{ marginLeft: 6 }}>
-                    I agree to the{" "}
-                    <Link href="#" sx={{ color: "#667eea" }}>
-                      Terms of Service
-                    </Link>{" "}
-                    and{" "}
-                    <Link href="#" sx={{ color: "#667eea" }}>
-                      Privacy Policy
-                    </Link>
-                  </label>
-                </Typography>
-
-                {/* Register Button */}
-                <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                  <Button
-                    fullWidth
-                    variant="contained"
-                    size="large"
-                    type="submit"
-                    disabled={loading}
+                  <MotionCard
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
                     sx={{
-                      background: "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
-                      color: "white",
-                      fontWeight: 700,
-                      py: 1.5,
-                      borderRadius: 2,
-                      mb: 2,
-                      transition: "all 0.3s ease",
-                      "&:hover": {
-                        boxShadow: "0 8px 24px rgba(245, 87, 108, 0.3)",
-                        transform: "translateY(-2px)",
-                      },
+                      borderRadius: 'var(--radius-lg)',
+                      boxShadow: "0 20px 60px rgba(0,0,0,0.4)",
+                      background: "rgba(255, 255, 255, 0.95)",
+                      backdropFilter: "blur(10px)",
+                      border: "1px solid rgba(255, 255, 255, 0.3)",
                     }}
                   >
-                    {loading ? "Creating Account..." : "Create Account"}
-                  </Button>
-                </motion.div>
+                    <CardContent sx={{ p: 4 }}>
+                      {/* Logo */}
+                      <Box sx={{ textAlign: "center", mb: 4 }}>
+                        <Box sx={{ fontSize: "3rem", mb: 1 }}>🎓</Box>
+                        <Typography variant="h5" sx={{ color: "#2c3e50", fontWeight: 800 }}>
+                          Create Your Account
+                        </Typography>
+                      </Box>
 
-                {/* Login Link */}
-                <Box sx={{ textAlign: "center" }}>
-                  <Typography variant="body2" sx={{ color: "#666" }}>
-                    Already have an account?{" "}
-                    <Link href="/login" sx={{ color: "#667eea", fontWeight: 700 }}>
-                      Sign in here
-                    </Link>
+                      {/* Error Alert */}
+                      {error && (
+                        <Alert severity="error" sx={{ mb: 2 }}>
+                          {error}
+                        </Alert>
+                      )}
+
+                      {/* Form */}
+                      <Box component="form" onSubmit={handleSubmit}>
+                        <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 1.5, mb: 2 }}>
+                          <FormInput
+                            label="First Name"
+                            placeholder="John"
+                            name="firstName"
+                            value={formData.firstName}
+                            onChange={handleChange}
+                            required
+                          />
+                          <FormInput
+                            label="Last Name"
+                            placeholder="Doe"
+                            name="lastName"
+                            value={formData.lastName}
+                            onChange={handleChange}
+                            required
+                          />
+                        </Box>
+
+                        <FormInput
+                          label="Email Address"
+                          type="email"
+                          placeholder="you@example.com"
+                          name="email"
+                          value={formData.email}
+                          onChange={handleChange}
+                          required
+                        />
+
+                        <FormInput
+                          label="Password"
+                          type="password"
+                          placeholder="••••••••"
+                          name="password"
+                          value={formData.password}
+                          onChange={handleChange}
+                          required
+                        />
+
+                        <FormInput
+                          label="Confirm Password"
+                          type="password"
+                          placeholder="••••••••"
+                          name="confirmPassword"
+                          value={formData.confirmPassword}
+                          onChange={handleChange}
+                          required
+                        />
+
+                        <Box sx={{ display: "flex", gap: 1.5, mb: 2 }}>
+                          <Button
+                            variant={formData.role === "student" ? "contained" : "outlined"}
+                            onClick={() => setFormData({ ...formData, role: "student" })}
+                            sx={{
+                              flex: 1,
+                              background: formData.role === "student" ? "linear-gradient(135deg, #667eea 0%, #764ba2 100%)" : "transparent",
+                              color: formData.role === "student" ? "#ffffff" : "#667eea",
+                              borderColor: "#667eea",
+                              fontWeight: 600,
+                              "&:hover": {
+                                background: formData.role === "student" ? "linear-gradient(135deg, #5a6dd8 0%, #6a4190 100%)" : "rgba(102, 126, 234, 0.1)",
+                              },
+                            }}
+                          >
+                            Student
+                          </Button>
+                          <Button
+                            variant={formData.role === "teacher" ? "contained" : "outlined"}
+                            onClick={() => setFormData({ ...formData, role: "teacher" })}
+                            sx={{
+                              flex: 1,
+                              background: formData.role === "teacher" ? "linear-gradient(135deg, #667eea 0%, #764ba2 100%)" : "transparent",
+                              color: formData.role === "teacher" ? "#ffffff" : "#667eea",
+                              borderColor: "#667eea",
+                              fontWeight: 600,
+                              "&:hover": {
+                                background: formData.role === "teacher" ? "linear-gradient(135deg, #5a6dd8 0%, #6a4190 100%)" : "rgba(102, 126, 234, 0.1)",
+                              },
+                            }}
+                          >
+                            Teacher
+                          </Button>
+                        </Box>
+
+                        {/* Terms */}
+                        <Typography variant="caption" sx={{ color: "#555", mb: 2, display: "block" }}>
+                          <input type="checkbox" id="terms" required />
+                          <label htmlFor="terms" style={{ marginLeft: 6 }}>
+                            I agree to the{" "}
+                            <Link href="#" sx={{ color: "#667eea", fontWeight: 600, "&:hover": { color: "#764ba2" } }}>
+                              Terms of Service
+                            </Link>{" "}
+                            and{" "}
+                            <Link href="#" sx={{ color: "#667eea", fontWeight: 600, "&:hover": { color: "#764ba2" } }}>
+                              Privacy Policy
+                            </Link>
+                          </label>
+                        </Typography>
+
+                        {/* Register Button */}
+                        <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                          <Button
+                            fullWidth
+                            variant="contained"
+                            size="large"
+                            type="submit"
+                            disabled={loading}
+                            sx={{
+                              background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                              color: "white",
+                              fontWeight: 700,
+                              py: 1.5,
+                              borderRadius: 2,
+                              mb: 2,
+                              transition: "all 0.3s ease",
+                              "&:hover": {
+                                boxShadow: "0 8px 24px rgba(102, 126, 234, 0.3)",
+                                transform: "translateY(-2px)",
+                              },
+                            }}
+                          >
+                            {loading ? "Creating Account..." : "Create Account"}
+                          </Button>
+                        </motion.div>
+
+                        {/* Login Link */}
+                        <Box sx={{ textAlign: "center" }}>
+                          <Typography variant="body2" sx={{ color: "#555" }}>
+                            Already have an account?{" "}
+                            <Link href="/login" sx={{ color: "#667eea", fontWeight: 700, textDecoration: "none", "&:hover": { color: "#764ba2", textDecoration: "underline" } }}>
+                              Sign in here
+                            </Link>
+                          </Typography>
+                        </Box>
+                      </Box>
+                    </CardContent>
+                  </MotionCard>
+                </Box>
+              </Box>
+
+              {/* Right Side - Image and Text */}
+              <Box sx={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+                {/* Image */}
+                <Box
+                  component="img"
+                  src="/images/login-image.png"
+                  alt="EduSphere Learning"
+                  sx={{
+                    width: "100%",
+                    maxWidth: 500,
+                    height: "auto",
+                    borderRadius: 4,
+                    mb: 4,
+                    boxShadow: "0 10px 30px rgba(0,0,0,0.3)",
+                  }}
+                />
+
+                {/* Text Section */}
+                <Box sx={{ maxWidth: 500, textAlign: "center" }}>
+                  <Typography
+                    variant="h4"
+                    sx={{
+                      fontWeight: 800,
+                      color: "#ffffff",
+                      mb: 2,
+                      textShadow: "0 2px 10px rgba(0,0,0,0.3)",
+                    }}
+                  >
+                    Start Your Learning Journey
+                  </Typography>
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      color: "#ffffff",
+                      fontSize: "1.1rem",
+                      lineHeight: 1.8,
+                      fontWeight: 500,
+                      textShadow: "0 2px 10px rgba(0,0,0,0.3)",
+                    }}
+                  >
+                    Join thousands of learners on EduSphere and unlock your potential. Access world-class courses, connect with expert instructors, and achieve your goals!
                   </Typography>
                 </Box>
               </Box>
-            </CardContent>
-          </MotionCard>
-        </Container>
+            </Box>
+          </Container>
+        </Box>
       </Box>
     </Box>
   );
