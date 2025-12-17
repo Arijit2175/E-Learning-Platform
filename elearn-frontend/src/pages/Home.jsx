@@ -118,15 +118,50 @@ export default function Home() {
                       description={course.description}
                       icon={course.icon}
                       sx={{
-                        minHeight: 260,
+                        minHeight: 180,
                         borderStyle: "dashed",
                         borderColor: "var(--color-border)",
-                        background: "var(--color-surface)",
+                        background: "linear-gradient(135deg, rgba(102,126,234,0.06) 0%, rgba(118,75,162,0.06) 100%)",
                         boxShadow: "var(--shadow-sm)",
                         textAlign: "left",
                         alignItems: "flex-start",
                         justifyContent: "flex-start",
-                        padding: "20px",
+                        padding: "16px",
+                        position: "relative",
+                        overflow: "hidden",
+                        transition: "transform 180ms ease-out, box-shadow 180ms ease-out, border-color 180ms ease-out",
+                        "&::after": {
+                          content: '""',
+                          position: "absolute",
+                          inset: 0,
+                          background: "radial-gradient(120px 80px at 85% 15%, rgba(255,255,255,0.25), transparent)",
+                          opacity: 0.6,
+                          pointerEvents: "none",
+                          transition: "opacity 180ms ease-out, transform 180ms ease-out",
+                        },
+                        "&::before": {
+                          content: '""',
+                          position: "absolute",
+                          top: 0,
+                          left: 0,
+                          right: 0,
+                          height: "3px",
+                          background: "linear-gradient(90deg, #667eea 0%, #7a5bff 50%, transparent 100%)",
+                          opacity: 0.75,
+                        },
+                        "&:hover": {
+                          transform: "translateY(-4px) rotate(-0.25deg)",
+                          boxShadow: "var(--shadow-lg)",
+                          borderColor: "#7a5bff55",
+                        },
+                        "&:hover::after": {
+                          opacity: 1,
+                          transform: "translate3d(-2px, -2px, 0)",
+                        },
+                        "& .MuiCardContent-root": {
+                          p: 2.25,
+                          gap: 1.25,
+                        },
                       }}
                     >
                       <Box sx={{ mt: 1, color: "var(--color-muted)", fontSize: "0.9rem", textAlign: "left" }}>
