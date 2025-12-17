@@ -13,25 +13,25 @@ export default function Home() {
     {
       title: "Formal Learning",
       link: "/formal",
-      description: "Structured, curriculum-driven courses",
+      description: "Structured, accredited coursework with assessments and certifications.",
       icon: "📚",
     },
     {
       title: "Non-Formal Learning",
       link: "/nonformal",
-      description: "Workshops, bootcamps & skill-building",
+      description: "Workshops and bootcamps focused on skills with hands-on projects and mentors.",
       icon: "🎯",
     },
     {
       title: "Informal Learning",
       link: "/informal",
-      description: "AI-powered personalized learning",
+      description: "Post your doubts and tips, learn from community opinions, and use AI explanations to understand faster.",
       icon: "💡",
     },
     {
       title: "AI Tutor",
       link: "/ai",
-      description: "24/7 intelligent learning companion",
+      description: "24/7 AI tutor for instant answers, summaries, and practice guidance.",
       icon: "🤖",
     },
   ];
@@ -118,7 +118,7 @@ export default function Home() {
                       description={course.description}
                       icon={course.icon}
                       sx={{
-                        minHeight: 220,
+                        minHeight: 260,
                         borderStyle: "dashed",
                         borderColor: "var(--color-border)",
                         background: "var(--color-surface)",
@@ -126,10 +126,11 @@ export default function Home() {
                         textAlign: "left",
                         alignItems: "flex-start",
                         justifyContent: "flex-start",
+                        padding: "20px",
                       }}
                     >
                       <Box sx={{ mt: 1, color: "var(--color-muted)", fontSize: "0.9rem", textAlign: "left" }}>
-                        Explore {course.title} to find structured paths, curated resources, and quick starts tailored to this track.
+                        {course.description}
                       </Box>
                     </CourseCard>
                   </Grid>
