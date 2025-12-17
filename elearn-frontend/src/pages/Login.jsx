@@ -44,23 +44,130 @@ export default function Login() {
   };
 
   return (
-    <Box>
-      <Navbar />
+    <Box sx={{ position: "relative", minHeight: "100vh" }}>
+      {/* Background Video */}
       <Box
         sx={{
-          background: 'var(--color-bg)',
-          minHeight: "100vh",
-          py: 4,
-          pt: { xs: 10, md: 12 },
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          backgroundColor: "#1a1a2e",
+          zIndex: -10,
+          pointerEvents: "none",
         }}
       >
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            display: "block",
+            filter: "blur(2px)",
+          }}
+        >
+          <source src="/videos/bg-video.mp4" type="video/mp4" />
+        </video>
+        <Box
+          sx={{
+            position: "absolute",
+            inset: 0,
+            background: "rgba(0, 0, 0, 0.5)",
+            zIndex: 1,
+          }}
+        />
+      </Box>
 
-        <Container maxWidth="sm" sx={{ mt: 4 }}>
-          <PageHeader
-            title="Welcome Back"
-            subtitle="Sign in to your account to continue learning"
-            backgroundGradient="linear-gradient(180deg, rgba(37, 99, 235, 0.08), transparent)"
-          />
+      {/* Content */}
+      <Box sx={{ position: "relative", zIndex: 1 }}>
+        <Navbar />
+        <Box
+          sx={{
+            minHeight: "100vh",
+            py: 4,
+            pt: { xs: 10, md: 12 },
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <Container maxWidth="xl">
+            <Box sx={{ display: "flex", gap: 8, alignItems: "center", flexDirection: { xs: "column", md: "row" } }}>
+              {/* Left Side - Image and Text */}
+              <Box sx={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+                {/* Image */}
+                <Box
+                  component="img"
+                  src="/images/login-image.png"
+                  alt="EduSphere Learning"
+                  sx={{
+                    width: "100%",
+                    maxWidth: 500,
+                    height: "auto",
+                    borderRadius: 4,
+                    mb: 4,
+                    boxShadow: "0 10px 30px rgba(0,0,0,0.3)",
+                  }}
+                />
+
+                {/* Text Section */}
+                <Box sx={{ maxWidth: 500, textAlign: "center" }}>
+                  <Typography
+                    variant="h4"
+                    sx={{
+                      fontWeight: 800,
+                      color: "#ffffff",
+                      mb: 2,
+                      textShadow: "0 2px 10px rgba(0,0,0,0.3)",
+                    }}
+                  >
+                    Did you know?
+                  </Typography>
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      color: "#ffffff",
+                      fontSize: "1.1rem",
+                      lineHeight: 1.8,
+                      fontWeight: 500,
+                      textShadow: "0 2px 10px rgba(0,0,0,0.3)",
+                    }}
+                  >
+                    Regardless of who you are, mastering even just one more skill on EduSphere results in learning gains. Start your journey today and unlock your potential!
+                  </Typography>
+                </Box>
+              </Box>
+
+              {/* Right Side - Login Form */}
+              <Box sx={{ flex: 1, display: "flex", justifyContent: "center", width: "100%" }}>
+                <Box sx={{ width: "100%", maxWidth: 500 }}>
+                  <Box sx={{ textAlign: "center", mb: 4 }}>
+                    <Typography
+                      variant="h3"
+                      sx={{
+                        fontWeight: 800,
+                        color: "#ffffff",
+                        mb: 1,
+                        textShadow: "0 2px 10px rgba(0,0,0,0.3)",
+                      }}
+                    >
+                      Welcome Back
+                    </Typography>
+                    <Typography
+                      variant="body1"
+                      sx={{
+                        color: "#ffffff",
+                        opacity: 0.95,
+                        fontWeight: 500,
+                      }}
+                    >
+                      Sign in to your account to continue learning
+                    </Typography>
+                  </Box>
 
           <MotionCard
             initial={{ opacity: 0, y: 20 }}
@@ -68,15 +175,17 @@ export default function Login() {
             transition={{ duration: 0.5 }}
             sx={{
               borderRadius: 'var(--radius-lg)',
-              boxShadow: 'var(--shadow-md)',
-              background: 'var(--color-surface)',
+              boxShadow: "0 20px 60px rgba(0,0,0,0.4)",
+              background: "rgba(255, 255, 255, 0.95)",
+              backdropFilter: "blur(10px)",
+              border: "1px solid rgba(255, 255, 255, 0.3)",
             }}
           >
             <CardContent sx={{ p: 4 }}>
               {/* Logo */}
-              <Box sx={{ textAlign: "center", mb: 3 }}>
-                <Box sx={{ fontSize: "3rem", mb: 1 }}>🔐</Box>
-                <Typography variant="h6" sx={{ color: 'var(--color-text)', fontWeight: 700 }}>
+              <Box sx={{ textAlign: "center", mb: 4 }}>
+                <Box sx={{ fontSize: "3rem", mb: 1 }}>🎓</Box>
+                <Typography variant="h5" sx={{ color: "#2c3e50", fontWeight: 800 }}>
                   Login to EduSphere
                 </Typography>
               </Box>
@@ -112,14 +221,32 @@ export default function Login() {
                   <Button
                     variant={role === "student" ? "contained" : "outlined"}
                     onClick={() => setRole("student")}
-                    sx={{ flex: 1 }}
+                    sx={{
+                      flex: 1,
+                      background: role === "student" ? "linear-gradient(135deg, #667eea 0%, #764ba2 100%)" : "transparent",
+                      color: role === "student" ? "#ffffff" : "#667eea",
+                      borderColor: "#667eea",
+                      fontWeight: 600,
+                      "&:hover": {
+                        background: role === "student" ? "linear-gradient(135deg, #5a6dd8 0%, #6a4190 100%)" : "rgba(102, 126, 234, 0.1)",
+                      },
+                    }}
                   >
                     Student
                   </Button>
                   <Button
                     variant={role === "teacher" ? "contained" : "outlined"}
                     onClick={() => setRole("teacher")}
-                    sx={{ flex: 1 }}
+                    sx={{
+                      flex: 1,
+                      background: role === "teacher" ? "linear-gradient(135deg, #667eea 0%, #764ba2 100%)" : "transparent",
+                      color: role === "teacher" ? "#ffffff" : "#667eea",
+                      borderColor: "#667eea",
+                      fontWeight: 600,
+                      "&:hover": {
+                        background: role === "teacher" ? "linear-gradient(135deg, #5a6dd8 0%, #6a4190 100%)" : "rgba(102, 126, 234, 0.1)",
+                      },
+                    }}
                   >
                     Teacher
                   </Button>
@@ -147,7 +274,8 @@ export default function Login() {
                       color: "#667eea", 
                       textDecoration: "none",
                       cursor: "pointer",
-                      "&:hover": { textDecoration: "underline" }
+                      fontWeight: 600,
+                      "&:hover": { textDecoration: "underline", color: "#764ba2" }
                     }}
                   >
                     Forgot Password?
@@ -182,9 +310,9 @@ export default function Login() {
 
                 {/* Signup Link */}
                 <Box sx={{ textAlign: "center" }}>
-                  <Typography variant="body2" sx={{ color: "#666" }}>
+                  <Typography variant="body2" sx={{ color: "#555" }}>
                     Don't have an account?{" "}
-                    <Link href="/register" sx={{ color: "#667eea", fontWeight: 700 }}>
+                    <Link href="/register" sx={{ color: "#667eea", fontWeight: 700, textDecoration: "none", "&:hover": { color: "#764ba2", textDecoration: "underline" } }}>
                       Sign up here
                     </Link>
                   </Typography>
@@ -195,17 +323,21 @@ export default function Login() {
 
           {/* Features */}
           <Box sx={{ mt: 4, textAlign: "center" }}>
-            <Typography variant="body2" sx={{ color: "#666", mb: 2 }}>
+            <Typography variant="body2" sx={{ color: "#ffffff", mb: 2, fontWeight: 600, textShadow: "0 2px 10px rgba(0,0,0,0.3)" }}>
               Need help?
             </Typography>
-            <Link href="/contact" sx={{ color: "#667eea", mr: 2, textDecoration: "none" }}>
+            <Link href="/contact" sx={{ color: "#ffffff", mr: 3, textDecoration: "none", fontWeight: 600, textShadow: "0 2px 10px rgba(0,0,0,0.3)", "&:hover": { color: "#667eea" } }}>
               Contact Support
             </Link>
-            <Link href="/" sx={{ color: "#667eea", textDecoration: "none" }}>
+            <Link href="/" sx={{ color: "#ffffff", textDecoration: "none", fontWeight: 600, textShadow: "0 2px 10px rgba(0,0,0,0.3)", "&:hover": { color: "#667eea" } }}>
               Back to Home
             </Link>
           </Box>
-        </Container>
+                </Box>
+              </Box>
+            </Box>
+          </Container>
+        </Box>
       </Box>
     </Box>
   );
