@@ -57,9 +57,50 @@ export default function Home() {
   };
 
   return (
-    <Box>
-      {/* Navbar */}
-      <Navbar />
+    <Box sx={{ position: "relative", overflow: "hidden" }}>
+      {/* Background Video */}
+      <Box
+        sx={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          zIndex: -1,
+          overflow: "hidden",
+          "&::after": {
+            content: '""',
+            position: "absolute",
+            inset: 0,
+            background: "rgba(0, 0, 0, 0.4)",
+            zIndex: 1,
+          },
+        }}
+      >
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            zIndex: 0,
+          }}
+        >
+          <source src="/videos/bg-video.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+      </Box>
+
+      {/* Content */}
+      <Box sx={{ position: "relative", zIndex: 2 }}>
+        {/* Navbar */}
+        <Navbar />
 
       {/* Main content */}
       <Box
@@ -187,6 +228,7 @@ export default function Home() {
 
         {/* Footer */}
         <Footer />
+      </Box>
       </Box>
     </Box>
   );
