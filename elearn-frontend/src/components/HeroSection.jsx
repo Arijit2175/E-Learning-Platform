@@ -11,28 +11,54 @@ export default function HeroSection({ title, subtitle }) {
   const letters = displayTitle.split("");
 
   return (
-    <MotionBox
-      initial={{ opacity: 0, y: -20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6 }}
-      sx={{
-        minHeight: { xs: "46vh", md: "54vh" },
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        background: "linear-gradient(135deg, #5b7bff 0%, #7a5bff 45%, #f38ff3 100%)",
-        color: "white",
-        borderRadius: "22px",
-        p: { xs: 3, md: 5 },
-        mx: { xs: 2, sm: 3, md: 4 },
-        mt: 2,
-        mb: 4,
-        position: "relative",
-        overflow: "hidden",
-        boxShadow: 'var(--shadow-lg)',
-      }}
-    >
+    <Box sx={{ position: "relative", mt: -3 }}>
+      {/* Top badge */}
+      <motion.div
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1, duration: 0.5 }}
+        style={{ display: "flex", justifyContent: "center", marginBottom: "12px", position: "relative", zIndex: 2 }}
+      >
+        <Box
+          sx={{
+            backdropFilter: "blur(10px)",
+            background: "rgba(255, 255, 255, 0.2)",
+            border: "1px solid rgba(255, 255, 255, 0.3)",
+            borderRadius: "20px",
+            padding: "8px 20px",
+            color: "#7a5bff",
+            fontWeight: 600,
+            fontSize: "0.95rem",
+            letterSpacing: 0.5,
+            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+          }}
+        >
+          🎓 Learn. Grow. Succeed.
+        </Box>
+      </motion.div>
+
+      <MotionBox
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        sx={{
+          minHeight: { xs: "46vh", md: "54vh" },
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          background: "linear-gradient(135deg, #5b7bff 0%, #7a5bff 45%, #f38ff3 100%)",
+          color: "white",
+          borderRadius: "22px",
+          p: { xs: 3, md: 5 },
+          mx: { xs: 2, sm: 3, md: 4 },
+          mt: 2,
+          mb: 4,
+          position: "relative",
+          overflow: "hidden",
+          boxShadow: 'var(--shadow-lg)',
+        }}
+      >
       {/* Animated Background Elements */}
       <Box
         sx={{
@@ -187,5 +213,6 @@ export default function HeroSection({ title, subtitle }) {
         </Box>
       </Container>
     </MotionBox>
+    </Box>
   );
 }
