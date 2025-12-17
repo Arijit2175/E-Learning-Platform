@@ -1,5 +1,6 @@
 import { Box, Container, Grid, Typography, Link, Button } from "@mui/material";
 import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
@@ -8,7 +9,24 @@ import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 
 const MotionBox = motion(Box);
 
-export default function Footer() {
+export default function Footer({ compact = false, disableGutters = false }) {
+  const [scrollY, setScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Calculate scroll-based transformations (same as PageHeader)
+  const scrollProgress = Math.min(scrollY / 200, 1); // Normalize to 0-1 over 200px
+  const footerHeight = 1 - (scrollProgress * 0.4); // Shrink slightly
+  const footerOpacity = 1 - (scrollProgress * 0.2); // Slight opacity reduction
+  const translateY = -(scrollProgress * 20); // Move up by 20px as user scrolls down
+
   const footerLinks = {
     Company: ["About Us", "Careers", "Blog", "Press"],
     Learning: ["Browse Courses", "Scholarships", "Help Center", "Accessibility"],
@@ -20,19 +38,30 @@ export default function Footer() {
   };
 
   return (
-    <Box
+    <MotionBox
+      animate={{ 
+        opacity: footerOpacity,
+        y: translateY,
+        scaleY: footerHeight,
+      }}
+      transition={{ duration: 0.3, ease: "easeOut" }}
       sx={{
         background: "linear-gradient(135deg, #2c3e50 0%, #34495e 100%)",
         color: "white",
-        pt: 6,
-        pb: 3,
+        pt: compact ? 1.5 : 6,
+        pb: compact ? 1 : 3,
         mt: 0,
         backdropFilter: "blur(3px)",
+        width: "100%",
+        maxWidth: "95%",
+        ml: 0,
+        mr: "auto",
+        transformOrigin: "bottom right",
       }}
     >
-      <Container maxWidth="lg">
+      <Container maxWidth="lg" disableGutters={disableGutters} sx={{ px: disableGutters ? 0 : 2 }}>
         {/* Footer Content */}
-        <Grid container spacing={4} sx={{ mb: 4 }}>
+        <Grid container spacing={compact ? 1.5 : 4} sx={{ mb: compact ? 1 : 4 }}>
           {/* About Section */}
           <Grid item xs={12} md={4}>
             <MotionBox
@@ -40,14 +69,14 @@ export default function Footer() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
             >
-              <Typography variant="h6" sx={{ fontWeight: 700, mb: 2, fontSize: "1.3rem" }}>
+              <Typography variant="h6" sx={{ fontWeight: 700, mb: compact ? 1.5 : 2, fontSize: compact ? "1.1rem" : "1.3rem", color: "#ffffff" }}>
                 EduSphere
               </Typography>
-              <Typography variant="body2" sx={{ opacity: 0.8, mb: 3, lineHeight: 1.6, color: "#ffffff" }}>
+              <Typography variant="body2" sx={{ opacity: 0.8, mb: compact ? 2 : 3, lineHeight: 1.5, color: "#ffffff" }}>
                 Empowering learners worldwide with accessible, affordable, and high-quality
                 education through formal, non-formal, and informal learning pathways.
               </Typography>
-              <Box sx={{ display: "flex", gap: 2 }}>
+              <Box sx={{ display: "flex", gap: compact ? 1.5 : 2 }}>
                 {[FacebookIcon, TwitterIcon, LinkedInIcon, InstagramIcon].map((Icon, i) => (
                   <motion.div
                     key={i}
@@ -60,8 +89,8 @@ export default function Footer() {
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
-                        width: 40,
-                        height: 40,
+                        width: compact ? 34 : 40,
+                        height: compact ? 34 : 40,
                         background: "rgba(255,255,255,0.1)",
                         borderRadius: "50%",
                         color: "white",
@@ -90,11 +119,11 @@ export default function Footer() {
               >
                 <Typography
                   variant="subtitle1"
-                  sx={{ fontWeight: 700, mb: 2, fontSize: "1rem", color: "#ffffff" }}
+                  sx={{ fontWeight: 700, mb: compact ? 1.5 : 2, fontSize: compact ? "0.95rem" : "1rem", color: "#ffffff" }}
                 >
                   {category}
                 </Typography>
-                <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
+                <Box sx={{ display: "flex", flexDirection: "column", gap: compact ? 1 : 1.5 }}>
                   {links.map((link) => (
                     <Link
                       key={link}
@@ -102,7 +131,7 @@ export default function Footer() {
                       sx={{
                         color: "#ffffff",
                         textDecoration: "none",
-                        fontSize: "0.9rem",
+                        fontSize: compact ? "0.85rem" : "0.9rem",
                         transition: "all 0.3s ease",
                         "&:hover": {
                           color: "#667eea",
@@ -120,7 +149,7 @@ export default function Footer() {
         </Grid>
 
         {/* Divider */}
-        <Box sx={{ my: 4, height: "1px", background: "rgba(255,255,255,0.1)" }} />
+        <Box sx={{ my: compact ? 1 : 4, height: "1px", background: "rgba(255,255,255,0.1)" }} />
 
         {/* Bottom Section */}
         <Box
@@ -129,10 +158,10 @@ export default function Footer() {
             justifyContent: "space-between",
             alignItems: "center",
             flexWrap: "wrap",
-            gap: 2,
+            gap: compact ? 1 : 2,
           }}
         >
-          <Typography variant="body2" sx={{ opacity: 0.7, color: "#ffffff" }}>
+          <Typography variant="body2" sx={{ opacity: 0.7, color: "#ffffff", fontSize: compact ? "0.85rem" : "0.9rem" }}>
             © 2025 E-Learning Platform. All rights reserved. Made with ❤️ by Arijit
           </Typography>
 
@@ -143,8 +172,8 @@ export default function Footer() {
             <Button
               onClick={scrollToTop}
               sx={{
-                minWidth: 40,
-                height: 40,
+                minWidth: compact ? 34 : 40,
+                height: compact ? 34 : 40,
                 borderRadius: "50%",
                 background: "#667eea",
                 color: "white",
@@ -163,6 +192,6 @@ export default function Footer() {
           </motion.div>
         </Box>
       </Container>
-    </Box>
+    </MotionBox>
   );
 }

@@ -26,8 +26,8 @@ export default function StatCard({ icon, value, label, color = "#667eea", action
         },
       }}
     >
-      <CardContent sx={{ py: 3 }}>
-        <Box sx={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", mb: 2 }}>
+      <CardContent sx={{ py: 4, px: 3 }}>
+        <Box sx={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", mb: 3 }}>
           <Box
             sx={{
               fontSize: "2.5rem",

@@ -22,9 +22,10 @@ export default function StatsGrid({ stats = [] }) {
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true }}
+      justifyContent="center"
     >
       {stats.map((stat, i) => (
-        <Grid item xs={12} sm={6} md={3} key={i}>
+        <Grid item xs={12} sm={6} md={4} lg={3} key={i}>
           <StatCard
             icon={stat.icon}
             value={stat.value}

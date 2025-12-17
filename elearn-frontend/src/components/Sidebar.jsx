@@ -39,7 +39,7 @@ export default function Sidebar() {
           justifyContent: "center",
           alignItems: "center",
           p: 1,
-          mt: 8,
+          mt: 1,
           minHeight: 50,
         }}
       >

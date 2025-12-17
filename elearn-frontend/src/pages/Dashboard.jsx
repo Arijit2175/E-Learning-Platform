@@ -11,7 +11,7 @@ import { useNonFormal } from "../contexts/NonFormalContext";
 import { useFormalEducation } from "../contexts/FormalEducationContext";
 import { useAuth } from "../contexts/AuthContext";
 import { useSidebar } from "../contexts/SidebarContext";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import StarIcon from "@mui/icons-material/Star";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
@@ -25,6 +25,15 @@ export default function Dashboard() {
   const { isOpen } = useSidebar();
   const navigate = useNavigate();
   const [tabValue, setTabValue] = useState(0);
+  const [userAvatar, setUserAvatar] = useState(null);
+
+  // Load saved avatar from localStorage
+  useEffect(() => {
+    const savedAvatar = localStorage.getItem('userAvatar');
+    if (savedAvatar) {
+      setUserAvatar(savedAvatar);
+    }
+  }, []);
   // Teacher: schedule dialog state
   const [scheduleOpen, setScheduleOpen] = useState(false);
   const [scheduleCourseId, setScheduleCourseId] = useState("");
@@ -88,14 +97,36 @@ export default function Dashboard() {
       <Box
         sx={{
           flexGrow: 1,
-          ml: { xs: 0, md: isOpen ? 25 : 8.75 },
-          mt: { xs: 6, md: 8 },
-          background: "linear-gradient(135deg, #f8f9fa 0%, #f0f2f5 100%)",
+          background: "transparent",
           minHeight: "100vh",
-          transition: "margin-left 0.3s ease",
+          display: "flex",
+          flexDirection: "column",
         }}
       >
+        {/* Light blurred background overlay */}
+        <Box
+          sx={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            zIndex: -1,
+            pointerEvents: "none",
+            background: "linear-gradient(135deg, rgba(248,249,254,0.9) 0%, rgba(240,242,249,0.9) 100%)",
+            filter: "blur(3px)",
+          }}
+        />
         <Navbar />
+        <Box
+          sx={{
+            flexGrow: 1,
+            ml: { xs: 0, md: isOpen ? 25 : 8.75 },
+            transition: "margin-left 0.3s ease",
+            position: "relative",
+            zIndex: 1,
+          }}
+        >
 
         {/* Page Header Section */}
         <Section background="transparent" pt={4} pb={2} animated={false}>
@@ -103,6 +134,10 @@ export default function Dashboard() {
             title={`Welcome back, ${displayName}!`}
             subtitle="Track your learning progress and achievements"
             backgroundGradient="linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
+            showAvatar={true}
+            userName={displayName}
+            avatarSrc={userAvatar}
+            onAvatarChange={setUserAvatar}
           />
         </Section>
 
@@ -235,12 +270,21 @@ export default function Dashboard() {
         ) : (
         
         /* Enrolled Courses Section */
-        <Section background="white" py={{ xs: 4, md: 5 }}>
-          <SectionTitle
-            title="My Courses"
-            subtitle="Continue learning from where you left off"
-            centered
-          />
+        <Box sx={{ px: { xs: 2, md: 4 }, pb: 4 }}>
+          <Box
+            sx={{
+              background: "white",
+              borderRadius: "24px",
+              border: "1px solid #e0e7ff",
+              boxShadow: "0 4px 20px rgba(102, 126, 234, 0.08)",
+              p: { xs: 3, md: 4 },
+            }}
+          >
+            <SectionTitle
+              title="My Courses"
+              subtitle="Continue learning from where you left off"
+              centered
+            />
 
           {/* Tabs for Formal and Non-Formal */}
           <Tabs
@@ -365,8 +409,17 @@ export default function Dashboard() {
               )}
             </>
           )}
-        </Section>
+          </Box>
+        </Box>
         )}
+
+        {/* Page Footer */}
+        <Box sx={{ py: 2, textAlign: "center", mt: 4 }}>
+          <Typography variant="body2" sx={{ color: "#666", fontSize: "0.9rem" }}>
+            © 2025 E-Learning Platform. All rights reserved.
+          </Typography>
+        </Box>
+        </Box>
       </Box>
     </Box>
   );

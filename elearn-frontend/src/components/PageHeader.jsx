@@ -1,47 +1,207 @@
-import { Box, Container, Typography } from "@mui/material";
+import { Box, Container, Typography, Avatar, IconButton, Tooltip } from "@mui/material";
 import { motion } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
+import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
 
 const MotionBox = motion(Box);
+const MotionTypography = motion(Typography);
+const MotionAvatar = motion(Avatar);
 
-export default function PageHeader({ title, subtitle, backgroundGradient }) {
+export default function PageHeader({ title, subtitle, backgroundGradient, showAvatar, avatarSrc, userName, onAvatarChange }) {
+  const [scrollY, setScrollY] = useState(0);
+  const [localAvatarSrc, setLocalAvatarSrc] = useState(avatarSrc);
+  const fileInputRef = useRef(null);
+
+  useEffect(() => {
+    setLocalAvatarSrc(avatarSrc);
+  }, [avatarSrc]);
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file && file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setLocalAvatarSrc(reader.result);
+        if (onAvatarChange) {
+          onAvatarChange(reader.result);
+        }
+        // Save to localStorage
+        localStorage.setItem('userAvatar', reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleAvatarClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Calculate scroll-based transformations
+  const scrollProgress = Math.min(scrollY / 200, 1); // Normalize to 0-1 over 200px
+  const headerHeight = 1 - (scrollProgress * 0.5); // Shrink to 50% height
+  const headerOpacity = 1 - (scrollProgress * 0.3); // Reduce opacity slightly
+  const translateY = -(scrollProgress * 30); // Move up by 30px
+
   return (
     <MotionBox
       initial={{ opacity: 0, y: -20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
+      animate={{ 
+        opacity: headerOpacity, 
+        y: translateY,
+        scaleY: headerHeight,
+      }}
+      transition={{ duration: 0.3, ease: "easeOut" }}
       sx={{
-        background:
-          backgroundGradient ||
-          "linear-gradient(180deg, rgba(37, 99, 235, 0.08), transparent)",
-        color: "var(--color-text)",
-        py: { xs: 4, md: 6 },
+        position: "sticky",
+        top: 80,
+        zIndex: 9,
+        background: backgroundGradient || "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+        color: "#ffffff",
+        py: { xs: 6, md: 8 },
         mb: 4,
-        borderBottom: '1px solid var(--color-border)',
+        borderRadius: "20px",
+        overflow: "hidden",
+        boxShadow: "0 10px 40px rgba(102, 126, 234, 0.3)",
+        transformOrigin: "top center",
+        mt: 0,
+        textAlign: "center",
+        "&::before": {
+          content: '""',
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: "radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%)",
+          pointerEvents: "none",
+        },
+        "&::after": {
+          content: '""',
+          position: "absolute",
+          top: "-50%",
+          right: "-10%",
+          width: "40%",
+          height: "200%",
+          background: "radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, transparent 70%)",
+          pointerEvents: "none",
+        },
       }}
     >
-      <Container maxWidth="lg" className="page-header">
-        <Typography
-          variant="h3"
-          sx={{
-            fontWeight: 800,
-            mb: 1,
-            fontSize: { xs: "2rem", md: "2.6rem" },
-          }}
-        >
-          {title}
-        </Typography>
-        {subtitle && (
-          <Typography
-            variant="h6"
-            sx={{
-              fontWeight: 400,
-              opacity: 0.9,
-              fontSize: { xs: "0.95rem", md: "1.05rem" },
-            }}
-          >
-            {subtitle}
-          </Typography>
-        )}
+      <Container maxWidth="lg" sx={{ position: "relative", zIndex: 1 }}>
+        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <Box sx={{ flex: 1 }}>
+            <MotionTypography
+              variant="h3"
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              sx={{
+                fontWeight: 800,
+                mb: 1.5,
+                fontSize: { xs: "2rem", md: "3rem" },
+                background: "linear-gradient(to right, #ffffff 0%, #e0e7ff 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+                textShadow: "0 4px 20px rgba(0,0,0,0.1)",
+              }}
+            >
+              {title}
+            </MotionTypography>
+            {subtitle && (
+              <MotionTypography
+                variant="h6"
+                initial={{ opacity: 0, x: -30 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, delay: 0.4 }}
+                sx={{
+                  fontWeight: 500,
+                  opacity: 0.95,
+                  fontSize: { xs: "1rem", md: "1.2rem" },
+                  color: "#e0e7ff",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 1,
+                  width: "100%",
+                  "&::before": {
+                    content: '"✨"',
+                    fontSize: "1.2rem",
+                  },
+                }}
+              >
+                {subtitle}
+              </MotionTypography>
+            )}
+          </Box>
+
+          {/* Profile Avatar */}
+          {showAvatar && (
+            <Box sx={{ position: "relative", mr: { xs: 6, md: 12 } }}>
+              <input
+                type="file"
+                ref={fileInputRef}
+                onChange={handleFileChange}
+                accept="image/*"
+                style={{ display: "none" }}
+              />
+              <Tooltip title="Change profile picture">
+                <MotionAvatar
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.6, delay: 0.5 }}
+                  src={localAvatarSrc}
+                  alt={userName || "User"}
+                  onClick={handleAvatarClick}
+                  sx={{
+                    width: { xs: 80, md: 120 },
+                    height: { xs: 80, md: 120 },
+                    border: "4px solid rgba(255, 255, 255, 0.3)",
+                    boxShadow: "0 8px 24px rgba(0, 0, 0, 0.2)",
+                    fontSize: { xs: "2rem", md: "3rem" },
+                    fontWeight: 800,
+                    background: "linear-gradient(135deg, #ffffff 0%, #e0e7ff 100%)",
+                    color: "#667eea",
+                    cursor: "pointer",
+                    "&:hover": {
+                      transform: "scale(1.05)",
+                      transition: "transform 0.2s ease",
+                    },
+                  }}
+                >
+                  {!localAvatarSrc && userName ? userName.charAt(0).toUpperCase() : "U"}
+                </MotionAvatar>
+              </Tooltip>
+              <IconButton
+                onClick={handleAvatarClick}
+                sx={{
+                  position: "absolute",
+                  bottom: 0,
+                  right: 0,
+                  backgroundColor: "#667eea",
+                  color: "white",
+                  width: { xs: 28, md: 36 },
+                  height: { xs: 28, md: 36 },
+                  "&:hover": {
+                    backgroundColor: "#764ba2",
+                  },
+                  boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
+                }}
+              >
+                <PhotoCameraIcon sx={{ fontSize: { xs: "1rem", md: "1.2rem" } }} />
+              </IconButton>
+            </Box>
+          )}
+        </Box>
       </Container>
     </MotionBox>
   );
