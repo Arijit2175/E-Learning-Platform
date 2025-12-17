@@ -40,9 +40,9 @@ export default function Footer() {
               viewport={{ once: true }}
             >
               <Typography variant="h6" sx={{ fontWeight: 700, mb: 2, fontSize: "1.3rem" }}>
-                E-Learning Platform
+                EduSphere
               </Typography>
-              <Typography variant="body2" sx={{ opacity: 0.8, mb: 3, lineHeight: 1.6 }}>
+              <Typography variant="body2" sx={{ opacity: 0.8, mb: 3, lineHeight: 1.6, color: "#ffffff" }}>
                 Empowering learners worldwide with accessible, affordable, and high-quality
                 education through formal, non-formal, and informal learning pathways.
               </Typography>
@@ -89,7 +89,7 @@ export default function Footer() {
               >
                 <Typography
                   variant="subtitle1"
-                  sx={{ fontWeight: 700, mb: 2, fontSize: "1rem" }}
+                  sx={{ fontWeight: 700, mb: 2, fontSize: "1rem", color: "#ffffff" }}
                 >
                   {category}
                 </Typography>
@@ -99,7 +99,7 @@ export default function Footer() {
                       key={link}
                       href="#"
                       sx={{
-                        color: "rgba(255,255,255,0.7)",
+                        color: "#ffffff",
                         textDecoration: "none",
                         fontSize: "0.9rem",
                         transition: "all 0.3s ease",
@@ -131,7 +131,7 @@ export default function Footer() {
             gap: 2,
           }}
         >
-          <Typography variant="body2" sx={{ opacity: 0.7 }}>
+          <Typography variant="body2" sx={{ opacity: 0.7, color: "#ffffff" }}>
             © 2025 E-Learning Platform. All rights reserved. Made with ❤️ by Arijit
           </Typography>
 
