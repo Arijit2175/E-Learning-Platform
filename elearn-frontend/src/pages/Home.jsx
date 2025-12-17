@@ -57,8 +57,8 @@ export default function Home() {
   };
 
   return (
-    <Box sx={{ position: "relative", overflow: "hidden" }}>
-      {/* Background Video */}
+    <Box sx={{ position: "relative", width: "100%", minHeight: "100vh" }}>
+      {/* Background Video - Behind Everything */}
       <Box
         sx={{
           position: "fixed",
@@ -66,15 +66,9 @@ export default function Home() {
           left: 0,
           width: "100%",
           height: "100%",
-          zIndex: -1,
-          overflow: "hidden",
-          "&::after": {
-            content: '""',
-            position: "absolute",
-            inset: 0,
-            background: "rgba(0, 0, 0, 0.4)",
-            zIndex: 1,
-          },
+          backgroundColor: "#1a1a2e",
+          zIndex: -10,
+          pointerEvents: "none",
         }}
       >
         <video
@@ -83,33 +77,43 @@ export default function Home() {
           muted
           playsInline
           style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
             width: "100%",
             height: "100%",
             objectFit: "cover",
-            zIndex: 0,
+            display: "block",
+            filter: "blur(2px)",
           }}
+          onError={(e) => console.error("Video error:", e)}
         >
           <source src="/videos/bg-video.mp4" type="video/mp4" />
           Your browser does not support the video tag.
         </video>
+
+        {/* Dark Overlay */}
+        <Box
+          sx={{
+            position: "absolute",
+            inset: 0,
+            background: "rgba(0, 0, 0, 0.08)",
+            zIndex: 1,
+            pointerEvents: "none",
+          }}
+        />
       </Box>
 
-      {/* Content */}
-      <Box sx={{ position: "relative", zIndex: 2 }}>
+      {/* All Content - On Top */}
+      <Box sx={{ position: "relative", zIndex: 1 }}>
         {/* Navbar */}
         <Navbar />
 
-      {/* Main content */}
-      <Box
-        sx={{
-          background: 'var(--color-bg)',
-          minHeight: "100vh",
-          pt: { xs: 8, md: 10 },
-        }}
-      >
+        {/* Main content */}
+        <Box
+          sx={{
+            background: 'transparent',
+            minHeight: "100vh",
+            pt: { xs: 8, md: 10 },
+          }}
+        >
 
         {/* Hero Section */}
         <HeroSection
@@ -118,7 +122,7 @@ export default function Home() {
         />
 
         {/* Main Container */}
-        <Container maxWidth="lg" className="section">
+        <Container maxWidth="lg" className="section" sx={{ backdropFilter: "blur(3px)", py: 4, borderRadius: 2 }}>
           {/* Learning Paths Section */}
           <motion.div
             variants={containerVariants}
@@ -129,10 +133,10 @@ export default function Home() {
             <Typography
               variant="h4"
               sx={{
-                fontWeight: 700,
+                fontWeight: 800,
                 mb: 2,
                 textAlign: "center",
-                color: 'var(--color-text)',
+                color: '#ffffff',
                 fontSize: { xs: "1.5rem", md: "2rem" },
               }}
             >
@@ -142,9 +146,10 @@ export default function Home() {
               variant="body1"
               sx={{
                 textAlign: "center",
-                color: 'var(--color-muted)',
+                color: '#ffffff',
                 mb: 4,
                 fontSize: { xs: "0.9rem", md: "1rem" },
+                fontWeight: 600,
               }}
             >
               Select the learning method that works best for you
@@ -162,7 +167,7 @@ export default function Home() {
                         minHeight: 180,
                         borderStyle: "dashed",
                         borderColor: "var(--color-border)",
-                        background: "linear-gradient(135deg, rgba(102,126,234,0.06) 0%, rgba(118,75,162,0.06) 100%)",
+                        background: "linear-gradient(135deg, #ffffff 0%, #e8dff5 100%)",
                         boxShadow: "var(--shadow-sm)",
                         textAlign: "left",
                         alignItems: "flex-start",
@@ -228,7 +233,7 @@ export default function Home() {
 
         {/* Footer */}
         <Footer />
-      </Box>
+        </Box>
       </Box>
     </Box>
   );

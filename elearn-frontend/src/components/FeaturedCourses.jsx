@@ -46,10 +46,10 @@ export default function FeaturedCourses() {
       <Typography
         variant="h4"
         sx={{
-          fontWeight: 700,
+          fontWeight: 800,
           textAlign: "center",
           mb: 1,
-          color: 'var(--color-text)',
+          color: '#ffffff',
           fontSize: { xs: "1.5rem", md: "2rem" },
         }}
       >
@@ -59,9 +59,10 @@ export default function FeaturedCourses() {
         variant="body1"
         sx={{
           textAlign: "center",
-          color: 'var(--color-muted)',
+          color: '#ffffff',
           mb: 4,
           fontSize: { xs: "0.9rem", md: "1rem" },
+          fontWeight: 600,
         }}
       >
         Explore the exact non-formal modules available right now
