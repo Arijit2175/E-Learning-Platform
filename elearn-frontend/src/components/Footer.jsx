@@ -47,12 +47,12 @@ export default function Footer({ compact = false, disableGutters = false, disabl
       }}
       transition={{ duration: 0.3, ease: "easeOut" }}
       sx={{
-        background: "rgba(44, 62, 80, 0.3)",
+        background: "rgba(44, 62, 80, 0.15)",
         color: "white",
         pt: compact ? 2 : 6,
         pb: compact ? 2 : 3,
         mt: 0,
-        backdropFilter: "blur(10px)",
+        backdropFilter: "blur(20px)",
         borderRadius: "24px",
         width: sticky ? "100%" : "80%",
         maxWidth: sticky ? "100%" : "80%",
