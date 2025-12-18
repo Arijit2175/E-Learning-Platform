@@ -174,7 +174,7 @@ export default function NonFormalCourseDetail() {
             </CardContent>
           </Card>
 
-          <Box sx={{ width: { xs: "100%", md: "92%" }, mx: "auto", transform: { md: "translateX(16px)" } }}>
+          <Box sx={{ width: { xs: "100%", md: "92%" }, mx: "auto", transform: { md: "translateX(55px)" } }}>
           <Grid container spacing={3}>
             {/* Main Content */}
             <Grid item xs={12} md={8}>
