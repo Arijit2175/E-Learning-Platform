@@ -26,14 +26,6 @@ export default function Dashboard() {
   const navigate = useNavigate();
   const [tabValue, setTabValue] = useState(0);
   const [userAvatar, setUserAvatar] = useState(null);
-
-  // Load saved avatar from localStorage
-  useEffect(() => {
-    const savedAvatar = localStorage.getItem('userAvatar');
-    if (savedAvatar) {
-      setUserAvatar(savedAvatar);
-    }
-  }, []);
   // Teacher: schedule dialog state
   const [scheduleOpen, setScheduleOpen] = useState(false);
   const [scheduleCourseId, setScheduleCourseId] = useState("");

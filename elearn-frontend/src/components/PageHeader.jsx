@@ -9,24 +9,16 @@ const MotionAvatar = motion(Avatar);
 
 export default function PageHeader({ title, subtitle, backgroundGradient, showAvatar, avatarSrc, userName, onAvatarChange }) {
   const [scrollY, setScrollY] = useState(0);
-  const [localAvatarSrc, setLocalAvatarSrc] = useState(avatarSrc);
   const fileInputRef = useRef(null);
-
-  useEffect(() => {
-    setLocalAvatarSrc(avatarSrc);
-  }, [avatarSrc]);
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file && file.type.startsWith('image/')) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setLocalAvatarSrc(reader.result);
         if (onAvatarChange) {
           onAvatarChange(reader.result);
         }
-        // Save to localStorage
-        localStorage.setItem('userAvatar', reader.result);
       };
       reader.readAsDataURL(file);
     }
@@ -34,6 +26,13 @@ export default function PageHeader({ title, subtitle, backgroundGradient, showAv
 
   const handleAvatarClick = () => {
     fileInputRef.current?.click();
+  };
+
+  const handleClearAvatar = (e) => {
+    e.stopPropagation();
+    if (onAvatarChange) {
+      onAvatarChange(null);
+    }
   };
 
   useEffect(() => {
@@ -154,12 +153,12 @@ export default function PageHeader({ title, subtitle, backgroundGradient, showAv
                 accept="image/*"
                 style={{ display: "none" }}
               />
-              <Tooltip title="Change profile picture">
+              <Tooltip title={avatarSrc ? "Change profile picture" : "Add profile picture"}>
                 <MotionAvatar
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.6, delay: 0.5 }}
-                  src={localAvatarSrc}
+                  src={avatarSrc || ""}
                   alt={userName || "User"}
                   onClick={handleAvatarClick}
                   sx={{
@@ -178,27 +177,45 @@ export default function PageHeader({ title, subtitle, backgroundGradient, showAv
                     },
                   }}
                 >
-                  {!localAvatarSrc && userName ? userName.charAt(0).toUpperCase() : "U"}
+                  {!avatarSrc && userName ? userName.charAt(0).toUpperCase() : "U"}
                 </MotionAvatar>
               </Tooltip>
-              <IconButton
-                onClick={handleAvatarClick}
-                sx={{
-                  position: "absolute",
-                  bottom: 0,
-                  right: 0,
-                  backgroundColor: "#667eea",
-                  color: "white",
-                  width: { xs: 28, md: 36 },
-                  height: { xs: 28, md: 36 },
-                  "&:hover": {
-                    backgroundColor: "#764ba2",
-                  },
-                  boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
-                }}
-              >
-                <PhotoCameraIcon sx={{ fontSize: { xs: "1rem", md: "1.2rem" } }} />
-              </IconButton>
+              <Box sx={{ display: "flex", gap: 0.5, position: "absolute", bottom: 0, right: 0 }}>
+                {avatarSrc && (
+                  <IconButton
+                    onClick={handleClearAvatar}
+                    sx={{
+                      backgroundColor: "#e74c3c",
+                      color: "white",
+                      width: { xs: 28, md: 36 },
+                      height: { xs: 28, md: 36 },
+                      "&:hover": {
+                        backgroundColor: "#c0392b",
+                      },
+                      boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
+                      fontSize: { xs: "0.8rem", md: "1rem" },
+                    }}
+                    title="Remove picture"
+                  >
+                    ✕
+                  </IconButton>
+                )}
+                <IconButton
+                  onClick={handleAvatarClick}
+                  sx={{
+                    backgroundColor: "#667eea",
+                    color: "white",
+                    width: { xs: 28, md: 36 },
+                    height: { xs: 28, md: 36 },
+                    "&:hover": {
+                      backgroundColor: "#764ba2",
+                    },
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
+                  }}
+                >
+                  <PhotoCameraIcon sx={{ fontSize: { xs: "1rem", md: "1.2rem" } }} />
+                </IconButton>
+              </Box>
             </Box>
           )}
         </Box>
