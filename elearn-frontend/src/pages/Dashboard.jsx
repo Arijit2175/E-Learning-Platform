@@ -26,6 +26,7 @@ export default function Dashboard() {
   const navigate = useNavigate();
   const [tabValue, setTabValue] = useState(0);
   const [userAvatar, setUserAvatar] = useState(null);
+  const [statsModalOpen, setStatsModalOpen] = useState(false);
   // Teacher: schedule dialog state
   const [scheduleOpen, setScheduleOpen] = useState(false);
   const [scheduleCourseId, setScheduleCourseId] = useState("");
@@ -69,18 +70,61 @@ export default function Dashboard() {
   const teacherStudentsCount = teacherCourses.reduce((acc, c) => acc + (getCourseStudents(c.id)?.length || 0), 0);
   const teacherUpcomingClasses = teacherCourses.reduce((acc, c) => acc + ((c.schedules || []).filter(s => new Date(s.startTime) > new Date()).length), 0);
 
+  // Handler functions for stats actions
+  const handleBrowseMore = () => {
+    navigate(user?.role === "teacher" ? "/formal" : "/formal");
+  };
+
+  const handleViewStats = () => {
+    setStatsModalOpen(true);
+  };
+
+  const handleShareCertificates = () => {
+    const certificateText = `I've earned ${completedCourses + userCertificates.length} certificates on EduSphere! 🏆 Check out my learning journey.`;
+    if (navigator.share) {
+      navigator.share({
+        title: "My EduSphere Certificates",
+        text: certificateText,
+      }).catch(err => console.log("Share cancelled"));
+    } else {
+      // Fallback: copy to clipboard
+      navigator.clipboard.writeText(certificateText);
+      alert("Certificate achievement copied to clipboard!");
+    }
+  };
+
+  const handleCreateCourse = () => {
+    navigate("/formal");
+  };
+
+  const handleViewStudents = () => {
+    setTabValue(1); // Switch to view students
+  };
+
+  const handleScheduleClass = () => {
+    if (teacherCourses.length > 0) {
+      setScheduleCourseId(teacherCourses[0].id);
+      setScheduleForm({ title: "Live Class", startTime: "", duration: 60, meetLink: "" });
+      setScheduleOpen(true);
+    }
+  };
+
+  const handleAddAssignment = () => {
+    navigate("/formal");
+  };
+
   // Stats data (role-aware)
   const statsData = user?.role === "teacher"
     ? [
-        { icon: "📘", value: teacherCourses.length.toString(), label: "Courses Taught", color: "#667eea", actionText: "Create" },
-        { icon: "👩‍🎓", value: teacherStudentsCount.toString(), label: "Enrolled Students", color: "#10b981", actionText: "View" },
-        { icon: "📅", value: teacherUpcomingClasses.toString(), label: "Upcoming Classes", color: "#f59e0b", actionText: "Schedule" },
-        { icon: "🧪", value: (teacherCourses.reduce((acc,c)=> acc + (c.assignments?.length||0),0)).toString(), label: "Assignments", color: "#f093fb", actionText: "Add" },
+        { icon: "📘", value: teacherCourses.length.toString(), label: "Courses Taught", color: "#667eea", actionText: "Create", onAction: handleCreateCourse },
+        { icon: "👩‍🎓", value: teacherStudentsCount.toString(), label: "Enrolled Students", color: "#10b981", actionText: "View", onAction: handleViewStudents },
+        { icon: "📅", value: teacherUpcomingClasses.toString(), label: "Upcoming Classes", color: "#f59e0b", actionText: "Schedule", onAction: handleScheduleClass },
+        { icon: "🧪", value: (teacherCourses.reduce((acc,c)=> acc + (c.assignments?.length||0),0)).toString(), label: "Assignments", color: "#f093fb", actionText: "Add", onAction: handleAddAssignment },
       ]
     : [
-        { icon: "📚", value: (formalCourses.length + nonFormalCourses.length).toString(), label: "Courses Enrolled", color: "#667eea", actionText: "Browse More" },
-        { icon: "⏱️", value: `${totalHours}h+`, label: "Learning Hours", color: "#f093fb", actionText: "View Stats" },
-        { icon: "🏆", value: (completedCourses + userCertificates.length).toString(), label: "Certificates Earned", color: "#4facfe", actionText: "Share" },
+        { icon: "📚", value: (formalCourses.length + nonFormalCourses.length).toString(), label: "Courses Enrolled", color: "#667eea", actionText: "Browse More", onAction: handleBrowseMore },
+        { icon: "⏱️", value: `${totalHours}h+`, label: "Learning Hours", color: "#f093fb", actionText: "View Stats", onAction: handleViewStats },
+        { icon: "🏆", value: (completedCourses + userCertificates.length).toString(), label: "Certificates Earned", color: "#4facfe", actionText: "Share", onAction: handleShareCertificates },
       ];
 
   return (
@@ -410,6 +454,67 @@ export default function Dashboard() {
           <Typography variant="body2" sx={{ color: "#666", fontSize: "0.9rem" }}>
             © 2025 E-Learning Platform. All rights reserved.
           </Typography>
+        {/* Stats Modal */}
+        <Dialog open={statsModalOpen} onClose={() => setStatsModalOpen(false)} maxWidth="sm" fullWidth>
+          <DialogTitle sx={{ fontWeight: 700, fontSize: "1.3rem" }}>📊 Your Learning Statistics</DialogTitle>
+          <DialogContent sx={{ mt: 2 }}>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <Box sx={{ p: 2, background: "#f5f7fa", borderRadius: 2 }}>
+                  <Typography variant="body2" sx={{ color: "#666", mb: 0.5 }}>Total Courses Enrolled</Typography>
+                  <Typography variant="h5" sx={{ fontWeight: 700, color: "#667eea" }}>
+                    {formalCourses.length + nonFormalCourses.length}
+                  </Typography>
+                </Box>
+              </Grid>
+              <Grid item xs={6}>
+                <Box sx={{ p: 2, background: "#f5f7fa", borderRadius: 2 }}>
+                  <Typography variant="body2" sx={{ color: "#666", mb: 0.5 }}>Formal Courses</Typography>
+                  <Typography variant="h5" sx={{ fontWeight: 700, color: "#667eea" }}>
+                    {formalCourses.length}
+                  </Typography>
+                </Box>
+              </Grid>
+              <Grid item xs={6}>
+                <Box sx={{ p: 2, background: "#f5f7fa", borderRadius: 2 }}>
+                  <Typography variant="body2" sx={{ color: "#666", mb: 0.5 }}>Non-Formal Courses</Typography>
+                  <Typography variant="h5" sx={{ fontWeight: 700, color: "#667eea" }}>
+                    {nonFormalCourses.length}
+                  </Typography>
+                </Box>
+              </Grid>
+              <Grid item xs={12}>
+                <Box sx={{ p: 2, background: "#f5f7fa", borderRadius: 2 }}>
+                  <Typography variant="body2" sx={{ color: "#666", mb: 0.5 }}>Total Learning Hours</Typography>
+                  <Typography variant="h5" sx={{ fontWeight: 700, color: "#f093fb" }}>
+                    {totalHours}+ hours
+                  </Typography>
+                </Box>
+              </Grid>
+              <Grid item xs={12}>
+                <Box sx={{ p: 2, background: "#f5f7fa", borderRadius: 2 }}>
+                  <Typography variant="body2" sx={{ color: "#666", mb: 0.5 }}>Courses Completed</Typography>
+                  <Typography variant="h5" sx={{ fontWeight: 700, color: "#10b981" }}>
+                    {completedCourses}
+                  </Typography>
+                </Box>
+              </Grid>
+              <Grid item xs={12}>
+                <Box sx={{ p: 2, background: "#f5f7fa", borderRadius: 2 }}>
+                  <Typography variant="body2" sx={{ color: "#666", mb: 0.5 }}>Certificates Earned</Typography>
+                  <Typography variant="h5" sx={{ fontWeight: 700, color: "#4facfe" }}>
+                    {completedCourses + userCertificates.length}
+                  </Typography>
+                </Box>
+              </Grid>
+            </Grid>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setStatsModalOpen(false)} variant="contained" sx={{ background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)" }}>
+              Close
+            </Button>
+          </DialogActions>
+        </Dialog>
         </Box>
         </Box>
       </Box>
