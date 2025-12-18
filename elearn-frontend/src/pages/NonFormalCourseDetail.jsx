@@ -32,6 +32,7 @@ import StarIcon from "@mui/icons-material/Star";
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 import VerifiedIcon from "@mui/icons-material/Verified";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 
 export default function NonFormalCourseDetail() {
   const { isOpen } = useSidebar();
@@ -104,6 +105,25 @@ export default function NonFormalCourseDetail() {
               {snackbar.message}
             </Alert>
           </Snackbar>
+          <Box
+            sx={{
+              width: { xs: "100%", md: "92%" },
+              ml: 0,
+              mr: "auto",
+              mb: 2,
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <Button
+              variant="text"
+              startIcon={<ArrowBackIosNewIcon />}
+              onClick={() => navigate("/nonformal")}
+              sx={{ color: "#374151", textTransform: "none", px: 0, fontWeight: 600 }}
+            >
+              Back
+            </Button>
+          </Box>
           {/* Hero Section */}
           <Card sx={{ mb: 3, background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)", color: "white", width: { xs: "100%", md: "92%" }, ml: 0, mr: "auto" }}>
             <CardContent sx={{ p: 4 }}>
@@ -402,6 +422,15 @@ export default function NonFormalCourseDetail() {
           </Dialog>
           </Box>
           </Container>
+
+          <Box sx={{ mt: 6, mb: 2, textAlign: "center" }}>
+            <Typography
+              variant="body2"
+              sx={{ color: "#6b7280", fontWeight: 500 }}
+            >
+              © 2025 E-Learning Platform. All rights reserved.
+            </Typography>
+          </Box>
         </Box>
       </Box>
     </Box>

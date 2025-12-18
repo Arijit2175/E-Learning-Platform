@@ -296,6 +296,15 @@ export default function NonFormalHome() {
                   </Grid>
                 )}
               </Section>
+
+              <Box sx={{ mt: 6, mb: 2 }}>
+                <Typography
+                  variant="body2"
+                  sx={{ color: "#6b7280", textAlign: "center", fontWeight: 500 }}
+                >
+                  © 2025 E-Learning Platform. All rights reserved.
+                </Typography>
+              </Box>
             </>
           )}
           </Container>
