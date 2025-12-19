@@ -138,9 +138,20 @@ export default function NonFormalLearner() {
           }}
         >
         <Container maxWidth="lg" sx={{ mt: 2 }}>
+          {/* Back Button */}
+          <Box sx={{ mb: 2 }}>
+            <Button
+              variant="text"
+              onClick={() => navigate("/dashboard")}
+              sx={{ color: "#374151", textTransform: "none", fontWeight: 600 }}
+            >
+              ← Back to Dashboard
+            </Button>
+          </Box>
+
           <Grid container spacing={2}>
             {/* Main Player */}
-            <Grid item xs={12} md={8}>
+            <Grid item xs={12} lg={8}>
               <Card sx={{ mb: 2 }}>
                 <CardContent sx={{ p: 0 }}>
                   {/* Video Player */}
@@ -199,40 +210,38 @@ export default function NonFormalLearner() {
                         {isLastLesson ? "Take Assessment →" : "Next Lesson →"}
                       </Button>
                     </Stack>
-                  </Box>
-                </CardContent>
-              </Card>
 
-              {/* Description */}
-              <Card>
-                <CardContent>
-                  <Typography variant="h6" sx={{ fontWeight: 700, mb: 2 }}>
-                    📝 About this lesson
-                  </Typography>
-                  <Typography variant="body2" sx={{ color: "#6b7280", mb: 2 }}>
-                    This lesson covers important concepts and skills. Pay attention to the key points and try to apply them in practice.
-                  </Typography>
-
-                  {course.attachments?.length > 0 && (
-                    <>
-                      <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1 }}>
-                        📎 Resources
+                    {/* About this lesson - moved here */}
+                    <Box sx={{ mt: 3, pt: 3, borderTop: "1px solid #e5e7eb" }}>
+                      <Typography variant="h6" sx={{ fontWeight: 700, mb: 2 }}>
+                        📝 About this lesson
                       </Typography>
-                      <Stack spacing={1}>
-                        {course.attachments.map((file, idx) => (
-                          <Button key={idx} fullWidth variant="outlined" href={file.url} download startIcon={<AssignmentIcon />}>
-                            {file.name}
-                          </Button>
-                        ))}
-                      </Stack>
-                    </>
-                  )}
+                      <Typography variant="body2" sx={{ color: "#6b7280", mb: 2 }}>
+                        This lesson covers important concepts and skills. Pay attention to the key points and try to apply them in practice.
+                      </Typography>
+
+                      {course.attachments?.length > 0 && (
+                        <>
+                          <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1 }}>
+                            📎 Resources
+                          </Typography>
+                          <Stack spacing={1}>
+                            {course.attachments.map((file, idx) => (
+                              <Button key={idx} fullWidth variant="outlined" href={file.url} download startIcon={<AssignmentIcon />}>
+                                {file.name}
+                              </Button>
+                            ))}
+                          </Stack>
+                        </>
+                      )}
+                    </Box>
+                  </Box>
                 </CardContent>
               </Card>
             </Grid>
 
             {/* Sidebar - Lessons List */}
-            <Grid item xs={12} md={4}>
+            <Grid item xs={12} lg={4}>
               <Card>
                 <CardContent>
                   <Typography variant="h6" sx={{ fontWeight: 700, mb: 2 }}>
