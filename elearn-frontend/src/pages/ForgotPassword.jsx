@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import FormInput from "../components/FormInput";
-import PageHeader from "../components/PageHeader";
 import { useAuth } from "../contexts/AuthContext";
 import { useState, useEffect } from "react";
 
@@ -11,6 +10,8 @@ const MotionCard = motion(Card);
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
@@ -30,59 +31,112 @@ export default function ForgotPassword() {
     setSuccess(false);
     setLoading(true);
 
-    // Validate email
+    // Basic validation
     if (!email || !email.includes("@")) {
       setError("Please enter a valid email address");
       setLoading(false);
       return;
     }
 
-    // Simulate API call
+    if (!newPassword || newPassword.length < 8) {
+      setError("Password must be at least 8 characters long");
+      setLoading(false);
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      setError("Passwords do not match");
+      setLoading(false);
+      return;
+    }
+
+    // Simulate API call for resetting password
     setTimeout(() => {
       setSuccess(true);
       setEmail("");
+      setNewPassword("");
+      setConfirmPassword("");
       setLoading(false);
-    }, 1500);
+    }, 1200);
   };
 
   return (
-    <Box>
-      <Navbar />
+    <Box sx={{ position: "relative", minHeight: "100vh" }}>
+      {/* Background Video */}
       <Box
         sx={{
-          background: "linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)",
-          minHeight: "100vh",
-          py: 4,
-          pt: { xs: 10, md: 12 },
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          backgroundColor: "#1a1a2e",
+          zIndex: -10,
+          pointerEvents: "none",
         }}
       >
-        <Container maxWidth="sm" sx={{ mt: 4 }}>
-          <PageHeader
-            title="Reset Your Password"
-            subtitle="Enter your email to receive password reset instructions"
-            backgroundGradient="linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)"
-          />
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            display: "block",
+            filter: "blur(2px)",
+          }}
+        >
+          <source src="/videos/bg-video.mp4" type="video/mp4" />
+        </video>
+        <Box
+          sx={{
+            position: "absolute",
+            inset: 0,
+            background: "rgba(0, 0, 0, 0.5)",
+            zIndex: 1,
+          }}
+        />
+      </Box>
 
+      {/* Content */}
+      <Box sx={{ position: "relative", zIndex: 1, display: "flex", flexDirection: "column", minHeight: "100vh" }}>
+        <Navbar />
+        <Box sx={{ flex: 1, py: 4, pt: { xs: 10, md: 12 }, display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <Container maxWidth="sm">
           <MotionCard
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
             sx={{
               borderRadius: 3,
-              boxShadow: "0 8px 32px rgba(0,0,0,0.1)",
-              background: "white",
+              boxShadow: "0 8px 32px rgba(0,0,0,0.25)",
+              background: "rgba(255,255,255,0.85)",
+              backdropFilter: "blur(8px)",
             }}
           >
             <CardContent sx={{ p: 4 }}>
-              {/* Logo */}
-              <Box sx={{ textAlign: "center", mb: 3 }}>
-                <Box sx={{ fontSize: "3rem", mb: 1 }}>🔑</Box>
+              {/* Header: Emoji + Title */}
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 1.5,
+                  mb: 3,
+                }}
+              >
+                <Box sx={{ fontSize: "2.25rem", lineHeight: 1 }}>🔑</Box>
+                <Typography variant="h5" sx={{ fontWeight: 800, color: "#2c3e50" }}>
+                  Reset your Password
+                </Typography>
               </Box>
 
               {/* Success Message */}
               {success && (
                 <Alert severity="success" sx={{ mb: 3 }}>
-                  ✓ Check your email for password reset instructions! We've sent a link to reset your password.
+                  ✓ Your password has been reset successfully. You can now log in with your new password.
                 </Alert>
               )}
 
@@ -105,6 +159,24 @@ export default function ForgotPassword() {
                     fullWidth
                     sx={{ mb: 3 }}
                   />
+                  <FormInput
+                    label="New Password"
+                    type="password"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    placeholder="Enter a new password"
+                    fullWidth
+                    sx={{ mb: 3 }}
+                  />
+                  <FormInput
+                    label="Confirm New Password"
+                    type="password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    placeholder="Re-enter the new password"
+                    fullWidth
+                    sx={{ mb: 3 }}
+                  />
 
                   <Button
                     fullWidth
@@ -124,7 +196,7 @@ export default function ForgotPassword() {
                     }}
                     disabled={loading}
                   >
-                    {loading ? "Sending..." : "Send Reset Link"}
+                    {loading ? "Updating..." : "Reset Password"}
                   </Button>
 
                   <Typography variant="body2" sx={{ textAlign: "center", color: "#666", mb: 2 }}>
@@ -163,13 +235,13 @@ export default function ForgotPassword() {
                 <Box sx={{ textAlign: "center" }}>
                   <Box sx={{ fontSize: "3rem", mb: 2 }}>✅</Box>
                   <Typography variant="h6" sx={{ fontWeight: 700, mb: 1, color: "#2c3e50" }}>
-                    Check Your Email
+                    Password Reset Successful
                   </Typography>
                   <Typography variant="body2" sx={{ color: "#666", mb: 3 }}>
-                    We've sent password reset instructions to your email. Please check your inbox and follow the link to reset your password.
+                    Your password has been updated. You can now sign in with your new credentials.
                   </Typography>
                   <Typography variant="caption" sx={{ color: "#999", mb: 3 }}>
-                    If you don't see the email, check your spam folder.
+                    Tip: Keep your password unique and do not share it with anyone.
                   </Typography>
 
                   <Button
@@ -197,32 +269,15 @@ export default function ForgotPassword() {
               )}
             </CardContent>
           </MotionCard>
-
-          {/* Info Box */}
-          <Box
-            sx={{
-              mt: 4,
-              p: 3,
-              background: "rgba(255,255,255,0.8)",
-              backdropFilter: "blur(10px)",
-              borderRadius: 2,
-              border: "1px solid rgba(255,255,255,0.5)",
-            }}
-          >
-            <Typography variant="subtitle2" sx={{ fontWeight: 700, color: "#2c3e50", mb: 1 }}>
-              💡 Password Reset Tips:
-            </Typography>
-            <Typography variant="caption" sx={{ color: "#666", display: "block", mb: 0.5 }}>
-              • Check your email (including spam) within 10 minutes
-            </Typography>
-            <Typography variant="caption" sx={{ color: "#666", display: "block", mb: 0.5 }}>
-              • Reset links expire after 24 hours for security
-            </Typography>
-            <Typography variant="caption" sx={{ color: "#666", display: "block" }}>
-              • Create a strong password with letters, numbers, and symbols
-            </Typography>
-          </Box>
         </Container>
+        </Box>
+
+        {/* Center Footer - At bottom of page */}
+        <Box sx={{ textAlign: "center", py: 2, px: 2 }}>
+          <Typography variant="caption" sx={{ color: "#ffffff", opacity: 0.9 }}>
+            © 2025 E-Learning Platform
+          </Typography>
+        </Box>
       </Box>
     </Box>
   );
