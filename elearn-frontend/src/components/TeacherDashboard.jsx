@@ -607,6 +607,9 @@ export default function TeacherDashboard() {
                           onClick={() => {
                             if (window.confirm('Are you sure you want to delete this material?')) {
                               deleteMaterial(manageDialog.course.id, material.id);
+                              // Update the dialog course to reflect the deletion
+                              const updatedCourse = courses.find(c => c.id === manageDialog.course.id);
+                              setManageDialog({ open: true, course: updatedCourse });
                             }
                           }}
                         >
