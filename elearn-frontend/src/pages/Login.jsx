@@ -84,11 +84,11 @@ export default function Login() {
       </Box>
 
       {/* Content */}
-      <Box sx={{ position: "relative", zIndex: 1 }}>
+      <Box sx={{ position: "relative", zIndex: 1, display: "flex", flexDirection: "column", minHeight: "100vh" }}>
         <Navbar />
         <Box
           sx={{
-            minHeight: "100vh",
+            flex: 1,
             py: 4,
             pt: { xs: 10, md: 12 },
             display: "flex",
@@ -337,6 +337,13 @@ export default function Login() {
               </Box>
             </Box>
           </Container>
+        </Box>
+
+        {/* Center Footer - At bottom of page */}
+        <Box sx={{ textAlign: "center", py: 2, px: 2 }}>
+          <Typography variant="caption" sx={{ color: "#ffffff", opacity: 0.9 }}>
+            © 2025 E-Learning Platform
+          </Typography>
         </Box>
       </Box>
     </Box>
