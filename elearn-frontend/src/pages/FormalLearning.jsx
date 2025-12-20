@@ -58,7 +58,7 @@ export default function FormalLearning() {
 
   // Student view
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box sx={{ display: "flex", minHeight: "100vh" }}>
       <Sidebar />
       <Box
         sx={{
@@ -77,6 +77,8 @@ export default function FormalLearning() {
             transition: "margin-left 0.3s ease",
             position: "relative",
             zIndex: 1,
+            display: "flex",
+            flexDirection: "column",
           }}
         >
 
@@ -161,6 +163,20 @@ export default function FormalLearning() {
             </Section>
           </>
         )}
+
+        {/* Footer */}
+        <Box
+          sx={{
+            mt: "auto",
+            py: 3,
+            textAlign: "center",
+            borderTop: "1px solid #e5e7eb",
+          }}
+        >
+          <Typography variant="body2" sx={{ color: "#6b7280" }}>
+            © 2025 EduSphere. All rights reserved.
+          </Typography>
+        </Box>
         </Box>
       </Box>
     </Box>

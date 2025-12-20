@@ -903,6 +903,20 @@ export default function TeacherDashboard() {
         </Button>
       </DialogActions>
     </Dialog>
+
+    {/* Footer */}
+    <Box
+      sx={{
+        mt: 8,
+        py: 3,
+        textAlign: "center",
+        borderTop: "1px solid #e5e7eb",
+      }}
+    >
+      <Typography variant="body2" sx={{ color: "#6b7280" }}>
+        © 2025 EduSphere. All rights reserved.
+      </Typography>
+    </Box>
     </>
   );
 }

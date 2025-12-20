@@ -428,7 +428,7 @@ export default function NonFormalCourseDetail() {
               variant="body2"
               sx={{ color: "#6b7280", fontWeight: 500 }}
             >
-              © 2025 E-Learning Platform. All rights reserved.
+              © 2025 EduSphere. All rights reserved.
             </Typography>
           </Box>
         </Box>

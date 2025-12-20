@@ -361,7 +361,7 @@ export default function Register() {
         {/* Center Footer - At bottom of page */}
         <Box sx={{ textAlign: "center", py: 2, px: 2 }}>
           <Typography variant="caption" sx={{ color: "#ffffff", opacity: 0.9 }}>
-            © 2025 E-Learning Platform
+            © 2025 EduSphere
           </Typography>
         </Box>
       </Box>

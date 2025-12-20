@@ -475,7 +475,7 @@ export default function Dashboard() {
         {/* Page Footer */}
         <Box sx={{ py: 2, textAlign: "center", mt: 4 }}>
           <Typography variant="body2" sx={{ color: "#666", fontSize: "0.9rem" }}>
-            © 2025 E-Learning Platform. All rights reserved.
+            © 2025 EduSphere. All rights reserved.
           </Typography>
         {/* Stats Modal */}
         <Dialog open={statsModalOpen} onClose={() => setStatsModalOpen(false)} maxWidth="sm" fullWidth>
