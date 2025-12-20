@@ -7,8 +7,8 @@ const MotionCard = motion(Card);
 export default function CourseCard({ children, title, description, icon, sx }) {
   return (
     <MotionCard
-      whileHover={{ scale: 1.05, y: -8 }}
-      transition={{ duration: 0.2, ease: "easeOut" }}
+      whileHover={{ scale: 1.02 }}
+      transition={{ duration: 0.25, ease: "easeOut" }}
       sx={{
         minHeight: 320,
         borderRadius: "16px",
@@ -19,10 +19,13 @@ export default function CourseCard({ children, title, description, icon, sx }) {
         justifyContent: "flex-start",
         background: "linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%)",
         border: "1px solid #e5e7eb",
-        transition: "transform 0.2s ease-out, box-shadow 0.2s ease-out",
+        transition: "all 0.25s ease-out",
         cursor: "pointer",
         position: "relative",
         overflow: "hidden",
+        willChange: "transform",
+        backfaceVisibility: "hidden",
+        transform: "translateZ(0)",
         "&::before": {
           content: '""',
           position: "absolute",
@@ -42,11 +45,13 @@ export default function CourseCard({ children, title, description, icon, sx }) {
       {/* Icon Background */}
       <Box
         sx={{
-          background: "linear-gradient(135deg, #667eea15 0%, #764ba215 100%)",
+          background: "transparent",
           py: 3,
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
+          willChange: "transform",
+          backfaceVisibility: "hidden",
         }}
       >
         {icon && (
@@ -54,6 +59,13 @@ export default function CourseCard({ children, title, description, icon, sx }) {
             sx={{
               fontSize: "4rem",
               textShadow: "0 2px 4px rgba(102, 126, 234, 0.1)",
+              lineHeight: 1,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              willChange: "transform",
+              backfaceVisibility: "hidden",
+              transform: "translateZ(0)",
             }}
           >
             {icon}
@@ -66,6 +78,8 @@ export default function CourseCard({ children, title, description, icon, sx }) {
           width: "100%",
           display: "flex",
           flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
           gap: 1.5,
           p: 2.5,
           flex: 1,
@@ -80,6 +94,7 @@ export default function CourseCard({ children, title, description, icon, sx }) {
               color: "#1f2937",
               fontSize: "1.15rem",
               lineHeight: 1.3,
+              textAlign: "center",
             }}
           >
             {title}
@@ -93,23 +108,12 @@ export default function CourseCard({ children, title, description, icon, sx }) {
               color: "#6b7280",
               fontSize: "0.9rem",
               lineHeight: 1.6,
-              minHeight: "2.7em",
+              textAlign: "center",
             }}
           >
             {description}
           </Typography>
         )}
-
-        {/* Rating Section */}
-        <Stack direction="row" spacing={0.5} alignItems="center" justifyContent="center">
-          <Star sx={{ fontSize: "1rem", color: "#fbbf24" }} />
-          <Typography variant="caption" sx={{ fontWeight: 600, color: "#374151" }}>
-            4.8
-          </Typography>
-          <Typography variant="caption" sx={{ color: "#9ca3af" }}>
-            (248)
-          </Typography>
-        </Stack>
 
         {children && (
           <Box sx={{ mt: "auto", pt: 1 }}>

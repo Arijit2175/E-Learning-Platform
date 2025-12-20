@@ -155,35 +155,29 @@ export default function Home() {
               Select the learning method that works best for you
             </Typography>
 
-            <Grid container spacing={3} sx={{ mt: 1 }} justifyContent="center">
+            <Grid container spacing={3} sx={{ mt: 1, maxWidth: "900px", mx: "auto" }} justifyContent="center">
               {learningPaths.map((course, index) => (
                 <motion.div key={index} variants={itemVariants} style={{ width: "100%" }}>
                   <Grid item xs={12} sm={6} md={3} sx={{ width: "100%" }}>
                     <CourseCard
                       title={course.title}
+                      description={course.description}
                       icon={course.icon}
                       sx={{
                         minHeight: 180,
                         borderStyle: "dashed",
-                        borderColor: "var(--color-border)",
+                        borderColor: "rgba(102, 126, 234, 0.3)",
                         background: "linear-gradient(135deg, #ffffff 0%, #e8dff5 100%)",
-                        boxShadow: "var(--shadow-sm)",
-                        textAlign: "left",
-                        alignItems: "flex-start",
-                        justifyContent: "flex-start",
-                        padding: "16px",
+                        boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+                        textAlign: "center",
+                        alignItems: "center",
+                        justifyContent: "center",
                         position: "relative",
                         overflow: "hidden",
-                        transition: "transform 180ms ease-out, box-shadow 180ms ease-out, border-color 180ms ease-out",
-                        "&::after": {
-                          content: '""',
-                          position: "absolute",
-                          inset: 0,
-                          background: "radial-gradient(120px 80px at 85% 15%, rgba(255,255,255,0.25), transparent)",
-                          opacity: 0.6,
-                          pointerEvents: "none",
-                          transition: "opacity 180ms ease-out, transform 180ms ease-out",
-                        },
+                        transition: "all 0.25s ease-out",
+                        willChange: "transform",
+                        backfaceVisibility: "hidden",
+                        transform: "translateZ(0)",
                         "&::before": {
                           content: '""',
                           position: "absolute",
@@ -195,24 +189,18 @@ export default function Home() {
                           opacity: 0.75,
                         },
                         "&:hover": {
-                          transform: "translateY(-4px) rotate(-0.25deg)",
-                          boxShadow: "var(--shadow-lg)",
-                          borderColor: "#7a5bff55",
-                        },
-                        "&:hover::after": {
-                          opacity: 1,
-                          transform: "translate3d(-2px, -2px, 0)",
+                          transform: "translateY(-6px) translateZ(0)",
+                          boxShadow: "0 12px 24px rgba(102, 126, 234, 0.2)",
+                          borderColor: "rgba(122, 91, 255, 0.5)",
                         },
                         "& .MuiCardContent-root": {
                           p: 2.25,
                           gap: 1.25,
+                          alignItems: "center",
+                          justifyContent: "center",
                         },
                       }}
-                    >
-                      <Box sx={{ mt: 1, color: "var(--color-muted)", fontSize: "0.9rem", textAlign: "left" }}>
-                        {course.description}
-                      </Box>
-                    </CourseCard>
+                    />
                   </Grid>
                 </motion.div>
               ))}
