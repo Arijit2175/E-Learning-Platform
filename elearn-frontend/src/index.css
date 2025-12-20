@@ -16,3 +16,45 @@ body {
   background: #f7f9fc;
   font-family: 'Inter', sans-serif;
 }
+
+/* Minimal scrollbars: thumb appears only on hover, track stays transparent */
+html, body, * {
+  /* Firefox: hidden by default */
+  scrollbar-width: none;
+}
+
+/* Firefox: show thin thumb on hover */
+*:hover {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(120, 130, 255, 0.5) transparent; /* thumb, track */
+}
+
+/* Chrome, Edge, Safari */
+*::-webkit-scrollbar {
+  width: 6px;   /* reserved space for thumb */
+  height: 6px;
+  background: transparent; /* no track background */
+}
+*::-webkit-scrollbar-track {
+  background: transparent; /* keep track invisible */
+}
+*::-webkit-scrollbar-thumb {
+  background: transparent; /* hidden by default */
+  border-radius: 8px;
+}
+/* Show thumb when hovering the scrollable area */
+*:hover::-webkit-scrollbar-thumb {
+  background: rgba(120, 130, 255, 0.5);
+}
+/* Intensify on direct hover over the thumb */
+*:hover::-webkit-scrollbar-thumb:hover {
+  background: rgba(120, 130, 255, 0.7);
+}
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Optional: smoother scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
