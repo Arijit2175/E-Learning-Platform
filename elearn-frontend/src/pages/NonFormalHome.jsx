@@ -119,7 +119,7 @@ export default function NonFormalHome() {
           {!isTeacher && (
             <>
               <PageHeader
-                title="Non-Formal Learning"
+                title="Certificate Courses"
                 subtitle="Flexible, skill-focused micro-courses and workshops"
                 backgroundGradient="linear-gradient(135deg, #f093fb 0%, #f5576c 100%)"
                 disableAnimation={true}

@@ -29,11 +29,8 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 
-const SAMPLE_QUIZ = [
-  { id: "q1", question: "What is the primary purpose of this course?", options: ["Option A", "Option B", "Option C", "Option D"] },
-  { id: "q2", question: "Which concept is most important?", options: ["Concept 1", "Concept 2", "Concept 3", "Concept 4"] },
-  { id: "q3", question: "How would you apply this?", options: ["Apply A", "Apply B", "Apply C", "Apply D"] },
-];
+// Use assessmentQuestions from course if available
+
 
 export default function NonFormalLearner() {
   const { isOpen } = useSidebar();
@@ -48,7 +45,11 @@ export default function NonFormalLearner() {
   const [openQuiz, setOpenQuiz] = useState(false);
   const [quizAnswers, setQuizAnswers] = useState({});
   const [quizSubmitted, setQuizSubmitted] = useState(false);
+
   const [quizScore, setQuizScore] = useState(0);
+  const quizQuestions = course?.assessmentQuestions && Array.isArray(course.assessmentQuestions) && course.assessmentQuestions.length > 0
+    ? course.assessmentQuestions
+    : [];
 
   if (!course || !progress) {
     return (
@@ -96,21 +97,23 @@ export default function NonFormalLearner() {
     }
 
     let score = 0;
-    SAMPLE_QUIZ.forEach((q, idx) => {
-      if (quizAnswers[q.id] === idx.toString()) score += 1;
+    quizQuestions.forEach((q, idx) => {
+      // If correctAnswer is an index, compare to optIdx; if string, compare to option value
+      if (typeof q.correctAnswer === "number") {
+        if (quizAnswers[q.id] === q.correctAnswer.toString()) score += 1;
+      } else if (typeof q.correctAnswer === "string") {
+        // Find the index of the correct answer in options
+        const correctIdx = q.options.findIndex(opt => opt === q.correctAnswer);
+        if (quizAnswers[q.id] === correctIdx.toString()) score += 1;
+      }
     });
-    const percentage = (score / SAMPLE_QUIZ.length) * 100;
-    
+    const percentage = quizQuestions.length > 0 ? (score / quizQuestions.length) * 100 : 0;
     setQuizScore(percentage);
     setQuizSubmitted(true);
     updateAssessmentScore(user?.id, courseId, percentage);
-    
-    // If passed, earn certificate
     if (percentage >= 70) {
       earnCertificate(user?.id, courseId);
     }
-    
-    // If failed, reset course to first lesson
     if (percentage < 70) {
       resetCourseProgress(user?.id, courseId);
       setCurrentLessonIdx(0);
@@ -314,7 +317,7 @@ export default function NonFormalLearner() {
                 <Alert severity="info">
                   📊 You need <strong>70%</strong> to pass and earn the certificate
                 </Alert>
-                {SAMPLE_QUIZ.map((q, idx) => (
+                {quizQuestions.map((q, idx) => (
                   <Stack key={q.id}>
                     <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1 }}>
                       {idx + 1}. {q.question}

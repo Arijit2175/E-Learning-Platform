@@ -53,7 +53,7 @@ export default function FeaturedCourses() {
           fontSize: { xs: "1.5rem", md: "2rem" },
         }}
       >
-        Non-Formal Courses
+        Certified Courses
       </Typography>
       <Typography
         variant="body1"
@@ -65,7 +65,7 @@ export default function FeaturedCourses() {
           fontWeight: 600,
         }}
       >
-        Explore the exact non-formal modules available right now
+        Explore the certified modules available right now
       </Typography>
 
       <motion.div
@@ -160,10 +160,6 @@ export default function FeaturedCourses() {
                       </Box>
                     </Box>
 
-                    {/* Showcase only - no enroll action on home */}
-                    <Box sx={{ mt: 1, color: 'var(--color-muted)', fontSize: "0.85rem", fontWeight: 600 }}>
-                      Non-formal module preview
-                    </Box>
                   </Box>
                 </MotionBox>
               </motion.div>
@@ -192,7 +188,7 @@ export default function FeaturedCourses() {
             },
           }}
         >
-          View All Non-Formal Courses →
+          View All Certified Courses →
         </Button>
       </Box>
     </Box>

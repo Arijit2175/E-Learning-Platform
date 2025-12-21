@@ -31,6 +31,26 @@ const DEFAULT_COURSES = [
     ],
     attachments: [{ name: "Python_Cheatsheet.pdf", url: "#" }],
     certificate: true,
+    assessmentQuestions: [
+      {
+        id: "q1",
+        question: "Which keyword is used to define a function in Python?",
+        options: ["func", "def", "function", "define"],
+        correctAnswer: "def"
+      },
+      {
+        id: "q2",
+        question: "What data type would the value '42' (in quotes) be in Python?",
+        options: ["Integer", "String", "Float", "Boolean"],
+        correctAnswer: "String"
+      },
+      {
+        id: "q3",
+        question: "Which of the following is used to create a loop that executes a specific number of times?",
+        options: ["while loop", "for loop", "do-while loop", "repeat loop"],
+        correctAnswer: "for loop"
+      }
+    ],
   },
   {
     id: "nf-2",
@@ -52,6 +72,26 @@ const DEFAULT_COURSES = [
     ],
     attachments: [{ name: "Marketing_Toolkit.pdf", url: "#" }],
     certificate: true,
+    assessmentQuestions: [
+      {
+        id: "q1",
+        question: "What does SEO stand for in digital marketing?",
+        options: ["Social Engine Optimization", "Search Engine Optimization", "Site Enhancement Operations", "Simple Email Outreach"],
+        correctAnswer: "Search Engine Optimization"
+      },
+      {
+        id: "q2",
+        question: "Which metric measures how many people clicked on your content compared to how many saw it?",
+        options: ["Conversion Rate", "Bounce Rate", "Click-Through Rate", "Impression Rate"],
+        correctAnswer: "Click-Through Rate"
+      },
+      {
+        id: "q3",
+        question: "What is the primary goal of content marketing?",
+        options: ["Selling products directly", "Creating viral videos", "Providing valuable information to attract and engage audience", "Spamming social media"],
+        correctAnswer: "Providing valuable information to attract and engage audience"
+      }
+    ],
   },
   {
     id: "nf-3",
@@ -73,6 +113,26 @@ const DEFAULT_COURSES = [
     ],
     attachments: [{ name: "Design_Resources.pdf", url: "#" }],
     certificate: true,
+    assessmentQuestions: [
+      {
+        id: "q1",
+        question: "What does UX stand for in design?",
+        options: ["User Experience", "Universal Extension", "Unified Execution", "User Exchange"],
+        correctAnswer: "User Experience"
+      },
+      {
+        id: "q2",
+        question: "Which tool is commonly used for creating wireframes and prototypes?",
+        options: ["Microsoft Word", "Figma", "Excel", "PowerPoint"],
+        correctAnswer: "Figma"
+      },
+      {
+        id: "q3",
+        question: "What is the purpose of whitespace in UI design?",
+        options: ["To save ink when printing", "To make the page longer", "To improve readability and focus attention", "To fill empty areas"],
+        correctAnswer: "To improve readability and focus attention"
+      }
+    ],
   },
   {
     id: "nf-4",
@@ -94,6 +154,26 @@ const DEFAULT_COURSES = [
     ],
     attachments: [{ name: "Speaking_Guide.pdf", url: "#" }],
     certificate: true,
+    assessmentQuestions: [
+      {
+        id: "q1",
+        question: "Which phrase is most appropriate for introducing yourself in a professional setting?",
+        options: ["Hey, what's up?", "Nice to meet you, I'm [name]", "Yo, I'm [name]", "What's happening?"],
+        correctAnswer: "Nice to meet you, I'm [name]"
+      },
+      {
+        id: "q2",
+        question: "What is the correct pronunciation emphasis in the word 'important'?",
+        options: ["IM-portant", "im-POR-tant", "im-por-TANT", "All syllables equal"],
+        correctAnswer: "im-POR-tant"
+      },
+      {
+        id: "q3",
+        question: "Which technique helps improve speaking fluency?",
+        options: ["Speaking as fast as possible", "Memorizing entire scripts", "Practicing with native speakers regularly", "Only reading textbooks"],
+        correctAnswer: "Practicing with native speakers regularly"
+      }
+    ],
   },
   {
     id: "nf-5",
@@ -115,6 +195,26 @@ const DEFAULT_COURSES = [
     ],
     attachments: [{ name: "JS_Cheatsheet.pdf", url: "#" }],
     certificate: true,
+    assessmentQuestions: [
+      {
+        id: "q1",
+        question: "What does DOM stand for in JavaScript?",
+        options: ["Data Object Model", "Document Object Model", "Digital Output Method", "Direct Object Manipulation"],
+        correctAnswer: "Document Object Model"
+      },
+      {
+        id: "q2",
+        question: "Which of the following is used to handle asynchronous operations in JavaScript?",
+        options: ["Callbacks only", "Promises and async/await", "Loops", "Variables"],
+        correctAnswer: "Promises and async/await"
+      },
+      {
+        id: "q3",
+        question: "What is an arrow function in ES6?",
+        options: ["A function that points upward", "A shorter syntax for writing functions", "A function for drawing arrows", "A deprecated feature"],
+        correctAnswer: "A shorter syntax for writing functions"
+      }
+    ],
   },
   {
     id: "nf-6",
@@ -136,6 +236,26 @@ const DEFAULT_COURSES = [
     ],
     attachments: [{ name: "Startup_Guide.pdf", url: "#" }],
     certificate: true,
+    assessmentQuestions: [
+      {
+        id: "q1",
+        question: "What is the primary purpose of a Business Model Canvas?",
+        options: ["To create a company logo", "To visualize and develop business strategy", "To design websites", "To calculate taxes"],
+        correctAnswer: "To visualize and develop business strategy"
+      },
+      {
+        id: "q2",
+        question: "What should be the focus of a startup pitch to investors?",
+        options: ["Technical jargon and complexity", "The problem you're solving and your solution", "Your personal story only", "Competitor weaknesses"],
+        correctAnswer: "The problem you're solving and your solution"
+      },
+      {
+        id: "q3",
+        question: "What is MVP in the context of startups?",
+        options: ["Most Valuable Player", "Minimum Viable Product", "Maximum Value Proposition", "Main Vision Plan"],
+        correctAnswer: "Minimum Viable Product"
+      }
+    ],
   },
   {
     id: "nf-7",
@@ -157,6 +277,26 @@ const DEFAULT_COURSES = [
     ],
     attachments: [{ name: "Mindfulness_Guide.pdf", url: "#" }],
     certificate: true,
+    assessmentQuestions: [
+      {
+        id: "q1",
+        question: "What is the primary goal of mindfulness meditation?",
+        options: ["To fall asleep quickly", "To be fully present in the moment", "To forget about problems", "To increase physical strength"],
+        correctAnswer: "To be fully present in the moment"
+      },
+      {
+        id: "q2",
+        question: "Which breathing technique is commonly used in meditation?",
+        options: ["Rapid shallow breaths", "Deep diaphragmatic breathing", "Holding breath for long periods", "Irregular breathing patterns"],
+        correctAnswer: "Deep diaphragmatic breathing"
+      },
+      {
+        id: "q3",
+        question: "How does regular meditation help with stress management?",
+        options: ["By avoiding all stressful situations", "By reducing cortisol levels and promoting relaxation", "By making you forget stress exists", "By increasing adrenaline"],
+        correctAnswer: "By reducing cortisol levels and promoting relaxation"
+      }
+    ],
   },
 ];
 

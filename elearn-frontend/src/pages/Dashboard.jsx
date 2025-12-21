@@ -351,9 +351,9 @@ export default function Dashboard() {
             onChange={(e, newValue) => setTabValue(newValue)}
             sx={{ borderBottom: "1px solid #e0e0e0", mb: 3 }}
           >
-            <Tab label={`📖 Formal Learning (${formalCourses.length})`} />
+            <Tab label={`📖 Classes (${formalCourses.length})`} />
             {user?.role !== "teacher" && (
-              <Tab label={`🎯 Non-Formal Learning (${nonFormalCourses.length})`} />
+              <Tab label={`🎯 Courses (${nonFormalCourses.length})`} />
             )}
           </Tabs>
 
@@ -363,10 +363,10 @@ export default function Dashboard() {
               {formalCourses.length === 0 ? (
                 <Card sx={{ p: 4, textAlign: "center" }}>
                   <Typography variant="body1" sx={{ color: "#999", mb: 2 }}>
-                    You haven't enrolled in any formal courses yet.
+                    You haven't enrolled in any classes yet.
                   </Typography>
                   <Button variant="contained" onClick={() => navigate("/formal")}>
-                    Explore Formal Courses
+                    Explore Classes
                   </Button>
                 </Card>
               ) : (
@@ -381,10 +381,10 @@ export default function Dashboard() {
               {nonFormalCourses.length === 0 ? (
                 <Card sx={{ p: 4, textAlign: "center" }}>
                   <Typography variant="body1" sx={{ color: "#999", mb: 2 }}>
-                    You haven't enrolled in any non-formal courses yet.
+                    You haven't enrolled in any courses yet.
                   </Typography>
                   <Button variant="contained" onClick={() => navigate("/nonformal")}>
-                    Explore Non-Formal Courses
+                    Explore Courses
                   </Button>
                 </Card>
               ) : (

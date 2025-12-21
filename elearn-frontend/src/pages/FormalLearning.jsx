@@ -90,8 +90,8 @@ export default function FormalLearning() {
               onChange={(e, newValue) => setTabValue(newValue)}
               sx={{ borderBottom: "1px solid #e0e0e0", mb: 2 }}
             >
-              <Tab label="My Courses" />
-              <Tab label="Browse Courses" />
+              <Tab label="My Classes" />
+              <Tab label="Browse Classes" />
             </Tabs>
           </Container>
         </Section>
@@ -105,7 +105,7 @@ export default function FormalLearning() {
             {/* Page Header */}
             <Section background="transparent" pt={4} pb={2} animated={false}>
           <PageHeader
-            title="Formal Learning"
+            title="Classes Catalog"
             subtitle="Structured, curriculum-driven courses for students"
             backgroundGradient="linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
             disableAnimation
@@ -115,7 +115,7 @@ export default function FormalLearning() {
             {/* Courses Grid */}
             <Section background="transparent" py={{ xs: 4, md: 6 }}>
           <SectionTitle
-            title="Available Formal Courses"
+            title="Available Classes"
             subtitle="Choose from our comprehensive collection of formal learning programs"
             centered
           />
@@ -134,7 +134,7 @@ export default function FormalLearning() {
               {catalogCourses.length === 0 ? (
                 <Box sx={{ width: "100%", textAlign: "center", py: 4 }}>
                   <Typography variant="body1" sx={{ color: "#999" }}>
-                    No formal courses available yet. Your teacher will assign courses.
+                    No classes available yet. Your teacher will assign classes.
                   </Typography>
                 </Box>
               ) : catalogCourses.map((course, i) => {

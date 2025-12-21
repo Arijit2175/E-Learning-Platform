@@ -75,7 +75,7 @@ export default function StudentFormalDashboard({ onExploreCourses }) {
               You haven't enrolled in any formal courses yet.
             </Typography>
             <Button variant="contained" onClick={onExploreCourses} sx={{ background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)" }}>
-              Explore Courses
+              Explore Classes
             </Button>
           </Card>
         ) : (
