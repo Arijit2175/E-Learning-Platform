@@ -148,69 +148,6 @@ export default function HeroSection({ title, subtitle }) {
             {subtitle || "Formal, non-formal, and informal learning — all in one platform."}
           </Typography>
         </motion.div>
-
-        <Box sx={{ display: "flex", gap: 2, justifyContent: "center", flexWrap: "wrap" }}>
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6, duration: 0.4 }}
-          >
-            <Button
-              variant="contained"
-              href="/register"
-              size="large"
-              endIcon={<ArrowRightIcon />}
-              sx={{
-                background: "white",
-                color: "#667eea",
-                fontWeight: 700,
-                px: 4,
-                py: 1.5,
-                fontSize: "1rem",
-                boxShadow: 'var(--shadow-md)',
-                transition: "all 180ms ease-out",
-                "&:hover": {
-                  background: "#f9fafb",
-                  transform: "translateY(-2px)",
-                  boxShadow: 'var(--shadow-lg)',
-                },
-              }}
-            >
-              Get Started
-            </Button>
-          </motion.div>
-
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.7, duration: 0.4 }}
-          >
-            <Button
-              variant="outlined"
-              href="/explore"
-              size="large"
-              sx={{
-                borderColor: "white",
-                color: "white",
-                fontWeight: 700,
-                px: 4,
-                py: 1.5,
-                fontSize: "1rem",
-                transition: "all 0.3s ease",
-                "&:hover": {
-                  background: "rgba(255,255,255,0.1)",
-                  borderColor: "white",
-                },
-              }}
-            >
-              Explore
-            </Button>
-          </motion.div>
-        </Box>
       </Container>
     </MotionBox>
     </Box>

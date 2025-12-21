@@ -1,6 +1,6 @@
 import { Box, Container, Button, Typography, Card, CardContent, Link, Alert } from "@mui/material";
 import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link as RouterLink } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import FormInput from "../components/FormInput";
 import PageHeader from "../components/PageHeader";
@@ -259,11 +259,11 @@ export default function Register() {
                           <input type="checkbox" id="terms" required />
                           <label htmlFor="terms" style={{ marginLeft: 6 }}>
                             I agree to the{" "}
-                            <Link href="#" sx={{ color: "#667eea", fontWeight: 600, "&:hover": { color: "#764ba2" } }}>
+                            <Link component={RouterLink} to="/terms" sx={{ color: "#667eea", fontWeight: 600, "&:hover": { color: "#764ba2" } }}>
                               Terms of Service
                             </Link>{" "}
                             and{" "}
-                            <Link href="#" sx={{ color: "#667eea", fontWeight: 600, "&:hover": { color: "#764ba2" } }}>
+                            <Link component={RouterLink} to="/data-protection" sx={{ color: "#667eea", fontWeight: 600, "&:hover": { color: "#764ba2" } }}>
                               Privacy Policy
                             </Link>
                           </label>

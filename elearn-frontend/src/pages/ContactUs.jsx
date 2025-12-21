@@ -1,6 +1,7 @@
 import { Box, Container, Typography, TextField, Button, Grid, Card, CardContent } from "@mui/material";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import HeroSection from "../components/HeroSection";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import EmailIcon from "@mui/icons-material/Email";
@@ -22,94 +23,138 @@ export default function ContactUs() {
   };
 
   return (
-    <Box sx={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+    <Box sx={{ position: "relative", width: "100%", minHeight: "100vh" }}>
+      {/* Background Video - Behind Everything */}
+      <Box
+        sx={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          backgroundColor: "#1a1a2e",
+          zIndex: -10,
+          pointerEvents: "none",
+        }}
+      >
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            display: "block",
+            filter: "blur(2px)",
+          }}
+          onError={(e) => console.error("Video error:", e)}
+        >
+          <source src="/videos/bg-video.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+
+        {/* Dark Overlay */}
+        <Box
+          sx={{
+            position: "absolute",
+            inset: 0,
+            background: "rgba(0, 0, 0, 0.08)",
+            zIndex: 1,
+            pointerEvents: "none",
+          }}
+        />
+      </Box>
+
+      {/* All Content - On Top */}
+      <Box sx={{ position: "relative", zIndex: 1 }}>
       <Navbar />
       
       {/* Hero Section */}
-      <Box
-        sx={{
-          background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-          color: "white",
-          py: 8,
-          mt: 8,
-        }}
-      >
-        <Container maxWidth="lg">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            <Typography variant="h2" sx={{ fontWeight: 800, mb: 2, textAlign: "center" }}>
-              Contact Us
-            </Typography>
-            <Typography variant="h6" sx={{ textAlign: "center", opacity: 0.9 }}>
-              We're here to help! Get in touch with our team
-            </Typography>
-          </motion.div>
-        </Container>
-      </Box>
+      <HeroSection
+        title="Contact Us"
+        subtitle="We're here to help! Get in touch with our team"
+      />
 
       {/* Content */}
       <Container maxWidth="lg" sx={{ py: 8, flex: 1 }}>
-        <Grid container spacing={4}>
-          {/* Contact Information */}
+        {/* Contact Information Cards in a Row */}
+        <Grid container spacing={3} sx={{ mb: 6, justifyContent: "center" }}>
           <Grid item xs={12} md={4}>
             <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
             >
-              <Card sx={{ mb: 3, boxShadow: 3 }}>
+              <Card sx={{ boxShadow: 3, background: "rgba(255, 255, 255, 0.1)", backdropFilter: "blur(10px)", height: "100%" }}>
                 <CardContent sx={{ textAlign: "center", py: 4 }}>
                   <EmailIcon sx={{ fontSize: 48, color: "#667eea", mb: 2 }} />
-                  <Typography variant="h6" sx={{ fontWeight: 700, mb: 1 }}>
+                  <Typography variant="h6" sx={{ fontWeight: 700, mb: 1, color: "#ffffff" }}>
                     Email Us
                   </Typography>
-                  <Typography variant="body2" sx={{ color: "#666" }}>
+                  <Typography variant="body2" sx={{ color: "#ffffff" }}>
                     support@edusphere.com
-                  </Typography>
-                </CardContent>
-              </Card>
-
-              <Card sx={{ mb: 3, boxShadow: 3 }}>
-                <CardContent sx={{ textAlign: "center", py: 4 }}>
-                  <PhoneIcon sx={{ fontSize: 48, color: "#667eea", mb: 2 }} />
-                  <Typography variant="h6" sx={{ fontWeight: 700, mb: 1 }}>
-                    Call Us
-                  </Typography>
-                  <Typography variant="body2" sx={{ color: "#666" }}>
-                    +1 (555) 123-4567
-                  </Typography>
-                </CardContent>
-              </Card>
-
-              <Card sx={{ boxShadow: 3 }}>
-                <CardContent sx={{ textAlign: "center", py: 4 }}>
-                  <LocationOnIcon sx={{ fontSize: 48, color: "#667eea", mb: 2 }} />
-                  <Typography variant="h6" sx={{ fontWeight: 700, mb: 1 }}>
-                    Visit Us
-                  </Typography>
-                  <Typography variant="body2" sx={{ color: "#666" }}>
-                    123 Education Street<br />
-                    Learning City, LC 12345<br />
-                    United States
                   </Typography>
                 </CardContent>
               </Card>
             </motion.div>
           </Grid>
 
-          {/* Contact Form */}
-          <Grid item xs={12} md={8}>
+          <Grid item xs={12} md={4}>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+            >
+              <Card sx={{ boxShadow: 3, background: "rgba(255, 255, 255, 0.1)", backdropFilter: "blur(10px)", height: "100%" }}>
+                <CardContent sx={{ textAlign: "center", py: 4 }}>
+                  <PhoneIcon sx={{ fontSize: 48, color: "#667eea", mb: 2 }} />
+                  <Typography variant="h6" sx={{ fontWeight: 700, mb: 1, color: "#ffffff" }}>
+                    Call Us
+                  </Typography>
+                  <Typography variant="body2" sx={{ color: "#ffffff" }}>
+                    +91 1234567890
+                  </Typography>
+                </CardContent>
+              </Card>
+            </motion.div>
+          </Grid>
+
+          <Grid item xs={12} md={4}>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+            >
+              <Card sx={{ boxShadow: 3, background: "rgba(255, 255, 255, 0.1)", backdropFilter: "blur(10px)", height: "100%" }}>
+                <CardContent sx={{ textAlign: "center", py: 4 }}>
+                  <LocationOnIcon sx={{ fontSize: 48, color: "#667eea", mb: 2 }} />
+                  <Typography variant="h6" sx={{ fontWeight: 700, mb: 1, color: "#ffffff" }}>
+                    Visit Us
+                  </Typography>
+                  <Typography variant="body2" sx={{ color: "#ffffff" }}>
+                    123 Education Colony<br />
+                    Hyderabad, HY 502032<br />
+                    India
+                  </Typography>
+                </CardContent>
+              </Card>
+            </motion.div>
+          </Grid>
+        </Grid>
+
+        {/* Contact Form */}
+        <Grid container spacing={4}>
+          <Grid item xs={12}>
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.3 }}
             >
-              <Card sx={{ boxShadow: 3 }}>
+              <Card sx={{ boxShadow: 3, background: "rgba(255, 255, 255, 0.1)", backdropFilter: "blur(10px)" }}>
                 <CardContent sx={{ p: 4 }}>
-                  <Typography variant="h5" sx={{ fontWeight: 700, mb: 3 }}>
+                  <Typography variant="h5" sx={{ fontWeight: 700, mb: 3, color: "#ffffff" }}>
                     Send Us a Message
                   </Typography>
                   <form onSubmit={handleSubmit}>
@@ -119,7 +164,16 @@ export default function ContactUs() {
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                       required
-                      sx={{ mb: 3 }}
+                      sx={{ 
+                        mb: 3,
+                        '& .MuiInputBase-input': { color: '#ffffff' },
+                        '& .MuiInputLabel-root': { color: '#ffffff' },
+                        '& .MuiOutlinedInput-root': {
+                          '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.3)' },
+                          '&:hover fieldset': { borderColor: 'rgba(255, 255, 255, 0.5)' },
+                          '&.Mui-focused fieldset': { borderColor: '#667eea' }
+                        }
+                      }}
                     />
                     <TextField
                       fullWidth
@@ -128,7 +182,16 @@ export default function ContactUs() {
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                       required
-                      sx={{ mb: 3 }}
+                      sx={{ 
+                        mb: 3,
+                        '& .MuiInputBase-input': { color: '#ffffff' },
+                        '& .MuiInputLabel-root': { color: '#ffffff' },
+                        '& .MuiOutlinedInput-root': {
+                          '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.3)' },
+                          '&:hover fieldset': { borderColor: 'rgba(255, 255, 255, 0.5)' },
+                          '&.Mui-focused fieldset': { borderColor: '#667eea' }
+                        }
+                      }}
                     />
                     <TextField
                       fullWidth
@@ -136,7 +199,16 @@ export default function ContactUs() {
                       value={formData.subject}
                       onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
                       required
-                      sx={{ mb: 3 }}
+                      sx={{ 
+                        mb: 3,
+                        '& .MuiInputBase-input': { color: '#ffffff' },
+                        '& .MuiInputLabel-root': { color: '#ffffff' },
+                        '& .MuiOutlinedInput-root': {
+                          '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.3)' },
+                          '&:hover fieldset': { borderColor: 'rgba(255, 255, 255, 0.5)' },
+                          '&.Mui-focused fieldset': { borderColor: '#667eea' }
+                        }
+                      }}
                     />
                     <TextField
                       fullWidth
@@ -146,7 +218,16 @@ export default function ContactUs() {
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                       required
-                      sx={{ mb: 3 }}
+                      sx={{ 
+                        mb: 3,
+                        '& .MuiInputBase-input': { color: '#ffffff' },
+                        '& .MuiInputLabel-root': { color: '#ffffff' },
+                        '& .MuiOutlinedInput-root': {
+                          '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.3)' },
+                          '&:hover fieldset': { borderColor: 'rgba(255, 255, 255, 0.5)' },
+                          '&.Mui-focused fieldset': { borderColor: '#667eea' }
+                        }
+                      }}
                     />
                     <Button
                       type="submit"
@@ -179,10 +260,10 @@ export default function ContactUs() {
           transition={{ delay: 0.5 }}
         >
           <Box sx={{ mt: 6, textAlign: "center" }}>
-            <Typography variant="h5" sx={{ fontWeight: 700, mb: 2 }}>
+            <Typography variant="h5" sx={{ fontWeight: 700, mb: 2, color: "#ffffff" }}>
               Office Hours
             </Typography>
-            <Typography variant="body1" sx={{ color: "#666", lineHeight: 1.8 }}>
+            <Typography variant="body1" sx={{ color: "#ffffff", lineHeight: 1.8 }}>
               Monday - Friday: 9:00 AM - 6:00 PM (EST)<br />
               Saturday: 10:00 AM - 4:00 PM (EST)<br />
               Sunday: Closed
@@ -191,7 +272,8 @@ export default function ContactUs() {
         </motion.div>
       </Container>
 
-      <Footer />
+      <Footer sticky={false} />
+      </Box>
     </Box>
   );
 }

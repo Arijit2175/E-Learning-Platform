@@ -1,6 +1,4 @@
 import { Box, Container, Grid, Typography, Link, Button } from "@mui/material";
-import { motion } from "framer-motion";
-import { useState, useEffect } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import TwitterIcon from "@mui/icons-material/Twitter";
@@ -8,45 +6,13 @@ import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 
-const MotionBox = motion(Box);
-
-export default function Footer({ compact = false, disableGutters = false, disableAnimations = false, sticky = false }) {
-  const [scrollY, setScrollY] = useState(0);
-
-  useEffect(() => {
-    if (disableAnimations) return;
-    
-    const handleScroll = () => {
-      setScrollY(window.scrollY);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [disableAnimations]);
-
-  // Calculate scroll-based transformations (same as PageHeader)
-  const scrollProgress = Math.min(scrollY / 200, 1); // Normalize to 0-1 over 200px
-  const footerHeight = disableAnimations ? 1 : 1 - (scrollProgress * 0.4); // Shrink slightly
-  const footerOpacity = disableAnimations ? 1 : 1 - (scrollProgress * 0.2); // Slight opacity reduction
-  const translateY = disableAnimations ? 0 : -(scrollProgress * 20); // Move up by 20px as user scrolls down
-
-  const footerLinks = {
-    Company: ["About Us", "Blog"],
-    Legal: ["Privacy Policy", "Terms of Service", "Cookie Policy", "Contact Us"],
-  };
-
+export default function Footer({ compact = false, disableGutters = false, sticky = false }) {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
-    <MotionBox
-      animate={{ 
-        opacity: footerOpacity,
-        y: translateY,
-        scaleY: footerHeight,
-      }}
-      transition={{ duration: 0.3, ease: "easeOut" }}
+    <Box
       sx={{
         background: "rgba(44, 62, 80, 0.15)",
         color: "white",
@@ -71,12 +37,7 @@ export default function Footer({ compact = false, disableGutters = false, disabl
         {/* Footer Content */}
         <Box sx={{ mb: compact ? 1 : 4 }}>
           {/* About Section */}
-          <MotionBox
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            sx={{ mb: 3 }}
-          >
+          <Box sx={{ mb: 3 }}>
             <Typography variant="h6" sx={{ fontWeight: 700, mb: compact ? 1.5 : 2, fontSize: compact ? "1.1rem" : "1.3rem", color: "#ffffff" }}>
               EduSphere
             </Typography>
@@ -86,14 +47,10 @@ export default function Footer({ compact = false, disableGutters = false, disabl
             </Typography>
             <Box sx={{ display: "flex", gap: compact ? 1.5 : 2, mb: 3 }}>
               {[FacebookIcon, TwitterIcon, LinkedInIcon, InstagramIcon].map((Icon, i) => (
-                <motion.div
+                <Link
                   key={i}
-                  whileHover={{ scale: 1.2, rotate: 10 }}
-                  transition={{ type: "spring", stiffness: 400 }}
-                >
-                  <Link
-                    href="#"
-                    sx={{
+                  href="#"
+                  sx={{
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
@@ -110,21 +67,14 @@ export default function Footer({ compact = false, disableGutters = false, disabl
                   >
                     <Icon />
                   </Link>
-                </motion.div>
               ))}
             </Box>
-          </MotionBox>
+          </Box>
 
           {/* Links Row */}
           <Box sx={{ display: "flex", gap: 4 }}>
             {/* Company Section */}
-            <MotionBox
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.1 }}
-              sx={{ minWidth: 80, maxWidth: 100 }}
-            >
+            <Box sx={{ minWidth: 80, maxWidth: 100 }}>
               <Typography
                 variant="subtitle1"
                 sx={{ fontWeight: 700, mb: compact ? 1.5 : 2, fontSize: compact ? "0.95rem" : "1rem", color: "#ffffff" }}
@@ -165,16 +115,10 @@ export default function Footer({ compact = false, disableGutters = false, disabl
                   Blog
                 </Link>
               </Box>
-            </MotionBox>
+            </Box>
 
             {/* Legal Section */}
-            <MotionBox
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.1 }}
-              sx={{ minWidth: 80, maxWidth: 100 }}
-            >
+            <Box sx={{ minWidth: 80, maxWidth: 100 }}>
               <Typography
                 variant="subtitle1"
                 sx={{ fontWeight: 700, mb: compact ? 1.5 : 2, fontSize: compact ? "0.95rem" : "1rem", color: "#ffffff" }}
@@ -247,7 +191,7 @@ export default function Footer({ compact = false, disableGutters = false, disabl
                   Contact Us
                 </Link>
               </Box>
-            </MotionBox>
+            </Box>
           </Box>
         </Box>
 
@@ -268,13 +212,9 @@ export default function Footer({ compact = false, disableGutters = false, disabl
             © 2025 EduSphere. All rights reserved. Made with ❤️ by Arijit
           </Typography>
 
-          <motion.div
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <Button
-              onClick={scrollToTop}
-              sx={{
+          <Button
+            onClick={scrollToTop}
+            sx={{
                 minWidth: compact ? 34 : 40,
                 height: compact ? 34 : 40,
                 borderRadius: "50%",
@@ -292,9 +232,8 @@ export default function Footer({ compact = false, disableGutters = false, disabl
             >
               <ArrowUpwardIcon />
             </Button>
-          </motion.div>
         </Box>
       </Container>
-    </MotionBox>
+    </Box>
   );
 }

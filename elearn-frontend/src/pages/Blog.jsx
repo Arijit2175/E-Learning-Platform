@@ -1,6 +1,7 @@
 import { Box, Container, Typography, Card, CardContent, CardMedia, Chip } from "@mui/material";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import HeroSection from "../components/HeroSection";
 import { motion } from "framer-motion";
 
 const MotionCard = motion(Card);
@@ -38,33 +39,59 @@ export default function Blog() {
   ];
 
   return (
-    <Box sx={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+    <Box sx={{ position: "relative", width: "100%", minHeight: "100vh" }}>
+      {/* Background Video - Behind Everything */}
+      <Box
+        sx={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          backgroundColor: "#1a1a2e",
+          zIndex: -10,
+          pointerEvents: "none",
+        }}
+      >
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            display: "block",
+            filter: "blur(2px)",
+          }}
+          onError={(e) => console.error("Video error:", e)}
+        >
+          <source src="/videos/bg-video.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+
+        {/* Dark Overlay */}
+        <Box
+          sx={{
+            position: "absolute",
+            inset: 0,
+            background: "rgba(0, 0, 0, 0.08)",
+            zIndex: 1,
+            pointerEvents: "none",
+          }}
+        />
+      </Box>
+
+      {/* All Content - On Top */}
+      <Box sx={{ position: "relative", zIndex: 1 }}>
       <Navbar />
       
       {/* Hero Section */}
-      <Box
-        sx={{
-          background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-          color: "white",
-          py: 8,
-          mt: 8,
-        }}
-      >
-        <Container maxWidth="lg">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            <Typography variant="h2" sx={{ fontWeight: 800, mb: 2, textAlign: "center" }}>
-              EduSphere Blog
-            </Typography>
-            <Typography variant="h6" sx={{ textAlign: "center", opacity: 0.9 }}>
-              Insights, tips, and stories from the world of online learning
-            </Typography>
-          </motion.div>
-        </Container>
-      </Box>
+      <HeroSection
+        title="EduSphere Blog"
+        subtitle="Insights, tips, and stories from the world of online learning"
+      />
 
       {/* Blog Posts */}
       <Container maxWidth="lg" sx={{ py: 8, flex: 1 }}>
@@ -77,6 +104,8 @@ export default function Blog() {
               transition={{ delay: index * 0.1 }}
               sx={{
                 cursor: "pointer",
+                background: "rgba(255, 255, 255, 0.1)",
+                backdropFilter: "blur(10px)",
                 transition: "all 0.3s ease",
                 "&:hover": {
                   transform: "translateY(-8px)",
@@ -93,14 +122,14 @@ export default function Blog() {
               <CardContent>
                 <Box sx={{ mb: 2 }}>
                   <Chip label={post.category} size="small" sx={{ background: "#667eea", color: "white" }} />
-                  <Typography variant="caption" sx={{ ml: 2, color: "#999" }}>
+                  <Typography variant="caption" sx={{ ml: 2, color: "#ffffff" }}>
                     {post.date}
                   </Typography>
                 </Box>
-                <Typography variant="h5" sx={{ fontWeight: 700, mb: 2 }}>
+                <Typography variant="h5" sx={{ fontWeight: 700, mb: 2, color: "#ffffff" }}>
                   {post.title}
                 </Typography>
-                <Typography variant="body2" sx={{ color: "#666", lineHeight: 1.7 }}>
+                <Typography variant="body2" sx={{ color: "#ffffff", lineHeight: 1.7 }}>
                   {post.excerpt}
                 </Typography>
               </CardContent>
@@ -109,7 +138,8 @@ export default function Blog() {
         </Box>
       </Container>
 
-      <Footer />
+      <Footer sticky={false} />
+      </Box>
     </Box>
   );
 }
