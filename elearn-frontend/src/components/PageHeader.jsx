@@ -113,18 +113,80 @@ export default function PageHeader({ title, subtitle, backgroundGradient, showAv
           {/* Profile Avatar */}
           {showAvatar && (
             <Box sx={{ position: "relative", mr: { xs: 6, md: 12 } }}>
-              <input
-                type="file"
-                ref={fileInputRef}
-                onChange={handleFileChange}
-                accept="image/*"
-                style={{ display: "none" }}
-              />
-              <Tooltip title={avatarSrc ? "Change profile picture" : "Add profile picture"}>
+              {onAvatarChange ? (
+                <>
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={handleFileChange}
+                    accept="image/*"
+                    style={{ display: "none" }}
+                  />
+                  <Tooltip title={avatarSrc ? "Change profile picture" : "Add profile picture"}>
+                    <Avatar
+                      src={avatarSrc || ""}
+                      alt={userName || "User"}
+                      onClick={handleAvatarClick}
+                      sx={{
+                        width: { xs: 80, md: 120 },
+                        height: { xs: 80, md: 120 },
+                        border: "4px solid rgba(255, 255, 255, 0.3)",
+                        boxShadow: "0 8px 24px rgba(0, 0, 0, 0.2)",
+                        fontSize: { xs: "2rem", md: "3rem" },
+                        fontWeight: 800,
+                        background: "linear-gradient(135deg, #ffffff 0%, #e0e7ff 100%)",
+                        color: "#667eea",
+                        cursor: "pointer",
+                        "&:hover": {
+                          transform: "scale(1.05)",
+                          transition: "transform 0.2s ease",
+                        },
+                      }}
+                    >
+                      {!avatarSrc && userName ? userName.charAt(0).toUpperCase() : "U"}
+                    </Avatar>
+                  </Tooltip>
+                  <Box sx={{ display: "flex", gap: 0.5, position: "absolute", bottom: 0, right: 0 }}>
+                    {avatarSrc && (
+                      <IconButton
+                        onClick={handleClearAvatar}
+                        sx={{
+                          backgroundColor: "#e74c3c",
+                          color: "white",
+                          width: { xs: 28, md: 36 },
+                          height: { xs: 28, md: 36 },
+                          "&:hover": {
+                            backgroundColor: "#c0392b",
+                          },
+                          boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
+                          fontSize: { xs: "0.8rem", md: "1rem" },
+                        }}
+                        title="Remove picture"
+                      >
+                        ✕
+                      </IconButton>
+                    )}
+                    <IconButton
+                      onClick={handleAvatarClick}
+                      sx={{
+                        backgroundColor: "#667eea",
+                        color: "white",
+                        width: { xs: 28, md: 36 },
+                        height: { xs: 28, md: 36 },
+                        "&:hover": {
+                          backgroundColor: "#764ba2",
+                        },
+                        boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
+                      }}
+                    >
+                      <PhotoCameraIcon sx={{ fontSize: { xs: "1rem", md: "1.2rem" } }} />
+                    </IconButton>
+                  </Box>
+                </>
+              ) : (
                 <Avatar
                   src={avatarSrc || ""}
                   alt={userName || "User"}
-                  onClick={handleAvatarClick}
                   sx={{
                     width: { xs: 80, md: 120 },
                     height: { xs: 80, md: 120 },
@@ -134,52 +196,11 @@ export default function PageHeader({ title, subtitle, backgroundGradient, showAv
                     fontWeight: 800,
                     background: "linear-gradient(135deg, #ffffff 0%, #e0e7ff 100%)",
                     color: "#667eea",
-                    cursor: "pointer",
-                    "&:hover": {
-                      transform: "scale(1.05)",
-                      transition: "transform 0.2s ease",
-                    },
                   }}
                 >
                   {!avatarSrc && userName ? userName.charAt(0).toUpperCase() : "U"}
                 </Avatar>
-              </Tooltip>
-              <Box sx={{ display: "flex", gap: 0.5, position: "absolute", bottom: 0, right: 0 }}>
-                {avatarSrc && (
-                  <IconButton
-                    onClick={handleClearAvatar}
-                    sx={{
-                      backgroundColor: "#e74c3c",
-                      color: "white",
-                      width: { xs: 28, md: 36 },
-                      height: { xs: 28, md: 36 },
-                      "&:hover": {
-                        backgroundColor: "#c0392b",
-                      },
-                      boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
-                      fontSize: { xs: "0.8rem", md: "1rem" },
-                    }}
-                    title="Remove picture"
-                  >
-                    ✕
-                  </IconButton>
-                )}
-                <IconButton
-                  onClick={handleAvatarClick}
-                  sx={{
-                    backgroundColor: "#667eea",
-                    color: "white",
-                    width: { xs: 28, md: 36 },
-                    height: { xs: 28, md: 36 },
-                    "&:hover": {
-                      backgroundColor: "#764ba2",
-                    },
-                    boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
-                  }}
-                >
-                  <PhotoCameraIcon sx={{ fontSize: { xs: "1rem", md: "1.2rem" } }} />
-                </IconButton>
-              </Box>
+              )}
             </Box>
           )}
         </Box>

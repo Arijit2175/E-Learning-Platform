@@ -25,7 +25,6 @@ export default function Dashboard() {
   const { isOpen } = useSidebar();
   const navigate = useNavigate();
   const [tabValue, setTabValue] = useState(0);
-  const [userAvatar, setUserAvatar] = useState(null);
   const [statsModalOpen, setStatsModalOpen] = useState(false);
   const [certModalOpen, setCertModalOpen] = useState(false);
   const [studentsModalOpen, setStudentsModalOpen] = useState(false);
@@ -181,8 +180,7 @@ export default function Dashboard() {
             backgroundGradient="linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
             showAvatar={true}
             userName={displayName}
-            avatarSrc={userAvatar}
-            onAvatarChange={setUserAvatar}
+            avatarSrc={user?.avatar || null}
           />
         </Section>
 
@@ -211,7 +209,7 @@ export default function Dashboard() {
             ) : (
               <Grid container spacing={3}>
                 {teacherCourses.map((course) => (
-                  <Grid item xs={12} md={6} key={course.id}>
+                  <Grid key={course.id}>
                     <Card>
                       <CardContent>
                         <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
@@ -397,7 +395,7 @@ export default function Dashboard() {
                     const hasCertificate = userCertificates.some((c) => c.courseId === course.id);
 
                     return (
-                      <Grid item xs={12} md={6} key={course.id}>
+                      <Grid key={course.id}>
                         <Card sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
                           <CardContent sx={{ flex: 1 }}>
                             <Stack direction="row" spacing={2} alignItems="flex-start" sx={{ mb: 2 }}>
@@ -482,7 +480,7 @@ export default function Dashboard() {
           <DialogTitle sx={{ fontWeight: 700, fontSize: "1.3rem" }}>📊 Your Learning Statistics</DialogTitle>
           <DialogContent sx={{ mt: 2 }}>
             <Grid container spacing={2}>
-              <Grid item xs={12}>
+              <Grid>
                 <Box sx={{ p: 2, background: "#f5f7fa", borderRadius: 2 }}>
                   <Typography variant="body2" sx={{ color: "#666", mb: 0.5 }}>Total Courses Enrolled</Typography>
                   <Typography variant="h5" sx={{ fontWeight: 700, color: "#667eea" }}>
@@ -490,7 +488,7 @@ export default function Dashboard() {
                   </Typography>
                 </Box>
               </Grid>
-              <Grid item xs={6}>
+              <Grid>
                 <Box sx={{ p: 2, background: "#f5f7fa", borderRadius: 2 }}>
                   <Typography variant="body2" sx={{ color: "#666", mb: 0.5 }}>Formal Courses</Typography>
                   <Typography variant="h5" sx={{ fontWeight: 700, color: "#667eea" }}>
@@ -498,7 +496,7 @@ export default function Dashboard() {
                   </Typography>
                 </Box>
               </Grid>
-              <Grid item xs={6}>
+              <Grid>
                 <Box sx={{ p: 2, background: "#f5f7fa", borderRadius: 2 }}>
                   <Typography variant="body2" sx={{ color: "#666", mb: 0.5 }}>Non-Formal Courses</Typography>
                   <Typography variant="h5" sx={{ fontWeight: 700, color: "#667eea" }}>
@@ -506,7 +504,7 @@ export default function Dashboard() {
                   </Typography>
                 </Box>
               </Grid>
-              <Grid item xs={12}>
+              <Grid>
                 <Box sx={{ p: 2, background: "#f5f7fa", borderRadius: 2 }}>
                   <Typography variant="body2" sx={{ color: "#666", mb: 0.5 }}>Total Learning Hours</Typography>
                   <Typography variant="h5" sx={{ fontWeight: 700, color: "#f093fb" }}>
@@ -550,7 +548,7 @@ export default function Dashboard() {
             ) : (
               <Grid container spacing={2}>
                 {userCertificates.map((cert) => (
-                  <Grid item xs={12} key={cert.id}>
+                  <Grid key={cert.id}>
                     <Box sx={{ p: 2, border: "1px solid #e5e7eb", borderRadius: 2, background: "#f8fafc" }}>
                       <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 0.5 }}>
                         {cert.courseName || "Course"}

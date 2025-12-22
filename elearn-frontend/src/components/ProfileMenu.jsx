@@ -33,12 +33,7 @@ export default function ProfileMenu({ anchorEl, open, onClose }) {
     navigate("/profile");
   };
 
-  // Prepare details for grid
-  const detailItems = [
-    { label: "Email", value: user?.email || "-" },
-    { label: "Role", value: user?.role ? user.role.charAt(0).toUpperCase() + user.role.slice(1) : "-" },
-    { label: "Joined", value: user?.joinedDate ? new Date(user.joinedDate).toLocaleDateString() : "-" },
-  ];
+
 
   return (
     <Menu
@@ -58,44 +53,18 @@ export default function ProfileMenu({ anchorEl, open, onClose }) {
         }
       }}
     >
-      <Card elevation={0} sx={{ m: 0, boxShadow: 'none', background: 'transparent' }}>
-        <CardContent sx={{ p: 0, pb: 0 }}>
-          <Stack direction={{ xs: "column", sm: "row" }} spacing={2} alignItems="center" sx={{ mb: 2 }}>
-            <Avatar sx={{ bgcolor: "#667eea", width: 56, height: 56, fontSize: 22 }}>
-              {user?.firstName ? user.firstName[0].toUpperCase() : (user?.email ? user.email[0].toUpperCase() : "U")}
-            </Avatar>
-            <Box sx={{ textAlign: { xs: "center", sm: "left" } }}>
-              <Typography variant="h6" sx={{ fontWeight: 700 }}>{user?.firstName && user?.lastName ? `${user.firstName} ${user.lastName}` : user?.email || "User"}</Typography>
-              <Typography variant="body2" sx={{ color: "#6b7280" }}>{user?.email}</Typography>
-              <Stack direction="row" spacing={1} sx={{ mt: 1 }}>
-                {user?.role && <Chip label={user.role} size="small" />}
-              </Stack>
-            </Box>
+      <Stack direction={{ xs: "column", sm: "row" }} spacing={2} alignItems="center" sx={{ mb: 2, mt: 2, px: 3 }}>
+        <Avatar src={user?.avatar || undefined} sx={{ bgcolor: "#667eea", width: 80, height: 80, fontSize: 32 }}>
+          {!user?.avatar && (user?.firstName ? user.firstName[0].toUpperCase() : (user?.email ? user.email[0].toUpperCase() : "U"))}
+        </Avatar>
+        <Box sx={{ textAlign: { xs: "center", sm: "left" } }}>
+          <Typography variant="h6" sx={{ fontWeight: 700 }}>{user?.firstName && user?.lastName ? `${user.firstName} ${user.lastName}` : user?.email || "User"}</Typography>
+          <Typography variant="body2" sx={{ color: "#6b7280" }}>{user?.email}</Typography>
+          <Stack direction="row" spacing={1} sx={{ mt: 1 }}>
+            {user?.role && <Chip label={user.role} size="small" />}
           </Stack>
-          <Grid container spacing={2} sx={{ mb: 1 }}>
-            {detailItems.map((item) => (
-              <Grid item xs={12} sm={6} key={item.label}>
-                <Typography variant="subtitle2" sx={{ color: "#6b7280" }}>
-                  {item.label}
-                </Typography>
-                <Typography variant="body1" sx={{ fontWeight: 600 }}>
-                  {item.value}
-                </Typography>
-              </Grid>
-            ))}
-          </Grid>
-          {missingDetails && (
-            <Box sx={{ mt: 1, mb: 1 }}>
-              <Typography variant="body2" color="error">
-                Please complete your profile details.
-              </Typography>
-              <Button variant="outlined" size="small" onClick={handleFillDetails} sx={{ mt: 1 }}>
-                Fill Details
-              </Button>
-            </Box>
-          )}
-        </CardContent>
-      </Card>
+        </Box>
+      </Stack>
       <Divider />
       <MenuItem onClick={handleDashboard}>Dashboard</MenuItem>
       <MenuItem onClick={handleProfile}>Profile</MenuItem>
