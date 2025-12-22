@@ -315,7 +315,7 @@ export default function Register() {
                 {/* Image */}
                 <Box
                   component="img"
-                  src="/images/login-image.png"
+                  src="/images/register-image.png"
                   alt="EduSphere Learning"
                   sx={{
                     width: "100%",

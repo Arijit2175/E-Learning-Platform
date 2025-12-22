@@ -118,6 +118,9 @@ export default function FormalLearning() {
             title="Available Classes"
             subtitle="Choose from our comprehensive collection of formal learning programs"
             centered
+            variant="h3"
+            titleColor="gradient"
+            subtitleColor="#7f8c8d"
           />
           
           <Container maxWidth="lg">

@@ -147,18 +147,50 @@ export default function Dashboard() {
           flexDirection: "column",
         }}
       >
-        {/* Light blurred background overlay */}
+        {/* Background Video with Blur */}
         <Box
           sx={{
             position: "fixed",
             top: 0,
             left: 0,
-            width: "100%",
-            height: "100%",
+            width: "100vw",
+            height: "100vh",
+            zIndex: -2,
+            overflow: "hidden",
+          }}
+        >
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            style={{
+              width: "100vw",
+              height: "100vh",
+              objectFit: "cover",
+              filter: "blur(6px) brightness(0.8)",
+              position: "absolute",
+              top: 0,
+              left: 0,
+              zIndex: -2,
+            }}
+          >
+            <source src="/videos/webpage-video.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        </Box>
+        {/* Transparent blurred background overlay for extra softness */}
+        <Box
+          sx={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100vw",
+            height: "100vh",
             zIndex: -1,
             pointerEvents: "none",
-            background: "linear-gradient(135deg, rgba(248,249,254,0.9) 0%, rgba(240,242,249,0.9) 100%)",
-            filter: "blur(3px)",
+            background: "transparent",
+            backdropFilter: "blur(2px)",
           }}
         />
         <Navbar />
@@ -196,144 +228,166 @@ export default function Dashboard() {
 
         {/* Teacher Dashboard override */}
         {user?.role === "teacher" ? (
-          <Section background="white" py={{ xs: 4, md: 5 }}>
-            <SectionTitle title="My Courses (Teacher)" subtitle="Manage your classes and schedules" centered />
+          <Section background="transparent" py={{ xs: 2, md: 3 }} noContainer>
+            <Box
+              sx={{
+                maxWidth: { xs: '100%', md: 1100 },
+                mx: 'auto',
+                background: 'white',
+                borderRadius: '28px',
+                border: '1px solid #e0e7ff',
+                boxShadow: '0 4px 24px rgba(102,126,234,0.10)',
+                px: { xs: 1, md: 4 },
+                py: { xs: 2, md: 3 },
+              }}
+            >
+              <SectionTitle
+                title="Teacher Dashboard"
+                subtitle={`Welcome, ${displayName}!`}
+                centered
+                variant="h3"
+                titleColor="gradient"
+                subtitleColor="#7f8c8d"
+              />
 
-            {teacherCourses.length === 0 ? (
-              <Card sx={{ p: 4, textAlign: "center" }}>
-                <Typography variant="body1" sx={{ color: "#999", mb: 2 }}>
-                  You haven't created any courses yet.
-                </Typography>
-                <Button variant="contained" onClick={() => navigate("/formal")}>Create Course</Button>
-              </Card>
-            ) : (
-              <Grid container spacing={3}>
-                {teacherCourses.map((course) => (
-                  <Grid key={course.id}>
-                    <Card>
-                      <CardContent>
-                        <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
-                          <Box>
-                            <Typography variant="h6" sx={{ fontWeight: 700 }}>{course.title}</Typography>
-                            <Typography variant="caption" sx={{ color: "#6b7280" }}>
-                              {course.students?.length || getCourseStudents(course.id)?.length || 0} students
-                            </Typography>
-                          </Box>
-                          <Stack direction="row" spacing={1}>
-                            <Button 
-                              size="small" 
-                              variant="outlined"
-                              startIcon={<VideocamIcon />}
-                              onClick={() => {
-                                setScheduleCourseId(course.id);
-                                setScheduleForm({ title: "Live Class", startTime: "", duration: 60, meetLink: "" });
-                                setScheduleOpen(true);
-                              }}
-                            >
-                              Manage
-                            </Button>
-                          </Stack>
-                        </Stack>
-
-                        {(course.schedules && course.schedules.length > 0) && (
-                          <Box sx={{ mt: 2 }}>
-                            <Typography variant="subtitle2" sx={{ mb: 1 }}>Scheduled Classes</Typography>
-                            <Stack spacing={1}>
-                              {course.schedules.map(s => (
-                                <Stack key={s.id} direction="row" spacing={1} alignItems="center">
-                                  <Chip icon={<VideocamIcon />} label={s.title} size="small" />
-                                  <Typography variant="caption" sx={{ color: "#6b7280" }}>
-                                    {new Date(s.startTime).toLocaleString()}
-                                  </Typography>
-                                  {s.meetLink && (
-                                    <Button size="small" href={s.meetLink} target="_blank" rel="noopener noreferrer">Open</Button>
-                                  )}
-                                </Stack>
-                              ))}
+              {teacherCourses.length === 0 ? (
+                <Card sx={{ p: 4, textAlign: "center" }}>
+                  <Typography variant="body1" sx={{ color: "#999", mb: 2 }}>
+                    You haven't created any courses yet.
+                  </Typography>
+                  <Button variant="contained" onClick={() => navigate("/formal")}>Create Course</Button>
+                </Card>
+              ) : (
+                <Grid container spacing={3}>
+                  {teacherCourses.map((course) => (
+                    <Grid key={course.id}>
+                      <Card>
+                        <CardContent>
+                          <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
+                            <Box>
+                              <Typography variant="h6" sx={{ fontWeight: 700 }}>{course.title}</Typography>
+                              <Typography variant="caption" sx={{ color: "#6b7280" }}>
+                                {course.students?.length || getCourseStudents(course.id)?.length || 0} students
+                              </Typography>
+                            </Box>
+                            <Stack direction="row" spacing={1}>
+                              <Button 
+                                size="small" 
+                                variant="outlined"
+                                startIcon={<VideocamIcon />}
+                                onClick={() => {
+                                  setScheduleCourseId(course.id);
+                                  setScheduleForm({ title: "Live Class", startTime: "", duration: 60, meetLink: "" });
+                                  setScheduleOpen(true);
+                                }}
+                              >
+                                Manage
+                              </Button>
                             </Stack>
-                          </Box>
-                        )}
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                ))}
-              </Grid>
-            )}
+                          </Stack>
 
-            {/* Schedule Class Dialog */}
-            <Dialog open={scheduleOpen} onClose={() => setScheduleOpen(false)} maxWidth="sm" fullWidth>
-              <DialogTitle>Schedule a Class</DialogTitle>
-              <DialogContent>
-                <Stack spacing={2} sx={{ mt: 1 }}>
-                  <TextField 
-                    label="Title" 
-                    value={scheduleForm.title}
-                    onChange={(e)=> setScheduleForm({ ...scheduleForm, title: e.target.value })}
-                    fullWidth
-                  />
-                  <TextField 
-                    label="Start Time (ISO or yyyy-mm-ddThh:mm)"
-                    placeholder="2025-12-11T19:30"
-                    value={scheduleForm.startTime}
-                    onChange={(e)=> setScheduleForm({ ...scheduleForm, startTime: e.target.value })}
-                    fullWidth
-                  />
-                  <TextField 
-                    label="Duration (minutes)"
-                    type="number"
-                    value={scheduleForm.duration}
-                    onChange={(e)=> setScheduleForm({ ...scheduleForm, duration: Number(e.target.value||60) })}
-                    fullWidth
-                  />
-                  <TextField 
-                    label="Meeting Link"
-                    placeholder="https://meet.google.com/xxx-xxxx-xxx"
-                    value={scheduleForm.meetLink}
-                    onChange={(e)=> setScheduleForm({ ...scheduleForm, meetLink: e.target.value })}
-                    helperText="Enter a valid meeting link (Google Meet, Zoom, Teams, Whereby, or Webex)"
-                    fullWidth
-                  />
-                </Stack>
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={()=> setScheduleOpen(false)}>Cancel</Button>
-                <Button 
-                  variant="contained" 
-                  onClick={()=>{
-                    if (!scheduleCourseId) return;
-                    
-                    // Validate meet link if provided
-                    if (scheduleForm.meetLink && scheduleForm.meetLink.trim()) {
-                      const validPatterns = [
-                        /^https?:\/\/(meet\.google\.com|zoom\.us|teams\.microsoft\.com|whereby\.com|webex\.com)/i,
-                      ];
-                      const isValid = validPatterns.some(pattern => pattern.test(scheduleForm.meetLink));
-                      if (!isValid) {
-                        alert('Please enter a valid meeting link from Google Meet, Zoom, Microsoft Teams, Whereby, or Webex');
-                        return;
+                          {(course.schedules && course.schedules.length > 0) && (
+                            <Box sx={{ mt: 2 }}>
+                              <Typography variant="subtitle2" sx={{ mb: 1 }}>Scheduled Classes</Typography>
+                              <Stack spacing={1}>
+                                {course.schedules.map(s => (
+                                  <Stack key={s.id} direction="row" spacing={1} alignItems="center">
+                                    <Chip icon={<VideocamIcon />} label={s.title} size="small" />
+                                    <Typography variant="caption" sx={{ color: "#6b7280" }}>
+                                      {new Date(s.startTime).toLocaleString()}
+                                    </Typography>
+                                    {s.meetLink && (
+                                      <Button size="small" href={s.meetLink} target="_blank" rel="noopener noreferrer">Open</Button>
+                                    )}
+                                  </Stack>
+                                ))}
+                              </Stack>
+                            </Box>
+                          )}
+                        </CardContent>
+                      </Card>
+                    </Grid>
+                  ))}
+                </Grid>
+              )}
+
+              {/* Schedule Class Dialog */}
+              <Dialog open={scheduleOpen} onClose={() => setScheduleOpen(false)} maxWidth="sm" fullWidth>
+                <DialogTitle>Schedule a Class</DialogTitle>
+                <DialogContent>
+                  <Stack spacing={2} sx={{ mt: 1 }}>
+                    <TextField 
+                      label="Title" 
+                      value={scheduleForm.title}
+                      onChange={(e)=> setScheduleForm({ ...scheduleForm, title: e.target.value })}
+                      fullWidth
+                    />
+                    <TextField 
+                      label="Start Time (ISO or yyyy-mm-ddThh:mm)"
+                      placeholder="2025-12-11T19:30"
+                      value={scheduleForm.startTime}
+                      onChange={(e)=> setScheduleForm({ ...scheduleForm, startTime: e.target.value })}
+                      fullWidth
+                    />
+                    <TextField 
+                      label="Duration (minutes)"
+                      type="number"
+                      value={scheduleForm.duration}
+                      onChange={(e)=> setScheduleForm({ ...scheduleForm, duration: Number(e.target.value||60) })}
+                      fullWidth
+                    />
+                    <TextField 
+                      label="Meeting Link"
+                      placeholder="https://meet.google.com/xxx-xxxx-xxx"
+                      value={scheduleForm.meetLink}
+                      onChange={(e)=> setScheduleForm({ ...scheduleForm, meetLink: e.target.value })}
+                      helperText="Enter a valid meeting link (Google Meet, Zoom, Teams, Whereby, or Webex)"
+                      fullWidth
+                    />
+                  </Stack>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={()=> setScheduleOpen(false)}>Cancel</Button>
+                  <Button 
+                    variant="contained" 
+                    onClick={()=>{
+                      if (!scheduleCourseId) return;
+                      
+                      // Validate meet link if provided
+                      if (scheduleForm.meetLink && scheduleForm.meetLink.trim()) {
+                        const validPatterns = [
+                          /^https?:\/\/(meet\.google\.com|zoom\.us|teams\.microsoft\.com|whereby\.com|webex\.com)/i,
+                        ];
+                        const isValid = validPatterns.some(pattern => pattern.test(scheduleForm.meetLink));
+                        if (!isValid) {
+                          alert('Please enter a valid meeting link from Google Meet, Zoom, Microsoft Teams, Whereby, or Webex');
+                          return;
+                        }
                       }
-                    }
-                    
-                    const start = scheduleForm.startTime && !isNaN(new Date(scheduleForm.startTime)) ? new Date(scheduleForm.startTime).toISOString() : new Date().toISOString();
-                    scheduleClass(scheduleCourseId, { ...scheduleForm, startTime: start });
-                    setScheduleOpen(false);
-                  }}
-                >
-                  Save
-                </Button>
-              </DialogActions>
-            </Dialog>
+                      
+                      const start = scheduleForm.startTime && !isNaN(new Date(scheduleForm.startTime)) ? new Date(scheduleForm.startTime).toISOString() : new Date().toISOString();
+                      scheduleClass(scheduleCourseId, { ...scheduleForm, startTime: start });
+                      setScheduleOpen(false);
+                    }}
+                  >
+                    Save
+                  </Button>
+                </DialogActions>
+              </Dialog>
+            </Box>
           </Section>
         ) : (
         
         /* Enrolled Courses Section */
-        <Box sx={{ px: { xs: 2, md: 4 }, pb: 4 }}>
+        <Box sx={{ px: { xs: 2, md: 0 }, pb: 4 }}>
           <Box
             sx={{
-              background: "white",
-              borderRadius: "24px",
-              border: "1px solid #e0e7ff",
-              boxShadow: "0 4px 20px rgba(102, 126, 234, 0.08)",
+              maxWidth: { xs: '100%', md: 1100 },
+              mx: 'auto',
+              background: 'white',
+              borderRadius: '28px',
+              border: '1px solid #e0e7ff',
+              boxShadow: '0 4px 20px rgba(102, 126, 234, 0.08)',
               p: { xs: 3, md: 4 },
             }}
           >
@@ -341,6 +395,9 @@ export default function Dashboard() {
               title="My Courses"
               subtitle="Continue learning from where you left off"
               centered
+              variant="h3"
+              titleColor="gradient"
+              subtitleColor="#7f8c8d"
             />
 
           {/* Tabs for Formal and Non-Formal */}
@@ -472,7 +529,7 @@ export default function Dashboard() {
 
         {/* Page Footer */}
         <Box sx={{ py: 2, textAlign: "center", mt: 4 }}>
-          <Typography variant="body2" sx={{ color: "#666", fontSize: "0.9rem" }}>
+          <Typography variant="body2" sx={{ color: "#f5f7fa", fontSize: "0.9rem" }}>
             © 2025 EduSphere. All rights reserved.
           </Typography>
         {/* Stats Modal */}

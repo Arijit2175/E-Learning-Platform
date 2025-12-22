@@ -144,7 +144,10 @@ export default function TeacherDashboard() {
       <Section background="transparent">
         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3 }}>
           <Box>
-            <SectionTitle title="Teacher Dashboard" subtitle={`Welcome, ${user?.firstName}!`} centered={false} />
+            <SectionTitle title="Teacher Dashboard" subtitle={`Welcome, ${user?.firstName}!`} centered={false} 
+            titleColor="gradient"
+            subtitleColor="#7f8c8d"
+            />
           </Box>
           <Button
             variant="contained"
@@ -212,7 +215,10 @@ export default function TeacherDashboard() {
         </Grid>
 
         {/* My Courses */}
-        <SectionTitle title="My Courses" subtitle="Manage your courses and students" centered={false} />
+        <SectionTitle title="My Courses" subtitle="Manage your courses and students" centered={false} 
+        titleColor="gradient"
+        subtitleColor="#7f8c8d"
+        />
         
         {teacherCourses.length === 0 ? (
           <Card sx={{ p: 4, textAlign: "center" }}>
@@ -262,7 +268,13 @@ export default function TeacherDashboard() {
       {/* Live Classes & Attendance */}
       <Section background="transparent">
         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3 }}>
-          <SectionTitle title="Live Classes" subtitle="Schedule sessions and track attendance" centered={false} />
+          <SectionTitle 
+            title="Live Classes" 
+            subtitle="Schedule sessions and track attendance" 
+            centered={false}
+            titleColor="gradient"
+            subtitleColor="#7f8c8d"
+          />
           <Button
             variant="contained"
             startIcon={<VideoCall />}

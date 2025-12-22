@@ -15,7 +15,7 @@ export default function Footer({ compact = false, disableGutters = false, sticky
     <Box
       sx={{
         background: "rgba(44, 62, 80, 0.15)",
-        color: "white",
+        color: "#fff",
         pt: compact ? 2 : 6,
         pb: compact ? 2 : 3,
         mt: 0,
@@ -38,10 +38,10 @@ export default function Footer({ compact = false, disableGutters = false, sticky
         <Box sx={{ mb: compact ? 1 : 4 }}>
           {/* About Section */}
           <Box sx={{ mb: 3 }}>
-            <Typography variant="h6" sx={{ fontWeight: 700, mb: compact ? 1.5 : 2, fontSize: compact ? "1.1rem" : "1.3rem", color: "#ffffff" }}>
+            <Typography variant="h6" sx={{ fontWeight: 700, mb: compact ? 1.5 : 2, fontSize: compact ? "1.1rem" : "1.3rem", color: "#fff", textShadow: '0 2px 8px rgba(0,0,0,0.18)' }}>
               EduSphere
             </Typography>
-            <Typography variant="body2" sx={{ opacity: 0.8, mb: compact ? 2 : 3, lineHeight: 1.5, color: "#ffffff" }}>
+            <Typography variant="body2" sx={{ opacity: 0.8, mb: compact ? 2 : 3, lineHeight: 1.5, color: "#fff", textShadow: '0 2px 8px rgba(0,0,0,0.18)' }}>
               Empowering learners worldwide with accessible, affordable, and high-quality
               education through formal, non-formal, and informal learning pathways.
             </Typography>
@@ -58,10 +58,11 @@ export default function Footer({ compact = false, disableGutters = false, sticky
                       height: compact ? 34 : 40,
                       background: "rgba(255,255,255,0.1)",
                       borderRadius: "50%",
-                      color: "white",
+                      color: "#fff",
                       transition: "all 0.3s ease",
                       "&:hover": {
                         background: "#667eea",
+                        color: "#fff",
                       },
                     }}
                   >
@@ -77,7 +78,7 @@ export default function Footer({ compact = false, disableGutters = false, sticky
             <Box sx={{ minWidth: 80, maxWidth: 100 }}>
               <Typography
                 variant="subtitle1"
-                sx={{ fontWeight: 700, mb: compact ? 1.5 : 2, fontSize: compact ? "0.95rem" : "1rem", color: "#ffffff" }}
+                sx={{ fontWeight: 700, mb: compact ? 1.5 : 2, fontSize: compact ? "0.95rem" : "1rem", color: "#fff", textShadow: '0 2px 8px rgba(0,0,0,0.18)' }}
               >
                 Company
               </Typography>
@@ -208,7 +209,7 @@ export default function Footer({ compact = false, disableGutters = false, sticky
             gap: compact ? 1 : 2,
           }}
         >
-          <Typography variant="body2" sx={{ opacity: 0.7, color: "#ffffff", fontSize: compact ? "0.85rem" : "0.9rem" }}>
+          <Typography variant="body2" sx={{ opacity: 0.9, color: "#fff", fontSize: compact ? "0.85rem" : "0.9rem", textShadow: '0 2px 8px rgba(0,0,0,0.18)' }}>
             © 2025 EduSphere. All rights reserved. 
           </Typography>
 

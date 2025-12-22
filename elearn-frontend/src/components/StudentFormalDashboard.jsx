@@ -64,10 +64,12 @@ export default function StudentFormalDashboard({ onExploreCourses }) {
     <Box>
       <Section background="transparent">
         <SectionTitle 
-          title="My Classes" 
-          subtitle={`${studentEnrollments.length} classes enrolled`}
-          centered={false}
-        />
+            title="My Classes" 
+            subtitle={`${studentEnrollments.length} classes enrolled`}
+            centered={false}
+            titleColor="gradient"
+            subtitleColor="#7f8c8d"
+          />
 
         {studentEnrollments.length === 0 ? (
           <Card sx={{ p: 4, textAlign: "center" }}>

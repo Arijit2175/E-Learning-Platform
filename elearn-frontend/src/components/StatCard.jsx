@@ -9,7 +9,7 @@ export default function StatCard({ icon, value, label, color = "#667eea", action
       whileHover={{ y: -4, boxShadow: 'var(--shadow-md)' }}
       transition={{ duration: 0.18, ease: "easeOut" }}
       sx={{
-        background: `linear-gradient(135deg, ${color}10 0%, ${color}04 100%)`,
+        background: '#fff',
         border: `1px solid ${color}25`,
         borderRadius: 'var(--radius-lg)',
         overflow: "hidden",
