@@ -148,12 +148,12 @@ export default function NonFormalLearning() {
                             <Stack direction="row" spacing={2} alignItems="flex-start" sx={{ mb: 2 }}>
                               <Box sx={{ fontSize: 40 }}>{course.thumbnail}</Box>
                               <Box sx={{ flex: 1 }}>
-                                <Typography variant="h6" sx={{ fontWeight: 700 }}>
+                                <Typography variant="h6" sx={{ fontWeight: 700, color: 'white !important' }}>
                                   {course.title}
                                 </Typography>
                                 <Stack direction="row" spacing={0.5} alignItems="center">
                                   <StarIcon sx={{ fontSize: 14, color: "#fbbf24" }} />
-                                  <Typography variant="caption" sx={{ fontWeight: 600 }}>
+                                  <Typography variant="caption" sx={{ fontWeight: 600, color: 'white !important' }}>
                                     {course.rating}
                                   </Typography>
                                 </Stack>
@@ -163,7 +163,7 @@ export default function NonFormalLearning() {
                               )}
                             </Stack>
 
-                            <Typography variant="body2" sx={{ color: "#6b7280", mb: 2 }}>
+                            <Typography variant="body2" sx={{ color: 'white !important', mb: 2 }}>
                               {course.description}
                             </Typography>
 
@@ -180,8 +180,8 @@ export default function NonFormalLearning() {
                             </Stack>
 
                             <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
-                              <Chip label={course.level} size="small" variant="outlined" />
-                              <Chip label={course.duration} size="small" variant="outlined" />
+                              <Chip label={course.level} size="small" variant="outlined" sx={{ color: 'white !important', borderColor: 'white !important' }} />
+                              <Chip label={course.duration} size="small" variant="outlined" sx={{ color: 'white !important', borderColor: 'white !important' }} />
                             </Stack>
                           </CardContent>
 
