@@ -402,6 +402,7 @@ export const NonFormalProvider = ({ children }) => {
     }));
   };
 
+  // Only one earnCertificate function should exist
   const earnCertificate = (userId, courseId) => {
     const course = courses.find((c) => c.id === courseId);
     if (!course || certificates.some((c) => c.userId === userId && c.courseId === courseId)) return;
@@ -457,6 +458,7 @@ export const NonFormalProvider = ({ children }) => {
         getCourseProgress,
         resetCourseProgress,
         resetAllData,
+        earnCertificate,
       }}
     >
       {children}

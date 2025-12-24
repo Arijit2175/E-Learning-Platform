@@ -32,6 +32,8 @@ export default function Dashboard() {
   const [scheduleOpen, setScheduleOpen] = useState(false);
   const [scheduleCourseId, setScheduleCourseId] = useState("");
   const [scheduleForm, setScheduleForm] = useState({ title: "Live Class", startTime: "", duration: 60, meetLink: "" });
+  // Certificate view dialog state
+  const [viewCert, setViewCert] = useState(null);
 
   const displayName = user?.name || `${user?.firstName || ""} ${user?.lastName || ""}`.trim() || "Learner";
   // Build Formal courses from formal enrollments (+schedules) so only teacher-assigned courses appear
@@ -48,7 +50,17 @@ export default function Dashboard() {
       schedules,
     };
   });
-  const userCertificates = certificates?.filter((c) => c.userId === user?.id) || [];
+  // Only show one certificate per course (latest by earnedAt)
+  let userCertificates = certificates?.filter((c) => c.userId === user?.id) || [];
+  // Deduplicate by courseId, keeping the latest earnedAt
+  userCertificates = Object.values(
+    userCertificates.reduce((acc, cert) => {
+      if (!acc[cert.courseId] || new Date(cert.earnedAt) > new Date(acc[cert.courseId].earnedAt)) {
+        acc[cert.courseId] = cert;
+      }
+      return acc;
+    }, {})
+  );
   const certifiedIds = new Set(userCertificates.map(c => c.courseId));
   const nonFormalCourses = (getNonFormalCourses(user?.id) || []).filter(c => !certifiedIds.has(c.id));
 
@@ -605,7 +617,7 @@ export default function Dashboard() {
             ) : (
               <Grid container spacing={2}>
                 {userCertificates.map((cert) => (
-                  <Grid key={cert.id}>
+                  <Grid key={cert.certificateId}>
                     <Box sx={{ p: 2, border: "1px solid #e5e7eb", borderRadius: 2, background: "#f8fafc" }}>
                       <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 0.5 }}>
                         {cert.courseName || "Course"}
@@ -616,7 +628,14 @@ export default function Dashboard() {
                       <Typography variant="caption" sx={{ color: "#9ca3af" }}>
                         Earned on {new Date(cert.earnedAt).toLocaleDateString()}
                       </Typography>
-                      <Box sx={{ mt: 1.5, display: "flex", justifyContent: "flex-end" }}>
+                      <Box sx={{ mt: 1.5, display: "flex", gap: 1, justifyContent: "flex-end" }}>
+                        <Button
+                          size="small"
+                          variant="outlined"
+                          onClick={() => setViewCert(cert)}
+                        >
+                          View
+                        </Button>
                         <Button
                           size="small"
                           variant="contained"
@@ -634,6 +653,50 @@ export default function Dashboard() {
           </DialogContent>
           <DialogActions>
             <Button onClick={() => setCertModalOpen(false)} variant="outlined">Close</Button>
+          </DialogActions>
+        </Dialog>
+
+        {/* Certificate View Dialog (should be at root, not inside map or modal) */}
+        <Dialog open={!!viewCert} onClose={() => setViewCert(null)} maxWidth="sm" fullWidth>
+          <DialogTitle sx={{ fontWeight: 700, fontSize: "1.2rem" }}>🎓 Certificate Preview</DialogTitle>
+          <DialogContent>
+            {viewCert && (
+              <Box sx={{ p: 2, textAlign: "center" }}>
+                <Typography variant="h6" sx={{ fontWeight: 700, mb: 2 }}>{viewCert.courseName}</Typography>
+                <Typography variant="body2" sx={{ mb: 1 }}>Instructor: {viewCert.instructor}</Typography>
+                <Typography variant="body2" sx={{ mb: 1 }}>Date: {new Date(viewCert.earnedAt).toLocaleDateString()}</Typography>
+                <Typography variant="body2" sx={{ mb: 1 }}>Certificate ID: {viewCert.certificateId}</Typography>
+              </Box>
+            )}
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setViewCert(null)} variant="outlined">Close</Button>
+            {viewCert && (
+              <Button
+                variant="contained"
+                onClick={() => {
+                  const printWindow = window.open('', '_blank');
+                  printWindow.document.write(`
+                    <html><head><title>Certificate</title></head><body style="margin:0;padding:0;">
+                    <div style="font-family:sans-serif;padding:40px;text-align:center;background:linear-gradient(135deg,#fbbf24 0%,#f59e0b 100%);color:white;border-radius:24px;width:700px;margin:40px auto;">
+                      <h1 style="font-size:2.5rem;font-weight:800;margin-bottom:24px;">Certificate of Completion</h1>
+                      <h2 style="margin-bottom:8px;">This certifies that</h2>
+                      <h2 style="font-size:2rem;font-weight:700;margin-bottom:24px;">${user?.name || user?.firstName || "Student"}</h2>
+                      <div style="font-size:1.2rem;margin-bottom:16px;">has successfully completed the course</div>
+                      <h2 style="font-size:1.5rem;font-weight:700;margin-bottom:16px;">${viewCert.courseName}</h2>
+                      <div style="margin-bottom:8px;">Instructor: ${viewCert.instructor}</div>
+                      <div style="margin-bottom:8px;">Date: ${new Date(viewCert.earnedAt).toLocaleDateString()}</div>
+                      <div style="margin-bottom:8px;">Certificate ID: ${viewCert.certificateId}</div>
+                    </div>
+                    </body></html>
+                  `);
+                  printWindow.document.close();
+                  printWindow.print();
+                }}
+              >
+                Download
+              </Button>
+            )}
           </DialogActions>
         </Dialog>
 
