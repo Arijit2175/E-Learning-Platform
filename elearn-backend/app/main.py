@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from app.api import auth, courses, enrollments, assignments, lessons
+from app.api import auth, courses, enrollments, assignments, lessons, attendance
 
 app = FastAPI()
 
@@ -8,6 +8,7 @@ app.include_router(courses.router)
 app.include_router(enrollments.router)
 app.include_router(assignments.router)
 app.include_router(lessons.router)
+app.include_router(attendance.router)
 
 @app.get("/")
 def read_root():
