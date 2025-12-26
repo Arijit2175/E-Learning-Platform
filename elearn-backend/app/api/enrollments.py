@@ -1,7 +1,21 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
+from app.api.auth import get_current_user
 from app.db import get_db_connection
 
 router = APIRouter(prefix="/enrollments", tags=["enrollments"])
+
+@router.get("/me")
+def get_my_enrollments(user=Depends(get_current_user)):
+    conn = get_db_connection()
+    if not conn:
+        raise HTTPException(status_code=500, detail="DB connection error")
+    cursor = conn.cursor(dictionary=True)
+    # Assume user is a student; adjust if you support teacher enrollments
+    cursor.execute("SELECT * FROM enrollments WHERE student_id=%s", (user["id"],))
+    enrollments = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return enrollments
 
 @router.get("/")
 def list_enrollments():

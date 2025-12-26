@@ -1,11 +1,37 @@
-from fastapi import APIRouter, HTTPException, status, Depends
+from fastapi import APIRouter, HTTPException, status, Depends, Request
 from fastapi.security import OAuth2PasswordRequestForm
 from passlib.context import CryptContext
-from jose import jwt
+from jose import jwt, JWTError
 from datetime import datetime, timedelta
 from app.db import get_db_connection
 from app.core.config import SECRET_KEY, ALGORITHM
+from fastapi.security import OAuth2PasswordBearer
 
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
+def get_current_user(token: str = Depends(oauth2_scheme)):
+    credentials_exception = HTTPException(
+        status_code=401,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        user_id: str = payload.get("sub")
+        if user_id is None:
+            raise credentials_exception
+    except JWTError:
+        raise credentials_exception
+    conn = get_db_connection()
+    if not conn:
+        raise HTTPException(status_code=500, detail="DB connection error")
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM users WHERE id=%s", (user_id,))
+    user = cursor.fetchone()
+    cursor.close()
+    conn.close()
+    if user is None:
+        raise credentials_exception
+    return user
 router = APIRouter(prefix="/auth", tags=["auth"])
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
