@@ -44,7 +44,7 @@ export default function NonFormalCourseDetail() {
   const [previewLesson, setPreviewLesson] = useState(null);
   const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "info" });
 
-  const course = courses.find((c) => c.id === courseId);
+  const course = courses.find((c) => String(c.id) === String(courseId));
   const enrolled = isEnrolled(user?.id, courseId);
   const hasCertificate = certificates?.some((c) => c.userId === user?.id && c.courseId === courseId);
 

@@ -325,7 +325,13 @@ export const NonFormalProvider = ({ children }) => {
         if (coursesRes.ok) {
           const fetchedCourses = await coursesRes.json();
           if (Array.isArray(fetchedCourses) && fetchedCourses.length > 0) {
-            setCourses(fetchedCourses);
+            // Merge lessons and attachments from DEFAULT_COURSES by ID
+            const courseMap = Object.fromEntries(DEFAULT_COURSES.map(c => [String(c.id), c]));
+            const mergedCourses = fetchedCourses.map(c => {
+              const extra = courseMap[String(c.id)] || {};
+              return { ...c, lessons: extra.lessons || [], attachments: extra.attachments || [], outcomes: extra.outcomes || [] };
+            });
+            setCourses(mergedCourses);
           } else {
             setCourses(DEFAULT_COURSES);
           }
