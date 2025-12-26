@@ -1,3 +1,6 @@
+-- Create database for EduSphere
+CREATE DATABASE IF NOT EXISTS edusphere;
+USE edusphere;
 -- MySQL table for users
 -- Students Table
 CREATE TABLE IF NOT EXISTS students (
