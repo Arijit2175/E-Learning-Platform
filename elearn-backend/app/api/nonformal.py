@@ -34,8 +34,20 @@ def list_nonformal_enrollments(user=Depends(get_current_user)):
     conn.close()
     return enrollments
 
+from pydantic import BaseModel
+
+class EnrollRequest(BaseModel):
+    course_id: str
+
 @router.post("/enrollments/")
-def enroll_nonformal_course(course_id: int, user=Depends(get_current_user)):
+def enroll_nonformal_course(data: EnrollRequest, user=Depends(get_current_user)):
+    print("[DEBUG] enroll_nonformal_course called with:", data)
+    course_id = data.course_id
+    # If course_id is string like 'nf-1', try to extract integer part for DB queries
+    try:
+        course_id_int = int(course_id) if course_id.isdigit() else int(course_id.split('-')[-1])
+    except Exception:
+        raise HTTPException(status_code=400, detail="Invalid course_id format")
     conn = get_db_connection()
     if not conn:
         raise HTTPException(status_code=500, detail="DB connection error")

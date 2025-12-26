@@ -13,7 +13,7 @@ export const useNonFormal = () => {
 
 const DEFAULT_COURSES = [
   {
-    id: "nf-1",
+    id: 1,
     title: "Python Basics for Beginners",
     category: "Tech Skills",
     instructor: "Tech Academy",
@@ -54,7 +54,7 @@ const DEFAULT_COURSES = [
     ],
   },
   {
-    id: "nf-2",
+    id: 2,
     title: "Digital Marketing 101",
     category: "Career Skills",
     instructor: "Marketing Masters",
@@ -95,7 +95,7 @@ const DEFAULT_COURSES = [
     ],
   },
   {
-    id: "nf-3",
+    id: 3,
     title: "UI/UX Design Fundamentals",
     category: "Creative Skills",
     instructor: "Design School",
@@ -136,7 +136,7 @@ const DEFAULT_COURSES = [
     ],
   },
   {
-    id: "nf-4",
+    id: 4,
     title: "English Conversation Skills",
     category: "Language Skills",
     instructor: "English Plus",
@@ -177,7 +177,7 @@ const DEFAULT_COURSES = [
     ],
   },
   {
-    id: "nf-5",
+    id: 5,
     title: "JavaScript Essentials",
     category: "Tech Skills",
     instructor: "Code Academy",
@@ -218,7 +218,7 @@ const DEFAULT_COURSES = [
     ],
   },
   {
-    id: "nf-6",
+    id: 6,
     title: "Startup Essentials",
     category: "Entrepreneurship",
     instructor: "Startup Hub",
@@ -259,7 +259,7 @@ const DEFAULT_COURSES = [
     ],
   },
   {
-    id: "nf-7",
+    id: 7,
     title: "Meditation & Mindfulness",
     category: "Personal Growth",
     instructor: "Wellness Academy",
