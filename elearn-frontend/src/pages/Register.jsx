@@ -53,7 +53,15 @@ export default function Register() {
 
     setLoading(true);
     setTimeout(() => {
-      register(formData);
+      // Map frontend fields to backend expected fields
+      const payload = {
+        ...formData,
+        first_name: formData.firstName,
+        last_name: formData.lastName,
+      };
+      delete payload.firstName;
+      delete payload.lastName;
+      register(payload);
       setLoading(false);
       navigate("/dashboard");
     }, 1000);
