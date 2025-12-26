@@ -24,9 +24,16 @@ def create_access_token(data: dict, expires_delta: timedelta = timedelta(hours=2
     to_encode.update({"exp": expire})
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
+
 # Registration endpoint
 @router.post("/register")
-def register(name: str, email: str, password: str, role: str = "student"):
+def register(
+    first_name: str,
+    last_name: str,
+    email: str,
+    password: str,
+    role: str = "student"
+):
     conn = get_db_connection()
     if not conn:
         raise HTTPException(status_code=500, detail="DB connection error")
@@ -35,15 +42,31 @@ def register(name: str, email: str, password: str, role: str = "student"):
     if cursor.fetchone():
         raise HTTPException(status_code=400, detail="Email already registered")
     hashed = get_password_hash(password)
+    student_id = None
+    teacher_id = None
+    if role == "student":
+        cursor.execute(
+            "INSERT INTO students (first_name, last_name, email, password_hash) VALUES (%s, %s, %s, %s)",
+            (first_name, last_name, email, hashed)
+        )
+        student_id = cursor.lastrowid
+    elif role == "teacher":
+        cursor.execute(
+            "INSERT INTO teachers (first_name, last_name, email, password_hash) VALUES (%s, %s, %s, %s)",
+            (first_name, last_name, email, hashed)
+        )
+        teacher_id = cursor.lastrowid
+    else:
+        raise HTTPException(status_code=400, detail="Invalid role")
     cursor.execute(
-        "INSERT INTO users (name, email, password_hash, role) VALUES (%s, %s, %s, %s)",
-        (name, email, hashed, role)
+        "INSERT INTO users (email, password_hash, role, student_id, teacher_id) VALUES (%s, %s, %s, %s, %s)",
+        (email, hashed, role, student_id, teacher_id)
     )
-    conn.commit()
     user_id = cursor.lastrowid
+    conn.commit()
     cursor.close()
     conn.close()
-    return {"id": user_id, "name": name, "email": email, "role": role}
+    return {"id": user_id, "email": email, "role": role}
 
 # Login endpoint
 @router.post("/login")

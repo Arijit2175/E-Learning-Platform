@@ -91,8 +91,6 @@ CREATE TABLE IF NOT EXISTS contact_messages (
 -- Create database for EduSphere
 CREATE DATABASE IF NOT EXISTS edusphere;
 USE edusphere;
--- MySQL table for users
--- Students Table
 CREATE TABLE IF NOT EXISTS students (
     id INT AUTO_INCREMENT PRIMARY KEY,
     first_name VARCHAR(100) NOT NULL,
@@ -126,6 +124,19 @@ CREATE TABLE IF NOT EXISTS teachers (
     github VARCHAR(255),
     avatar TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Unified Users Table for Authentication
+CREATE TABLE IF NOT EXISTS users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    role ENUM('student', 'teacher') NOT NULL,
+    student_id INT,
+    teacher_id INT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (student_id) REFERENCES students(id),
+    FOREIGN KEY (teacher_id) REFERENCES teachers(id)
 );
 -- Assignments Table
 CREATE TABLE IF NOT EXISTS assignments (
