@@ -50,14 +50,26 @@ export default function ForgotPassword() {
       return;
     }
 
-    // Simulate API call for resetting password
-    setTimeout(() => {
-      setSuccess(true);
-      setEmail("");
-      setNewPassword("");
-      setConfirmPassword("");
-      setLoading(false);
-    }, 1200);
+    // Real API call for resetting password
+    fetch("http://127.0.0.1:8000/auth/forgot-password", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, new_password: newPassword }),
+    })
+      .then(async (res) => {
+        if (!res.ok) {
+          const err = await res.json();
+          throw new Error(err.detail || "Failed to reset password");
+        }
+        setSuccess(true);
+        setEmail("");
+        setNewPassword("");
+        setConfirmPassword("");
+      })
+      .catch((err) => {
+        setError(err.message);
+      })
+      .finally(() => setLoading(false));
   };
 
   return (

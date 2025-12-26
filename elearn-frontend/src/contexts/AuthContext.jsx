@@ -74,9 +74,25 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("enrolledCourses");
   };
 
-  // Add updateUser to allow profile editing
-  const updateUser = (updatedFields) => {
-    setUser((prev) => ({ ...prev, ...updatedFields }));
+  // Add updateUser to allow profile editing (now updates backend too)
+  const updateUser = async (updatedFields) => {
+    if (!user || !user.access_token) return;
+    try {
+      const res = await fetch("http://127.0.0.1:8000/users/me", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.access_token}`,
+        },
+        body: JSON.stringify(updatedFields),
+      });
+      if (!res.ok) {
+        throw new Error("Failed to update profile");
+      }
+      setUser((prev) => ({ ...prev, ...updatedFields }));
+    } catch (err) {
+      // Optionally handle error (show toast, etc.)
+    }
   };
 
   const value = {

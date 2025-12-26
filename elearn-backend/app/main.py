@@ -1,7 +1,7 @@
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.api import auth, courses, enrollments, assignments, lessons, attendance, quizzes, resources, certificates, ai_tutor_chats, class_schedules, contact_messages, nonformal
+from app.api import auth, courses, enrollments, assignments, lessons, attendance, quizzes, resources, certificates, ai_tutor_chats, class_schedules, contact_messages, nonformal, user, forgot_password
 
 
 app = FastAPI()
@@ -16,6 +16,8 @@ app.add_middleware(
 )
 
 app.include_router(auth.router)
+app.include_router(user.router)
+app.include_router(forgot_password.router)
 app.include_router(courses.router)
 app.include_router(enrollments.router)
 app.include_router(assignments.router)
