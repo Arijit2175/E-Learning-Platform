@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
+import { useAuth } from "./AuthContext";
 
 const NonFormalContext = createContext();
 
@@ -305,13 +306,21 @@ export const NonFormalProvider = ({ children }) => {
   const [enrollments, setEnrollments] = useState([]);
   const [progress, setProgress] = useState({});
   const [certificates, setCertificates] = useState([]);
+  const { user } = useAuth();
 
-  // Fetch all non-formal data from backend on mount
+  // Fetch all non-formal data from backend when user/token changes
   useEffect(() => {
     const fetchData = async () => {
+      if (!user || !user.access_token) {
+        setCourses([]);
+        setEnrollments([]);
+        setProgress({});
+        setCertificates([]);
+        return;
+      }
       try {
-        const token = JSON.parse(localStorage.getItem("user"))?.access_token;
-        const authHeader = token ? { Authorization: `Bearer ${token}` } : {};
+        const token = user.access_token;
+        const authHeader = { Authorization: `Bearer ${token}` };
         const coursesRes = await fetch("http://127.0.0.1:8000/nonformal/courses/", { headers: authHeader });
         if (coursesRes.ok) {
           setCourses(await coursesRes.json());
@@ -331,7 +340,7 @@ export const NonFormalProvider = ({ children }) => {
       } catch (err) {}
     };
     fetchData();
-  }, []);
+  }, [user]);
 
   const enrollCourse = async (userId, courseId) => {
     try {
@@ -344,10 +353,6 @@ export const NonFormalProvider = ({ children }) => {
         },
         body: JSON.stringify({ course_id: courseId }),
       });
-      if (!res.ok) {
-        const errorData = await res.json();
-        return { success: false, message: errorData.detail || "Enrollment failed" };
-      }
       const enrollment = await res.json();
       setEnrollments((prev) => [...prev, enrollment]);
       return { success: true, message: "Enrolled" };
@@ -503,4 +508,5 @@ export const NonFormalProvider = ({ children }) => {
       {children}
     </NonFormalContext.Provider>
   );
-};
+  }
+  export default NonFormalProvider;

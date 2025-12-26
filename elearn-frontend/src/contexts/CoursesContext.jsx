@@ -16,7 +16,10 @@ export const CoursesProvider = ({ children }) => {
   useEffect(() => {
     const fetchEnrolledCourses = async () => {
       try {
-        const res = await fetch("http://127.0.0.1:8000/enrollments/me"); // Adjust endpoint as needed
+        const token = JSON.parse(localStorage.getItem("user"))?.access_token;
+        const res = await fetch("http://127.0.0.1:8000/enrollments/me", {
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        });
         if (res.ok) {
           const data = await res.json();
           setEnrolledCourses(data);
@@ -30,9 +33,13 @@ export const CoursesProvider = ({ children }) => {
 
   const enrollCourse = async (courseId) => {
     try {
+      const token = JSON.parse(localStorage.getItem("user"))?.access_token;
       const res = await fetch("http://127.0.0.1:8000/enrollments/", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
         body: JSON.stringify({ course_id: courseId }),
       });
       if (!res.ok) {
@@ -49,8 +56,10 @@ export const CoursesProvider = ({ children }) => {
 
   const unenrollCourse = async (courseId) => {
     try {
+      const token = JSON.parse(localStorage.getItem("user"))?.access_token;
       const res = await fetch(`http://127.0.0.1:8000/enrollments/${courseId}`, {
         method: "DELETE",
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
       if (res.ok) {
         setEnrolledCourses((prev) => prev.filter((c) => c.course_id !== courseId && c.id !== courseId));
@@ -60,9 +69,13 @@ export const CoursesProvider = ({ children }) => {
 
   const updateProgress = async (courseId, progress) => {
     try {
+      const token = JSON.parse(localStorage.getItem("user"))?.access_token;
       const res = await fetch(`http://127.0.0.1:8000/enrollments/${courseId}/progress`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
         body: JSON.stringify({ progress }),
       });
       if (res.ok) {

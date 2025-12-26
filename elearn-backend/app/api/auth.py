@@ -52,14 +52,19 @@ def create_access_token(data: dict, expires_delta: timedelta = timedelta(hours=2
 
 
 # Registration endpoint
+
+from fastapi import Request
+
 @router.post("/register")
-def register(
-    first_name: str,
-    last_name: str,
-    email: str,
-    password: str,
-    role: str = "student"
-):
+async def register(request: Request):
+    data = await request.json()
+    first_name = data.get("first_name")
+    last_name = data.get("last_name")
+    email = data.get("email")
+    password = data.get("password")
+    role = data.get("role", "student")
+    if not all([first_name, last_name, email, password]):
+        raise HTTPException(status_code=400, detail="All fields are required")
     conn = get_db_connection()
     if not conn:
         raise HTTPException(status_code=500, detail="DB connection error")
@@ -95,17 +100,24 @@ def register(
     return {"id": user_id, "email": email, "role": role}
 
 # Login endpoint
+from fastapi import Request
+
 @router.post("/login")
-def login(form_data: OAuth2PasswordRequestForm = Depends()):
+async def login(request: Request):
+    data = await request.json()
+    email = data.get("email")
+    password = data.get("password")
+    if not email or not password:
+        raise HTTPException(status_code=400, detail="Email and password required")
     conn = get_db_connection()
     if not conn:
         raise HTTPException(status_code=500, detail="DB connection error")
     cursor = conn.cursor(dictionary=True)
-    cursor.execute("SELECT * FROM users WHERE email=%s", (form_data.username,))
+    cursor.execute("SELECT * FROM users WHERE email=%s", (email,))
     user = cursor.fetchone()
     cursor.close()
     conn.close()
-    if not user or not verify_password(form_data.password, user["password_hash"]):
+    if not user or not verify_password(password, user["password_hash"]):
         raise HTTPException(status_code=401, detail="Invalid credentials")
     access_token = create_access_token({"sub": str(user["id"]), "role": user["role"]})
     return {"access_token": access_token, "token_type": "bearer"}

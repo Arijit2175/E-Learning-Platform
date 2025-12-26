@@ -40,35 +40,33 @@ export const AuthProvider = ({ children }) => {
         throw new Error(errorData.detail || "Login failed");
       }
       const data = await response.json();
-      const userData = data.user || data;
-      setUser(userData);
-      localStorage.setItem("user", JSON.stringify(userData));
-      return userData;
+      // data: { access_token, token_type }
+      // Optionally, fetch user profile here if needed
+      const userObj = { email, access_token: data.access_token, token_type: data.token_type };
+      setUser(userObj);
+      localStorage.setItem("user", JSON.stringify(userObj));
+      return userObj;
     } catch (err) {
       throw err;
     }
   };
-    const register = async (formData) => {
-      try {
-        const response = await fetch("http://127.0.0.1:8000/auth/register", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(formData),
-        });
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.detail || "Registration failed");
-        }
-        const data = await response.json();
-        // Adjust this based on your backend's response structure
-        const userData = data.user || data;
-        setUser(userData);
-        localStorage.setItem("user", JSON.stringify(userData));
-        return userData;
-      } catch (err) {
-        throw err;
+  const register = async (formData) => {
+    try {
+      const response = await fetch("http://127.0.0.1:8000/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || "Registration failed");
       }
-    };
+      // Registration does not log in automatically. Require user to login after registration.
+      return await response.json();
+    } catch (err) {
+      throw err;
+    }
+  };
 
   const logout = () => {
     setUser(null);
