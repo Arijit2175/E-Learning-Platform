@@ -6,7 +6,7 @@ import os
 
 router = APIRouter()
 load_dotenv()
-HF_API_URL = "https://router.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.2"
+HF_API_URL = "https://router.huggingface.co/models/HuggingFaceTB/SmolLM3-3B"
 HF_TOKEN = os.getenv("HF_API_TOKEN")
 HF_HEADERS = {"Authorization": f"Bearer {HF_TOKEN}"} if HF_TOKEN else {}
 
@@ -25,6 +25,8 @@ async def ask_ai_tutor(data: QuestionRequest):
     if response.ok:
         data = response.json()
         # Hugging Face returns a list of dicts with 'generated_text'
-        answer = data[0]["generated_text"] if data and "generated_text" in data[0] else "No answer." 
+        answer = data[0]["generated_text"] if data and "generated_text" in data[0] else "No answer."
         return {"answer": answer}
-    return {"answer": "Sorry, AI Tutor is unavailable right now."}
+    # Log the error response for debugging
+    print("Hugging Face API error:", response.status_code, response.text)
+    return {"answer": f"Sorry, AI Tutor is unavailable right now. (Error: {response.status_code})"}
