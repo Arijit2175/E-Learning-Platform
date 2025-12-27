@@ -67,7 +67,7 @@ export default function TeacherDashboard() {
     if (formData.title && formData.description) {
       createCourse({
         ...formData,
-        teacherId: user?.id,
+        instructor_id: user?.id,
         teacherName: `${user?.firstName} ${user?.lastName}`,
       });
       setFormData({ title: "", description: "", duration: "", schedule: "" });

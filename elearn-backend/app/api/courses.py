@@ -1,5 +1,15 @@
+
 from fastapi import APIRouter, HTTPException, Depends
+from pydantic import BaseModel
 from app.db import get_db_connection
+class CourseCreate(BaseModel):
+    title: str
+    description: str = ""
+    type: str = "formal"
+    category: str = None
+    level: str = None
+    duration: str = None
+    instructor_id: int = None
 
 router = APIRouter(prefix="/courses", tags=["courses"])
 
@@ -30,20 +40,28 @@ def get_course(course_id: int):
     return course
 
 @router.post("/")
-def create_course(title: str, description: str = "", type: str = "formal", category: str = None, level: str = None, duration: str = None, instructor_id: int = None):
+def create_course(course: CourseCreate):
     conn = get_db_connection()
     if not conn:
         raise HTTPException(status_code=500, detail="DB connection error")
     cursor = conn.cursor()
     cursor.execute(
         "INSERT INTO courses (title, description, type, category, level, duration, instructor_id) VALUES (%s, %s, %s, %s, %s, %s, %s)",
-        (title, description, type, category, level, duration, instructor_id)
+        (
+            course.title,
+            course.description,
+            course.type,
+            course.category,
+            course.level,
+            course.duration,
+            course.instructor_id,
+        )
     )
     conn.commit()
     course_id = cursor.lastrowid
     cursor.close()
     conn.close()
-    return {"id": course_id, "title": title}
+    return {"id": course_id, "title": course.title}
 
 @router.put("/{course_id}")
 def update_course(course_id: int, title: str = None, description: str = None, category: str = None, level: str = None, duration: str = None):
