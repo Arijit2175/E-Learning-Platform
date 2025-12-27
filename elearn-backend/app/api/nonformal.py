@@ -1,3 +1,4 @@
+import uuid
 from fastapi import APIRouter, HTTPException, Depends, Request
 from app.db import get_db_connection
 from app.api.auth import get_current_user
@@ -120,3 +121,54 @@ def get_nonformal_certificates(user=Depends(get_current_user)):
     cursor.close()
     conn.close()
     return certificates
+
+# --- Claim Certificate ---
+@router.post("/certificates/")
+async def claim_nonformal_certificate(request: Request, user=Depends(get_current_user)):
+    data = await request.json()
+    course_id = str(data.get("course_id"))
+    if not course_id:
+        raise HTTPException(status_code=400, detail="Missing course_id")
+    conn = get_db_connection()
+    if not conn:
+        raise HTTPException(status_code=500, detail="DB connection error")
+    cursor = conn.cursor(dictionary=True)
+    # Check if already has certificate
+    cursor.execute("SELECT * FROM certificates WHERE user_id=%s AND course_id=%s", (user["id"], course_id))
+    existing = cursor.fetchone()
+    if existing:
+        cursor.close()
+        conn.close()
+        raise HTTPException(status_code=400, detail="Certificate already claimed")
+    # Generate a unique certificate_id
+    cert_id = str(uuid.uuid4())
+    # Insert certificate with certificate_id
+    cursor.execute("INSERT INTO certificates (user_id, course_id, certificate_id) VALUES (%s, %s, %s)", (user["id"], course_id, cert_id))
+    conn.commit()
+    # Return the created certificate object
+    cursor.execute("SELECT * FROM certificates WHERE user_id=%s AND course_id=%s ORDER BY id DESC LIMIT 1", (user["id"], course_id))
+    cert = cursor.fetchone()
+    cursor.close()
+    conn.close()
+    return cert
+
+# --- Progress Score Update ---
+@router.put("/progress/score")
+async def update_nonformal_progress_score(request: Request, user=Depends(get_current_user)):
+    data = await request.json()
+    course_id = data.get("course_id")
+    score = data.get("score")
+    if not course_id or score is None:
+        raise HTTPException(status_code=400, detail="Missing course_id or score")
+    conn = get_db_connection()
+    if not conn:
+        raise HTTPException(status_code=500, detail="DB connection error")
+    cursor = conn.cursor()
+    cursor.execute(
+        "UPDATE enrollments SET progress=%s WHERE user_id=%s AND course_id=%s",
+        (score, user["id"], course_id)
+    )
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return {"message": "Progress score updated"}

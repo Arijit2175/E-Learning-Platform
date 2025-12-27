@@ -19,7 +19,7 @@ import VideocamIcon from "@mui/icons-material/Videocam";
 
 export default function Dashboard() {
   const { enrolledCourses } = useCourses();
-  const { getEnrolledCourses: getNonFormalCourses, getCourseProgress: getNonFormalProgress, certificates } = useNonFormal();
+  const { getEnrolledCourses: getNonFormalCourses, getCourseProgress: getNonFormalProgress, certificates, courses: nonFormalCoursesList } = useNonFormal();
   const { getStudentEnrollments, getCourseById, getCourseSchedules, getTeacherCourses, getCourseStudents, scheduleClass } = useFormalEducation();
   const { user } = useAuth();
   const { isOpen } = useSidebar();
@@ -36,22 +36,35 @@ export default function Dashboard() {
   const [viewCert, setViewCert] = useState(null);
 
   const displayName = user?.name || `${user?.firstName || ""} ${user?.lastName || ""}`.trim() || "Learner";
-  // Build Formal courses from formal enrollments (+schedules) so only teacher-assigned courses appear
+  // Only show formal courses assigned by a teacher (from enrollments)
   const studentFormalEnrollments = user?.id ? getStudentEnrollments(user.id) : [];
-  const formalCourses = studentFormalEnrollments.map((enr) => {
-    const course = getCourseById(enr.courseId) || {};
-    const schedules = getCourseSchedules(enr.courseId) || [];
+  const formalCourses = studentFormalEnrollments
+    .map((enr) => {
+      const course = getCourseById(enr.courseId) || {};
+      const schedules = getCourseSchedules(enr.courseId) || [];
+      return {
+        id: enr.courseId,
+        title: course.title || "Course",
+        instructor: course.instructor || course.teacherName || "Instructor",
+        duration: course.duration || "",
+        progress: enr.progress ?? 0,
+        schedules,
+      };
+    })
+    .filter((c) => c.id && c.title && c.instructor); // Only show if assigned by teacher
+  // Map backend certificate fields to camelCase for display, and add courseName/instructor
+  let userCertificates = (certificates || []).map((c) => {
+    const course = (nonFormalCoursesList || []).find(course => String(course.id) === String(c.course_id));
     return {
-      id: enr.courseId,
-      title: course.title || "Course",
-      instructor: course.instructor || course.teacherName || "Instructor",
-      duration: course.duration || "",
-      progress: enr.progress ?? 0,
-      schedules,
+      ...c,
+      userId: c.user_id,
+      courseId: c.course_id,
+      earnedAt: c.earned_at,
+      certificateId: c.certificate_id,
+      courseName: course?.title || "Course",
+      instructor: course?.instructor || "Instructor",
     };
-  });
-  // Only show one certificate per course (latest by earnedAt)
-  let userCertificates = certificates?.filter((c) => c.userId === user?.id) || [];
+  }).filter((c) => c.userId === user?.id);
   // Deduplicate by courseId, keeping the latest earnedAt
   userCertificates = Object.values(
     userCertificates.reduce((acc, cert) => {

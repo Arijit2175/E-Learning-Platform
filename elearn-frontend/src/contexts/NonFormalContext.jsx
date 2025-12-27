@@ -494,8 +494,13 @@ export const NonFormalProvider = ({ children }) => {
         body: JSON.stringify({ course_id: courseId }),
       });
       if (res.ok) {
-        const cert = await res.json();
-        setCertificates((prev) => [...prev, cert]);
+        // After claiming, re-fetch all certificates to ensure state is up to date
+        const certsRes = await fetch("http://127.0.0.1:8000/nonformal/certificates/", {
+          headers: { ...(token ? { Authorization: `Bearer ${token}` } : {}) },
+        });
+        if (certsRes.ok) {
+          setCertificates(await certsRes.json());
+        }
       }
     } catch (err) {}
   };
