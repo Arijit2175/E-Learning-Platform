@@ -1,17 +1,23 @@
-from fastapi import APIRouter, Body
+from fastapi import APIRouter
+from pydantic import BaseModel
 from dotenv import load_dotenv
 import requests
 import os
 
 router = APIRouter()
 load_dotenv()
-# Hugging Face Inference API (free tier, rate limited)
-HF_API_URL = "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.2"
+HF_API_URL = "https://router.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.2"
 HF_TOKEN = os.getenv("HF_API_TOKEN")
 HF_HEADERS = {"Authorization": f"Bearer {HF_TOKEN}"} if HF_TOKEN else {}
 
+
+# Accept a JSON object with a 'question' field
+class QuestionRequest(BaseModel):
+    question: str
+
 @router.post("/ai-tutor/ask")
-async def ask_ai_tutor(question: str = Body(...)):
+async def ask_ai_tutor(data: QuestionRequest):
+    question = data.question
     if not HF_TOKEN:
         return {"answer": "AI Tutor is not configured. Please set HF_API_TOKEN in your environment."}
     payload = {"inputs": question}

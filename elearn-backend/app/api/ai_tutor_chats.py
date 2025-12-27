@@ -1,5 +1,21 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Body
+from pydantic import BaseModel
 from app.db import get_db_connection
+
+
+
+# Pydantic model for chat creation
+
+
+class ChatCreate(BaseModel):
+    student_id: int
+    chat_title: str
+    messages: str
+
+# Pydantic model for chat update
+class ChatUpdate(BaseModel):
+    messages: str = None
+    chat_title: str = None
 
 router = APIRouter(prefix="/ai-tutor-chats", tags=["ai_tutor_chats"])
 
@@ -19,20 +35,20 @@ def list_chats(student_id: int = None):
     return chats
 
 @router.post("/")
-def create_chat(student_id: int, chat_title: str, messages: str):
+def create_chat(chat: ChatCreate = Body(...)):
     conn = get_db_connection()
     if not conn:
         raise HTTPException(status_code=500, detail="DB connection error")
     cursor = conn.cursor()
     cursor.execute(
         "INSERT INTO ai_tutor_chats (student_id, chat_title, messages) VALUES (%s, %s, %s)",
-        (student_id, chat_title, messages)
+        (chat.student_id, chat.chat_title, chat.messages)
     )
     conn.commit()
     chat_id = cursor.lastrowid
     cursor.close()
     conn.close()
-    return {"id": chat_id, "student_id": student_id, "chat_title": chat_title}
+    return {"id": chat_id, "student_id": chat.student_id, "chat_title": chat.chat_title}
 
 @router.get("/{chat_id}")
 def get_chat(chat_id: int):
@@ -49,7 +65,7 @@ def get_chat(chat_id: int):
     return chat
 
 @router.put("/{chat_id}")
-def update_chat(chat_id: int, messages: str = None, chat_title: str = None):
+def update_chat(chat_id: int, update: ChatUpdate = Body(...)):
     conn = get_db_connection()
     if not conn:
         raise HTTPException(status_code=500, detail="DB connection error")
@@ -61,12 +77,12 @@ def update_chat(chat_id: int, messages: str = None, chat_title: str = None):
         raise HTTPException(status_code=404, detail="Chat not found")
     update_fields = []
     params = []
-    if messages is not None:
+    if update.messages is not None:
         update_fields.append("messages=%s")
-        params.append(messages)
-    if chat_title is not None:
+        params.append(update.messages)
+    if update.chat_title is not None:
         update_fields.append("chat_title=%s")
-        params.append(chat_title)
+        params.append(update.chat_title)
     if not update_fields:
         cursor.close()
         conn.close()
